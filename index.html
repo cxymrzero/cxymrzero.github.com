@@ -9,7 +9,7 @@
   <meta name="author" content="Mr.Zero">
 
   
-  <meta name="description" content="去年大概这个时候, 用jekyll和github pages搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low! 比较好的办法就是经常写 &hellip;">
+  <meta name="description" content="啰嗦 去年大概这个时候, 用jekyll和github pages搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low! &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +58,7 @@
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
 </ul>
 
 </nav>
@@ -82,26 +83,59 @@
 
 <time class='entry-date' datetime='2015-03-15T19:19:36+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:19 pm</span></time>
         
+           | <a href="/blog/2015/03/15/new-blog/#disqus_thread"
+             data-disqus-identifier="http://cxymrzero.github.io/blog/2015/03/15/new-blog/">Comments</a>
+        
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>去年大概这个时候, 用<code>jekyll</code>和<code>github pages</code>搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low!</p>
+  <div class="entry-content"><h3>啰嗦</h3>
+
+<p>去年大概这个时候, 用<code>jekyll</code>和<code>github pages</code>搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low!</p>
 
 <p>比较好的办法就是经常写, 把那些很low的文章顶到很多页之前, 就没人笑话了.</p>
 
 <p>新博客将<code>jekyll</code>换成了<code>octopress</code>, 因为喜欢这个博客主题, 同样是用markdown写博客, 代码高亮支持得很好, 自带的好看的<code>solarized dark</code>配色, 搭建流程参看<a href="http://shengmingzhiqing.com/blog/setup-octopress-with-github-pages.html/#octopress--github-pages">这篇博文</a></p>
 
-<p>记录下以后可能会用到的命令<br/>
-1. 发博客</p>
+<h3>发博客很简单</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd </span>octopress <span class="c"># 进入博客目录</span>
-</span><span class='line'>rake new_post<span class="o">[</span><span class="s2">&quot;title&quot;</span><span class="o">]</span> <span class="c"># title是文章名, 在生成的markdown文件名里</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd </span>octopress  <span class="c"># 进入博客目录</span>
+</span><span class='line'>rake new_post<span class="o">[</span><span class="s2">&quot;title&quot;</span><span class="o">]</span>  <span class="c"># title是文章名, 在生成的markdown文件名里</span>
+</span><span class='line'>rake preview  <span class="c"># 实时预览, 我用Mou写markdown, 保存后刷新网页即可</span>
+</span><span class='line'>rake gen_deploy  <span class="c"># 自动生成HTML网页, 并且进行一次commit and push, 还有贴心的commit message =w=</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<h3>坑</h3>
+
+<p>由于我用的是<code>zsh</code>, <code>rake new_post</code>命令不支持<code>zsh</code>, 每次还要切回<code>bash</code>才能自动生成新文章, 我在考虑写个脚本完成这件事</p>
+
+<h3>定制修改</h3>
+
+<h4>加上about页面</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake new_page<span class="o">[</span><span class="s2">&quot;about&quot;</span><span class="o">]</span>  <span class="c"># 注意这里是`page`</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>并根据<a href="http://octopress.org/docs/theme/template/">文档</a>修改navigation的配置</p>
+
+<h4>加上disqus评论</h4>
+
+<p>首先注册disqus并设置自己的shortname, 在<code>_config.yml</code>中加上自己的shortname</p>
+
+<h4>添加侧边栏文章分类</h4>
+
+<p>看<a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">这篇博客</a>, 折腾完还要<code>Ctrl+C</code>再执行下<code>rake preview</code>, 并且注意, 如果你的分类中有中文博客里的代码会出bug, 需要自己hack一下, 或者像我压根就不用中文做分类名&hellip;</p>
+
+<p>最后推荐这份<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">教程</a>(不过这哥们貌似写完这份教程之后都没更博了囧)</p>
 </div>
   
   
@@ -131,7 +165,13 @@
 
 
 
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/try/'>try (1)</a></li>
 
+  </ul>
+</section>
   
 </aside>
 
@@ -144,6 +184,19 @@
 
 </footer>
   
+
+<script type="text/javascript">
+      var disqus_shortname = 'cxymrzero';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 

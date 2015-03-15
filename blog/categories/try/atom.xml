@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[clean code]]></title>
-  <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Try | clean code]]></title>
+  <link href="http://cxymrzero.github.io/blog/categories/try/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
   <updated>2015-03-15T22:39:17+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
@@ -28,16 +28,11 @@
 
 <h3>发博客很简单</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd </span>octopress  <span class="c"># 进入博客目录</span>
-</span><span class='line'>rake new_post<span class="o">[</span><span class="s2">&quot;title&quot;</span><span class="o">]</span>  <span class="c"># title是文章名, 在生成的markdown文件名里</span>
-</span><span class='line'>rake preview  <span class="c"># 实时预览, 我用Mou写markdown, 保存后刷新网页即可</span>
-</span><span class='line'>rake gen_deploy  <span class="c"># 自动生成HTML网页, 并且进行一次commit and push, 还有贴心的commit message =w=</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<pre><code class="sh">    cd octopress  # 进入博客目录
+    rake new_post["title"]  # title是文章名, 在生成的markdown文件名里
+    rake preview  # 实时预览, 我用Mou写markdown, 保存后刷新网页即可
+    rake gen_deploy  # 自动生成HTML网页, 并且进行一次commit and push, 还有贴心的commit message =w=
+</code></pre>
 
 <h3>坑</h3>
 
@@ -47,10 +42,8 @@
 
 <h4>加上about页面</h4>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake new_page<span class="o">[</span><span class="s2">&quot;about&quot;</span><span class="o">]</span>  <span class="c"># 注意这里是`page`</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<pre><code class="sh">    rake new_page["about"]  # 注意这里是`page`
+</code></pre>
 
 <p>并根据<a href="http://octopress.org/docs/theme/template/">文档</a>修改navigation的配置</p>
 
