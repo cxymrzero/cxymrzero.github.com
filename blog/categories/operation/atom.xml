@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Operation | clean code]]></title>
+  <link href="http://cxymrzero.github.io/blog/categories/operation/atom.xml" rel="self"/>
+  <link href="http://cxymrzero.github.io/"/>
+  <updated>2015-03-18T17:06:27+08:00</updated>
+  <id>http://cxymrzero.github.io/</id>
+  <author>
+    <name><![CDATA[Mr.Zero]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[[老博文迁移]推土小记]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/oh-so-sad/"/>
+    <updated>2015-03-18T16:20:38+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/oh-so-sad</id>
+    <content type="html"><![CDATA[<p>十一这几天留在学校没回家跟胡扬，胡淼，强哥一起“推土”加上写一点新版新闻网的后台，这次来客串写点php。“推土”就是把原来的像17,43,45这几台跑windows的老机器尽量换成linux的，还有几台跑在45上的虚拟机都搬到13,14上。哎，想想之前做的有那么多网站就觉得好累。</p>
+
+<!-- more -->
+
+
+<p>今天一天我完成了原来用discuz搭的bbs的迁移，<a href="http://blog.bingyan.net/">冰岩博客</a>的迁移和华中大知多少的迁移，原先代码都在43上，数据库在17上，都是windows服务器，43上还有ftp服务，17上就什么都没有，dump下来的表都是用百度云上传的==！最后把它们全都放到13上了，整个都是体力劳动啊，后面应该想想一些重复的劳动怎样用脚本来解决掉。</p>
+
+<h3>数据库导出与导入</h3>
+
+<p><code>mysqldump -u username -p dbname &gt; name.sql</code></p>
+
+<pre><code class="sql">CREATE DATABASE dbname;
+USE dbname;
+SOURCE name.sql;
+</code></pre>
+
+<p>还是相当方便的</p>
+
+<h3>scp命令</h3>
+
+<ul>
+<li>从本地到服务器，2012是端口，不同服务器不同
+<code>scp -P2012 /home/mrzero/test.txt user@example.com:/home/user</code></li>
+<li>从服务器到本地
+<code>scp -P2012 user@example.com:/home/user/test.txt /home/mrzero</code><br/>
+scp这个命令还真是不好用，又臭又长还不能tab出文件名，很蛋疼。如果有图形界面的话，还是用filezilla来传文件吧。</li>
+</ul>
+
+
+<h3>ftp下载</h3>
+
+<p>我用Python写了一段脚本来下上传的文件，先是在iPython里一点点测试，成功后用scp传到13上的。用到的是<code>ftplib</code>，这是Python的标准库，果然是battery include啊～～
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="kn">from</span> <span class="nn">ftplib</span> <span class="kn">import</span> <span class="n">FTP</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">()</span>
+</span><span class='line'><span class="n">ftp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">xxxxxxx</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">port</span><span class="o">=</span><span class="n">xxxx</span><span class="p">)</span>
+</span><span class='line'><span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">xxxxxx</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="n">passwd</span><span class="o">=&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">xxxxx</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">filehandler</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">test</span><span class="o">.</span><span class="n">txt</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">wb</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span><span class="o">.</span><span class="n">write</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">RETR</span> <span class="n">robots</span><span class="o">.</span><span class="n">txt</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="n">filehandler</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">ftp</span><span class="o">.</span><span class="n">cwd</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">chenxiangyu</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span>
+</span><span class='line'><span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">RETR</span> <span class="n">test</span><span class="o">.</span><span class="n">txt</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="n">filehandler</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+感觉写得相当挫，不过能用=。=
+后面再改改能加上命令行参数就能在团队里共享，以后部署到服务器上就很欢乐了，现在简直是&hellip;
+不过在部署和管理方面，shell scripts应该能更自在地工作，后面一空下来就要学学shell scripts啊！</p>
+
+<h3>php的部署流程</h3>
+
+<ul>
+<li>把代码目录放到/var/www/example.com下</li>
+<li>在/etc/nginx/sites-avalible下建配置文件</li>
+<li>在/etc/nginx/sites-enabled下建立到avalible目录的软链接
+<code>ln -s example.com ../sites-avalible/example.com</code></li>
+<li>reload nginx一下，把配置文件更新</li>
+<li>对于搬迁服务器来说，还要在dnspod上将域名的指向改掉，并修改数据库配置，等一下下，没bug就可以去玩啦～～～</li>
+</ul>
+
+
+<p>奥，就是这个样子，明天再在自己电脑上折腾下把nginx配好吧，还要从零入门php和CI框架。哎，十一也过的这么累，不过还是进步很快的就是啦，最后谢谢胡扬大神的悉心指导，bug还要加油才是！</p>
+
+<p><em>2014-10-4 于博客园</em></p>
+
+<p>迁移批注:<br/>
+<code>scp</code>不能tab出文件名是<code>ssh key</code>的问题. 之前部署网站这种重复性的劳动也用脚本解决了一些, 不过说好的运维平台还是没有搭起来, 不知什么时候可以搭起来&hellip;</p>
+
+<p>即使现在想想那段每天迁网站调bug的日子还是很痛苦, 三四点睡都是家常便饭了, 最后效果还是不够好, 负载均衡没有搭起来, 单点故障的问题还是没有解决, 数据库依然是本机, 除了我用自己写的脚本部署外大家还是手动复制粘贴<code>nginx</code>配置, 只能说现在还是太弱了, 运维知识不足, 对架构理解也不深, 当时都没能理解胡扬到底要我干啥. 也许到公司实习之后可以改变团队服务器的现状吧, 可那时我还会能抵住更有趣的项目和钱的诱惑回来整团队服务器吗, 我要打上一个大大的问号&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>
