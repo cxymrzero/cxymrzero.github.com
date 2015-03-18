@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>新博客终于搭起来了 - clean code</title>
+  <title>[老博文迁移]linux进程管理 - clean code</title>
   <meta name="author" content="Mr.Zero">
 
   
-  <meta name="description" content="啰嗦 去年大概这个时候, 用jekyll和github pages搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low! &hellip;">
+  <meta name="description" content="作为一个新手，部署Python网站的时候总会出各种各样的问题，这个时候我就很想知道是哪个程序没有运行。这几天读了鸟哥私房菜的进程管理这一章，还没读完，先做下笔记。 什么是进程？ 一个程序被加载到内存中运行，在内存中的数据就被称为进程. 在Linux下，所有的命令在执行时都会被系统定义为一个进程， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cxymrzero.github.io/blog/2015/03/15/new-blog/">
+  <link rel="canonical" href="http://cxymrzero.github.io/blog/2015/03/18/linux-process/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
@@ -70,7 +70,7 @@
   
   <header>
     
-      <h1 class="entry-title">新博客终于搭起来了</h1>
+      <h1 class="entry-title">[老博文迁移]linux进程管理</h1>
     
     
       <p class="meta">
@@ -79,7 +79,7 @@
 
 
 
-<time class='entry-date' datetime='2015-03-15T19:19:36+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:19 pm</span></time>
+<time class='entry-date' datetime='2015-03-18T15:35:11+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>3:35 pm</span></time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://cxymrzero.github.io">Comments</a>
@@ -89,58 +89,86 @@
   </header>
 
 
-<div class="entry-content"><h3>啰嗦</h3>
-
-<p>去年大概这个时候, 用<code>jekyll</code>和<code>github pages</code>搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low!</p>
-
-<p>比较好的办法就是经常写, 把那些很low的文章顶到很多页之前, 就没人笑话了.</p>
+<div class="entry-content"><p>作为一个新手，部署Python网站的时候总会出各种各样的问题，这个时候我就很想知道是哪个程序没有运行。这几天读了鸟哥私房菜的进程管理这一章，还没读完，先做下笔记。</p>
 
 <!--more-->
 
 
-<p>新博客将<code>jekyll</code>换成了<code>octopress</code>, 因为喜欢这个博客主题, 同样是用markdown写博客, 代码高亮支持得很好, 自带的好看的<code>solarized dark</code>配色, 搭建流程参看<a href="http://shengmingzhiqing.com/blog/setup-octopress-with-github-pages.html/#octopress--github-pages">这篇博文</a></p>
+<h3>什么是进程？</h3>
 
-<h3>发博客很简单</h3>
+<p><strong>一个程序被加载到内存中运行，在内存中的数据就被称为进程.</strong> 在Linux下，所有的命令在执行时都会被系统定义为一个<code>进程</code>，这条命令会被分配一个ID，称为<code>PID</code>，执行这条命令的用户会被分配一个<code>UID</code>，系统根据UID来判别执行命令的权限。</p>
+
+<p>进程就是正在运行中的程序。</p>
+
+<p>子进程是父进程衍生出来的进程，用<code>fork and exec</code>的方式产生，<code>PPID</code>值与父进程<code>PID</code>值相同可以用<code>ps -l</code>来查看当前用户的所有进程。</p>
+
+<h3>工作管理(job control)</h3>
+
+<p>Linux下的工作管理很像windows的任务管理器。工作管理是将进程控制在前台或后台运行，后台运行的程序必须是与用户没有交互，换句话说不用等待输入的。出现提示符让你操作的环境称为<code>前台(foreground)</code>，反之称为<code>后台(background)</code></p>
+
+<p>可以在执行的命令后加上<code>&amp;</code>把它丢到后台去执行，如</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd </span>octopress  <span class="c"># 进入博客目录</span>
-</span><span class='line'>rake new_post<span class="o">[</span><span class="s2">&quot;title&quot;</span><span class="o">]</span>  <span class="c"># title是文章名, 在生成的markdown文件名里</span>
-</span><span class='line'>rake preview  <span class="c"># 实时预览, 我用Mou写markdown, 保存后刷新网页即可</span>
-</span><span class='line'>rake gen_deploy  <span class="c"># 自动生成HTML网页, 并且进行一次commit and push, 还有贴心的commit message =w=</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>tar -zpcf /tmp/etc.tar.gz /etc <span class="p">&amp;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>坑</h3>
+<p>  <br/>
+终端里会显示出PID，如果有出错信息，会提示，可以看到命令提示符。</p>
 
-<p>由于我用的是<code>zsh</code>, <code>rake new_post</code>命令不支持<code>zsh</code>, 每次还要切回<code>bash</code>才能自动生成新文章, 我在考虑写个脚本完成这件事</p>
+<h4>CTRL+Z 与 CTRL+C</h4>
 
-<h3>定制修改</h3>
+<p>CTRL+Z可以将进程暂停放到后台，<strong>进程是没有停止的！</strong>CTRL+C是停止当前的进程。被CTRL+Z放到后台暂停的进程，可以通过<code>fg</code>和<code>bg</code>调整为运行状态。先查看一下当前后台工作状态：
+<code>jobs [-lrs]</code></p>
 
-<h4>加上about页面</h4>
+<ul>
+<li>-l：列出命令及PID</li>
+<li>-r：列出运行的进程(run)</li>
+<li>-s：列出后台暂停的进程(stop)<br/>
+然后用<code>fg %jobnumber</code>可以调到前台（<code>%</code>可有可无，jobnumber为任务编号，不是PID）或是用<code>bg %jobnumber</code>来在后台运行。</li>
+</ul>
+
+
+<h4>kill</h4>
+
+<p><code>kill -signal %jobnumber</code>
+- signal：</p>
+
+<ul>
+<li>-1：重新读取配置文件（类似reload）（左边是原文，不懂是干嘛的，如果明白烦请指点>&lt;）</li>
+<li>-2：与键盘ctrl+c作用相同</li>
+<li>-9：强制删除一个工作</li>
+<li>-15：以正常方式结束一个工作</li>
+</ul>
+
+
+<h4>脱机管理</h4>
+
+<p>脱机管理是指当你用远程终端登陆服务器时，如果直接以<code>&amp;</code>方式将任务放到后台掉线之后进程是不会继续执行的，可以用<code>nohup</code>来解决，如：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake new_page<span class="o">[</span><span class="s2">&quot;about&quot;</span><span class="o">]</span>  <span class="c"># 注意这里是`page`</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>nohup ./sleep500.sh <span class="p">&amp;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>并根据<a href="http://octopress.org/docs/theme/template/">文档</a>修改navigation的配置</p>
+<h4>查看进程</h4>
 
-<h4>加上disqus评论</h4>
+<p>ps命令可以静态查看系统进程。</p>
 
-<p>首先注册disqus并设置自己的shortname, 在<code>_config.yml</code>中加上自己的shortname</p>
+<ul>
+<li><code>ps -l</code>查看自己bash相关进程</li>
+<li><code>ps aux</code>查看系统所有进程，配合grep等管道命令用</li>
+</ul>
 
-<h4>添加侧边栏文章分类</h4>
 
-<p>看<a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">这篇博客</a>, 折腾完还要<code>Ctrl+C</code>再执行下<code>rake preview</code>, 并且注意, 如果你的分类中有中文博客里的代码会出bug, 需要自己hack一下, 或者像我压根就不用中文做分类名&hellip;</p>
+<p><em>2014-9-21 于博客园</em></p>
 
-<p>最后推荐这份<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">教程</a>(不过这哥们貌似写完这份教程之后都没更博了囧)</p>
+<p>迁移批注:<br/>
+其实到今天那一章还是没读完&hellip;拖延就是这么产生的&hellip;</p>
 
-<h4>添加&#8221;继续阅读&#8221;按钮</h4>
+<p>之后学习到<code>ps aux | grep uwsgi | awk {'print $2'} | xargs sudo kill -9</code>这个神奇的命令, 后面还要详细学习<code>awk</code>的主要用法, 目前只会这一个命令, 用于重启<code>uwsgi</code>等等的进程已经足够了</p>
 
-<p><a href="http://shengmingzhiqing.com/blog/octopress-lean-modification-1.html/#section-8">教程在此</a>, 修改<code>_config.yml</code>, 查找到<code>excerpt_link: "Read on &amp;rarr;"</code>这一段, 默认设置是文中<code>&lt;!--more--&gt;</code>之前的内容会显示到首页上</p>
+<p>对于<code>ps</code>和<code>kill</code>两个命令, 目前团队里大家的做法依然是简单粗暴的<code>ps aux</code>和<code>kill -9</code>, 感觉对<code>kill</code>用得还是不够好&hellip;</p>
 </div>
 
 
@@ -156,12 +184,12 @@
 
 
 
-<time class='entry-date' datetime='2015-03-15T19:19:36+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>7:19 pm</span></time>
+<time class='entry-date' datetime='2015-03-18T15:35:11+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>3:35 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/try/'>try</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>
   
 </span>
 
@@ -170,7 +198,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/blog/2015/03/15/new-blog/" data-via="" data-counturl="http://cxymrzero.github.io/blog/2015/03/15/new-blog/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/blog/2015/03/18/linux-process/" data-via="" data-counturl="http://cxymrzero.github.io/blog/2015/03/18/linux-process/" >Tweet</a>
   
   
   
@@ -179,8 +207,10 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2015/03/18/jinja-practice/" title="Previous Post: [老博文迁移]jinja2模板使用经验">&laquo; [老博文迁移]jinja2模板使用经验</a>
       
-        <a class="basic-alignment right" href="/blog/2015/03/17/webpy-502/" title="Next Post: [老博文迁移]web.py+fastcgi+nginx 502">[老博文迁移]web.py+fastcgi+nginx 502 &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2015/03/18/linux-pipe-1/" title="Next Post: [老博客迁移]linux管道命令学习(一)">[老博客迁移]linux管道命令学习(一) &raquo;</a>
       
     </p>
   </footer>
@@ -291,8 +321,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://cxymrzero.github.io/blog/2015/03/15/new-blog/';
-        var disqus_url = 'http://cxymrzero.github.io/blog/2015/03/15/new-blog/';
+        var disqus_identifier = 'http://cxymrzero.github.io/blog/2015/03/18/linux-process/';
+        var disqus_url = 'http://cxymrzero.github.io/blog/2015/03/18/linux-process/';
         var disqus_script = 'embed.js';
       
     (function () {

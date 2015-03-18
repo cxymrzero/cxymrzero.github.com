@@ -5,16 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Links - clean code</title>
+  <title>[老博客迁移]linux管道命令学习(一) - clean code</title>
   <meta name="author" content="Mr.Zero">
 
   
-  <meta name="description" content="Links Mar 15th, 2015 11:37 pm o my dear friends! lily 写代码的女青年
-yuki 挥着皮鞭的PM
-lastmayday 师傅啊=w=
-刘志鹏学长 很nice的学长啊
-刘明亮 踩入算法坑的少年
-汪汪汪 喜欢读书的小姑娘 blogs 酷壳 &hellip;">
+  <meta name="description" content="继续看鸟哥私房菜，看一直很想弄懂的管道命令(pipe)。第一次知道管道这个词还是在学django的时候，模板里的过滤器很像这里的管道。管道就是将输出在标准输出中的信息一次次处理最终打印在标准输出中，所以管道命令必须是接受标准输出的命令，cp mv ls都不是管道命令。 好用的less和tail &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,7 +18,7 @@ lastmayday 师傅啊=w=
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cxymrzero.github.io/links/">
+  <link rel="canonical" href="http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
@@ -71,73 +66,130 @@ lastmayday 师傅啊=w=
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Links</h1>
-    <p class="meta">
-
-
-
-
-<time class='entry-date' datetime='2015-03-15T23:37:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:37 pm</span></time></p>
-  </header>
-  
-  <h3>o my dear friends!</h3>
-
-<ul>
-<li><a href="http://www.lilyslily.com/">lily</a> 写代码的女青年</li>
-<li><a href="http://smilyyuki.lofter.com/">yuki</a> 挥着皮鞭的PM</li>
-<li><a href="http://lastmayday.org/">lastmayday</a>  师傅啊=w=</li>
-<li><a href="http://hustlzp.com/">刘志鹏学长</a>  很nice的学长啊</li>
-<li><a href="http://www.cnblogs.com/rootial/">刘明亮</a>  踩入算法坑的少年</li>
-<li><a href="http://sylviawong1995.github.io/">汪汪汪</a>  喜欢读书的小姑娘</li>
-</ul>
-
-
-<h3>blogs</h3>
-
-<ul>
-<li><a href="http://coolshell.cn/">酷壳</a></li>
-<li><a href="http://www.cnblogs.com/vamei/">Vamei</a></li>
-</ul>
-
-
-<h3>useful links</h3>
-
-<ul>
-<li><a href="http://readfree.me/">readfree</a> 很全的电(dao)子(ban)书, <a href="http://readfree.me/wenli/">豆瓣chrome插件</a></li>
-<li><a href="http://www.readfar.com/">readfar</a>同上</li>
-<li><a href="http://www.yuedudna.com/users/64327898/book/2015">阅读DNA</a> 统计分析你在豆瓣上的读书情况</li>
-<li><a href="http://jgraph.github.io/mxgraph/javascript/examples/grapheditor/www/index.html">在线流程图制作</a></li>
-<li><a href="http://subhd.com/">字幕站</a> 射手之后字幕解决方案</li>
-</ul>
-
-
-  
-    <footer>
+    
+      <h1 class="entry-title">[老博客迁移]linux管道命令学习(一)</h1>
+    
+    
       <p class="meta">
         
+
+
+
+
+<time class='entry-date' datetime='2015-03-18T16:06:38+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:06 pm</span></time>
         
-
-
-
-
-<time class='entry-date' datetime='2015-03-15T23:37:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:37 pm</span></time>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://cxymrzero.github.io">Comments</a>
         
       </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>继续看鸟哥私房菜，看一直很想弄懂的<code>管道命令(pipe)</code>。第一次知道管道这个词还是在学<code>django</code>的时候，模板里的过滤器很像这里的管道。管道就是将输出在标准输出中的信息一次次处理最终打印在标准输出中，所以管道命令必须是接受标准输出的命令，<code>cp</code> <code>mv</code> <code>ls</code>都不是管道命令。</p>
+
+<!-- more -->
+
+
+<h3>好用的<code>less</code>和<code>tail</code></h3>
+
+<h4>less</h4>
+
+<p>如<code>ls -al /etc | less</code>就能用类似<code>vi</code>的方式浏览在屏幕上打印的内容了。还能用<code>vi</code>里的查找命令<code>/</code>、<code>?</code>，可以避免滚屏，非常好用。</p>
+
+<h4>tail</h4>
+
+<ul>
+<li><code>tail filename</code>输出文件最后10行</li>
+<li><code>tail -n 5 filename</code>输出文件最后5行</li>
+<li><code>tail -F filename</code>监视文件的改变，一有变化就显示出来</li>
+</ul>
+
+
+<p>在分析error log的时候非常有用，可以查看最近的错误信息。</p>
+
+<h3>选取命令<code>cut</code>和<code>grep</code></h3>
+
+<h4>cut</h4>
+
+<p>cut针对的是输出的每一行，解释两个命令：</p>
+
+<ul>
+<li><code>echo $PATH | cut -d ':' -f 5</code>
+-d 选项后面紧跟分隔符，-f表示取第5段</li>
+<li><code>export | cut -c 12-</code>
+-c 选项表示选取的字符数，从12到结尾，也可是类似12-15这样</li>
+</ul>
+
+
+<h4>grep</h4>
+
+<p>grep真是神一般的命令，可以配合<code>ps aux</code>找到想要的进程。
+参数</p>
+
+<ul>
+<li>-c计算找到的被查找字符串的次数</li>
+<li>-i忽略大小写</li>
+<li>-v输出查找结果的补集
+例如<code>last | grep -v 'root'</code>找出非root的登陆</li>
+</ul>
+
+
+<p>睡觉，明天继续整理剩下的内容ww</p>
+
+<p><em>2014-9-22 于博客园</em></p>
+
+<p>迁移批注:<br/>
+Yesterday you said tomorrow&hellip;有了&#8221;一&#8221;就再没&#8221;二&#8221;了&hellip;<br/>
+不过后来除了<code>cut</code>外这几个命令都很常用, 使用<code>linux</code>时还是带来了很大帮助~ 需要继续学习~</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-        <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/links/index.html" data-via="" data-counturl="http://cxymrzero.github.io/links/index.html" >Tweet</a>
+
+<span class="byline author vcard">Posted by <span class="fn">Mr.Zero</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-03-18T16:06:38+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:06 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1/" data-via="" data-counturl="http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1/" >Tweet</a>
   
   
   
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+        <a class="basic-alignment left" href="/blog/2015/03/18/linux-process/" title="Previous Post: [老博文迁移]linux进程管理">&laquo; [老博文迁移]linux进程管理</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/18/oh-so-sad/" title="Next Post: [老博文迁移]推土小记">[老博文迁移]推土小记 &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
   <section>
@@ -245,8 +297,8 @@ lastmayday 师傅啊=w=
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://cxymrzero.github.io/links/index.html';
-        var disqus_url = 'http://cxymrzero.github.io/links/index.html';
+        var disqus_identifier = 'http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1/';
+        var disqus_url = 'http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1/';
         var disqus_script = 'embed.js';
       
     (function () {

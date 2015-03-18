@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | clean code]]></title>
   <link href="http://cxymrzero.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-03-18T15:24:38+08:00</updated>
+  <updated>2015-03-18T17:03:55+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -210,7 +210,7 @@
 要获取列表的长度，应该写成<code>lst|length</code>或是它的别称<code>lst|count</code>
 参考<a href="http://stackoverflow.com/questions/1465249/jinja2-get-lengths-of-list">这个问题</a></p>
 
-<p>(2014-9-10 于博客园)</p>
+<p><em>2014-9-10 于博客园</em></p>
 
 <p>迁移批注:<br/>
 这篇博文由于包含<code>jinja2</code>的模板语法, 在解析时会与<code>liquid</code>发生冲突而报错, 于是我采用<a href="http://octopress.org/docs/blogging/code/">载入代码文件</a>的方式解决了这个问题!</p>
@@ -311,7 +311,7 @@ def follow_user(user_id):
 
 <p>解决是google到<a href="http://python.6.x6.nabble.com/CPyUG-spawn-fcgi-web-py-td2737790.html">这里</a>的解决方案。</p>
 
-<p>(2014-9-10 于博客园)</p>
+<p><em>2014-9-10 于博客园</em></p>
 
 <p>迁移批注:<br/>
 这是在部署<a href="http://new.bingyan.net/">冰岩新官网</a>出bug后写的博文, 其实是使用<code>web.py</code>线上代码和开发环境不一致导致的(服务器采用Nginx+FastCGI, 本地是直接解释器运行), <code>web.py</code>在部署时还得根据环境改代码, 这种做法是非常操蛋的, 我也没找到最佳实践, 而<code>flask</code>就不存在类似问题. 另外<code>web.py</code>的作者已经饮弹自尽, 没有继续开发了, 加上文档缺失等原因, <code>web.py</code>已经被抛弃了, 不过它足够简单, 作为Python web开发入门的学习框架还是很合适的, 它也是我的初恋, 相爱相杀! <code>tornado</code>与它写法很相似, 闲下来我会学习的!</p>

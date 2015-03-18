@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Linux | clean code]]></title>
+  <link href="http://cxymrzero.github.io/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://cxymrzero.github.io/"/>
+  <updated>2015-03-18T17:03:55+08:00</updated>
+  <id>http://cxymrzero.github.io/</id>
+  <author>
+    <name><![CDATA[Mr.Zero]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[[老博客迁移]linux管道命令学习(一)]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1/"/>
+    <updated>2015-03-18T16:06:38+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1</id>
+    <content type="html"><![CDATA[<p>继续看鸟哥私房菜，看一直很想弄懂的<code>管道命令(pipe)</code>。第一次知道管道这个词还是在学<code>django</code>的时候，模板里的过滤器很像这里的管道。管道就是将输出在标准输出中的信息一次次处理最终打印在标准输出中，所以管道命令必须是接受标准输出的命令，<code>cp</code> <code>mv</code> <code>ls</code>都不是管道命令。</p>
+
+<!-- more -->
+
+
+<h3>好用的<code>less</code>和<code>tail</code></h3>
+
+<h4>less</h4>
+
+<p>如<code>ls -al /etc | less</code>就能用类似<code>vi</code>的方式浏览在屏幕上打印的内容了。还能用<code>vi</code>里的查找命令<code>/</code>、<code>?</code>，可以避免滚屏，非常好用。</p>
+
+<h4>tail</h4>
+
+<ul>
+<li><code>tail filename</code>输出文件最后10行</li>
+<li><code>tail -n 5 filename</code>输出文件最后5行</li>
+<li><code>tail -F filename</code>监视文件的改变，一有变化就显示出来</li>
+</ul>
+
+
+<p>在分析error log的时候非常有用，可以查看最近的错误信息。</p>
+
+<h3>选取命令<code>cut</code>和<code>grep</code></h3>
+
+<h4>cut</h4>
+
+<p>cut针对的是输出的每一行，解释两个命令：</p>
+
+<ul>
+<li><code>echo $PATH | cut -d ':' -f 5</code>
+-d 选项后面紧跟分隔符，-f表示取第5段</li>
+<li><code>export | cut -c 12-</code>
+-c 选项表示选取的字符数，从12到结尾，也可是类似12-15这样</li>
+</ul>
+
+
+<h4>grep</h4>
+
+<p>grep真是神一般的命令，可以配合<code>ps aux</code>找到想要的进程。
+参数</p>
+
+<ul>
+<li>-c计算找到的被查找字符串的次数</li>
+<li>-i忽略大小写</li>
+<li>-v输出查找结果的补集
+例如<code>last | grep -v 'root'</code>找出非root的登陆</li>
+</ul>
+
+
+<p>睡觉，明天继续整理剩下的内容ww</p>
+
+<p><em>2014-9-22 于博客园</em></p>
+
+<p>迁移批注:<br/>
+Yesterday you said tomorrow&hellip;有了&#8221;一&#8221;就再没&#8221;二&#8221;了&hellip;<br/>
+不过后来除了<code>cut</code>外这几个命令都很常用, 使用<code>linux</code>时还是带来了很大帮助~ 需要继续学习~</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[老博文迁移]linux进程管理]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/linux-process/"/>
+    <updated>2015-03-18T15:35:11+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/linux-process</id>
+    <content type="html"><![CDATA[<p>作为一个新手，部署Python网站的时候总会出各种各样的问题，这个时候我就很想知道是哪个程序没有运行。这几天读了鸟哥私房菜的进程管理这一章，还没读完，先做下笔记。</p>
+
+<!--more-->
+
+
+<h3>什么是进程？</h3>
+
+<p><strong>一个程序被加载到内存中运行，在内存中的数据就被称为进程.</strong> 在Linux下，所有的命令在执行时都会被系统定义为一个<code>进程</code>，这条命令会被分配一个ID，称为<code>PID</code>，执行这条命令的用户会被分配一个<code>UID</code>，系统根据UID来判别执行命令的权限。</p>
+
+<p>进程就是正在运行中的程序。</p>
+
+<p>子进程是父进程衍生出来的进程，用<code>fork and exec</code>的方式产生，<code>PPID</code>值与父进程<code>PID</code>值相同可以用<code>ps -l</code>来查看当前用户的所有进程。</p>
+
+<h3>工作管理(job control)</h3>
+
+<p>Linux下的工作管理很像windows的任务管理器。工作管理是将进程控制在前台或后台运行，后台运行的程序必须是与用户没有交互，换句话说不用等待输入的。出现提示符让你操作的环境称为<code>前台(foreground)</code>，反之称为<code>后台(background)</code></p>
+
+<p>可以在执行的命令后加上<code>&amp;</code>把它丢到后台去执行，如
+<code>sh
+    tar -zpcf /tmp/etc.tar.gz /etc &amp;
+</code>  <br/>
+终端里会显示出PID，如果有出错信息，会提示，可以看到命令提示符。</p>
+
+<h4>CTRL+Z 与 CTRL+C</h4>
+
+<p>CTRL+Z可以将进程暂停放到后台，<strong>进程是没有停止的！</strong>CTRL+C是停止当前的进程。被CTRL+Z放到后台暂停的进程，可以通过<code>fg</code>和<code>bg</code>调整为运行状态。先查看一下当前后台工作状态：
+<code>jobs [-lrs]</code></p>
+
+<ul>
+<li>-l：列出命令及PID</li>
+<li>-r：列出运行的进程(run)</li>
+<li>-s：列出后台暂停的进程(stop)<br/>
+然后用<code>fg %jobnumber</code>可以调到前台（<code>%</code>可有可无，jobnumber为任务编号，不是PID）或是用<code>bg %jobnumber</code>来在后台运行。</li>
+</ul>
+
+
+<h4>kill</h4>
+
+<p><code>kill -signal %jobnumber</code>
+- signal：</p>
+
+<ul>
+<li>-1：重新读取配置文件（类似reload）（左边是原文，不懂是干嘛的，如果明白烦请指点>&lt;）</li>
+<li>-2：与键盘ctrl+c作用相同</li>
+<li>-9：强制删除一个工作</li>
+<li>-15：以正常方式结束一个工作</li>
+</ul>
+
+
+<h4>脱机管理</h4>
+
+<p>脱机管理是指当你用远程终端登陆服务器时，如果直接以<code>&amp;</code>方式将任务放到后台掉线之后进程是不会继续执行的，可以用<code>nohup</code>来解决，如：
+<code>sh
+    nohup ./sleep500.sh &amp;
+</code></p>
+
+<h4>查看进程</h4>
+
+<p>ps命令可以静态查看系统进程。</p>
+
+<ul>
+<li><code>ps -l</code>查看自己bash相关进程</li>
+<li><code>ps aux</code>查看系统所有进程，配合grep等管道命令用</li>
+</ul>
+
+
+<p><em>2014-9-21 于博客园</em></p>
+
+<p>迁移批注:<br/>
+其实到今天那一章还是没读完&hellip;拖延就是这么产生的&hellip;</p>
+
+<p>之后学习到<code>ps aux | grep uwsgi | awk {'print $2'} | xargs sudo kill -9</code>这个神奇的命令, 后面还要详细学习<code>awk</code>的主要用法, 目前只会这一个命令, 用于重启<code>uwsgi</code>等等的进程已经足够了</p>
+
+<p>对于<code>ps</code>和<code>kill</code>两个命令, 目前团队里大家的做法依然是简单粗暴的<code>ps aux</code>和<code>kill -9</code>, 感觉对<code>kill</code>用得还是不够好&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>
