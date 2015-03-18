@@ -4,7 +4,7 @@
   <title><![CDATA[clean code]]></title>
   <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-03-18T17:06:27+08:00</updated>
+  <updated>2015-03-18T17:09:21+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -106,7 +106,7 @@ scp这个命令还真是不好用，又臭又长还不能tab出文件名，很�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[[老博客迁移]linux管道命令学习(一)]]></title>
+    <title type="html"><![CDATA[[老博文迁移]linux管道命令学习(一)]]></title>
     <link href="http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1/"/>
     <updated>2015-03-18T16:06:38+08:00</updated>
     <id>http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1</id>
