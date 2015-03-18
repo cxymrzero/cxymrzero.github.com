@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Try | clean code]]></title>
   <link href="http://cxymrzero.github.io/blog/categories/try/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-03-16T13:31:53+08:00</updated>
+  <updated>2015-03-18T15:24:38+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -23,6 +23,9 @@
 <p>去年大概这个时候, 用<code>jekyll</code>和<code>github pages</code>搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low!</p>
 
 <p>比较好的办法就是经常写, 把那些很low的文章顶到很多页之前, 就没人笑话了.</p>
+
+<!--more-->
+
 
 <p>新博客将<code>jekyll</code>换成了<code>octopress</code>, 因为喜欢这个博客主题, 同样是用markdown写博客, 代码高亮支持得很好, 自带的好看的<code>solarized dark</code>配色, 搭建流程参看<a href="http://shengmingzhiqing.com/blog/setup-octopress-with-github-pages.html/#octopress--github-pages">这篇博文</a></p>
 
@@ -56,6 +59,10 @@
 <p>看<a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">这篇博客</a>, 折腾完还要<code>Ctrl+C</code>再执行下<code>rake preview</code>, 并且注意, 如果你的分类中有中文博客里的代码会出bug, 需要自己hack一下, 或者像我压根就不用中文做分类名&hellip;</p>
 
 <p>最后推荐这份<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">教程</a>(不过这哥们貌似写完这份教程之后都没更博了囧)</p>
+
+<h4>添加&#8221;继续阅读&#8221;按钮</h4>
+
+<p><a href="http://shengmingzhiqing.com/blog/octopress-lean-modification-1.html/#section-8">教程在此</a>, 修改<code>_config.yml</code>, 查找到<code>excerpt_link: "Read on &amp;rarr;"</code>这一段, 默认设置是文中<code>&lt;!--more--&gt;</code>之前的内容会显示到首页上</p>
 ]]></content>
   </entry>
   

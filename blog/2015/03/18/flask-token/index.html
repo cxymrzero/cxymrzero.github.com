@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>使用Flask实现用户认证API - clean code</title>
+  <meta name="author" content="Mr.Zero">
+
+  
+  <meta name="description" content="我们在开发网站时会采用session和cookie的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个token(令牌)的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次token是否有效, 无效的情况包括token无法被解析等. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cxymrzero.github.io/blog/2015/03/18/flask-token/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">clean code</a></h1>
+  
+    <h2>i create stuff</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="cxymrzero.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+  <li><a href="/links">Links</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">使用Flask实现用户认证API</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-03-18T00:32:28+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:32 am</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://cxymrzero.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>我们在开发网站时会采用<code>session</code>和<code>cookie</code>的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个<code>token(令牌)</code>的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次<code>token</code>是否有效, 无效的情况包括<code>token</code>无法被解析等. 另一个问题是如果<code>token</code>被泄露, 用户的安全将受到威胁, 所以应当对这个<code>token</code>设置一个过期时间, 超过这个时间后应当重新登录, 这样可以将用户信息泄露的风险降低.</p>
+
+<!--more-->
+
+
+<h3>生成和使用<code>token</code></h3>
+
+<p>有个很棒的Python第三方库叫<code>itsdangerous</code>, 包含许多常见安全问题的解决方案, 比如文件名等等.</p>
+
+<h4>生成<code>token</code></h4>
+
+<p><code>TimedJSONWebSignatureSerializer</code>能将包含用户id的字典, 如<code>{'user_id': 1}</code>设置一个具有过期时间的<code>数字证书(Signature)</code>, 需要注意的是, 设置的<code>secret key</code>一定要足够安全, 在<code>flask</code>应用中, 我们采用<code>flask</code>配置中的<code>secret key</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">TimedJSONWebSignatureSerializer</span> <span class="k">as</span> <span class="n">Serializer</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">SignatureExpired</span><span class="p">,</span> <span class="n">BadSignature</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">config</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">gen_token</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">expiration</span><span class="o">=</span><span class="mi">1440</span><span class="o">*</span><span class="mi">31</span><span class="o">*</span><span class="mi">60</span><span class="p">):</span>  <span class="c"># 单位为秒, 设定31天过期</span>
+</span><span class='line'>    <span class="n">s</span> <span class="o">=</span> <span class="n">Serializer</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">expires_in</span><span class="o">=</span><span class="n">expiration</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>  <span class="c"># user为model中封装过的对象</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h4>验证<code>token</code>合法性以及是否过期</h4>
+
+<p><code>装饰器(decorator)</code>是<code>Python</code>一个很有用的语法糖, 可以有效地减少重复代码. 在每个需要验证<code>token</code>的场景都用装饰器包裹一层, 就能验证无效<code>token</code>和过期<code>token</code>了~</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">token_required</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class='line'>    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;token&#39;</span><span class="p">]</span>
+</span><span class='line'>        <span class="n">s</span> <span class="o">=</span> <span class="n">Serializer</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">SECRET_KEY</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">except</span> <span class="n">SignatureExpired</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;msg&#39;</span><span class="p">:</span> <span class="s">&#39;expired token&#39;</span><span class="p">}})</span>
+</span><span class='line'>        <span class="k">except</span> <span class="n">BadSignature</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;msg&#39;</span><span class="p">:</span> <span class="s">&#39;useless token&#39;</span><span class="p">}})</span>
+</span><span class='line'>        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">wrapper</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>例如实现一个关注用户的操作, 在视图函数中这样调用装饰器<code>token_required</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nd">@user.route</span><span class="p">(</span><span class="s">&#39;/follow&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+</span><span class='line'><span class="nd">@token_required</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">follow_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">user_to_follow_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;user_id&#39;</span><span class="p">]</span>
+</span><span class='line'>    <span class="n">user_rel</span> <span class="o">=</span> <span class="n">UserRel</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_to_follow_id</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">get_user_rel</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_to_follow_id</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">to_json</span><span class="p">(</span><span class="s">&#39;already follow&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">user_to_follow</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">UserInfo</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_to_follow_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">user_to_follow</span><span class="o">.</span><span class="n">data</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">model</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user_rel</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">model</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">to_json</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c"># 将flask中的jsonify封装了一层</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可是这样每个视图函数中需要一个<code>user_id</code>的参数, 这样还是存在重复, 不知是不是我装饰器用得不对:(</p>
+
+<h3>参考</h3>
+
+<p>[1]<a href="http://www.cnblogs.com/vovlie/p/4182814.html">使用Flask设计带认证token的RESTful API接口</a><br/>
+[2]<a href="http://pythonhosted.org/itsdangerous/">itsdangerous文档</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Mr.Zero</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-03-18T00:32:28+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>12:32 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/python/'>python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/blog/2015/03/18/flask-token/" data-via="" data-counturl="http://cxymrzero.github.io/blog/2015/03/18/flask-token/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/03/17/webpy-502/" title="Previous Post: [老博文迁移]web.py+fastcgi+nginx 502">&laquo; [老博文迁移]web.py+fastcgi+nginx 502</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/18/jinja-practice/" title="Next Post: [老博文迁移]jinja2模板使用经验">[老博文迁移]jinja2模板使用经验 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/jinja-practice/">[老博文迁移]jinja2模板使用经验</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/flask-token/">使用Flask实现用户认证API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/17/webpy-502/">[老博文迁移]web.py+fastcgi+nginx 502</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/15/new-blog/">新博客终于搭起来了</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/cxymrzero">@cxymrzero</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'cxymrzero',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/python/'>python (3)</a></li>
+<li class='category'><a href='/blog/categories/try/'>try (1)</a></li>
+
+  </ul>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Mr.Zero -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'cxymrzero';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://cxymrzero.github.io/blog/2015/03/18/flask-token/';
+        var disqus_url = 'http://cxymrzero.github.io/blog/2015/03/18/flask-token/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

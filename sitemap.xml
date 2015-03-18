@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://cxymrzero.github.io/blog/2015/03/18/jinja-practice/</loc>
+    <lastmod>2015-03-18T13:19:01+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://cxymrzero.github.io/blog/2015/03/18/flask-token/</loc>
+    <lastmod>2015-03-18T00:32:28+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://cxymrzero.github.io/blog/2015/03/17/webpy-502/</loc>
+    <lastmod>2015-03-17T23:45:42+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://cxymrzero.github.io/blog/2015/03/15/new-blog/</loc>
     <lastmod>2015-03-15T19:19:36+08:00</lastmod>
   </url>
@@ -18,5 +30,24 @@
   </url>
   <url>
     <loc>http://cxymrzero.github.io/blog/categories/try/</loc>
+  </url>
+  <url>
+    <loc>http://cxymrzero.github.io/blog/categories/python/</loc>
+  </url>
+  <url>
+    <loc>http://cxymrzero.github.io/downloads/code/html/jinja0.html</loc>
+    <lastmod>2015-03-18T15:07:22+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://cxymrzero.github.io/downloads/code/html/jinja1.html</loc>
+    <lastmod>2015-03-18T15:10:12+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://cxymrzero.github.io/downloads/code/html/jinja2.html</loc>
+    <lastmod>2015-03-18T15:11:56+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://cxymrzero.github.io/downloads/code/html/jinja3.html</loc>
+    <lastmod>2015-03-18T15:13:47+08:00</lastmod>
   </url>
 </urlset>

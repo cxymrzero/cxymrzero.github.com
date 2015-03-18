@@ -95,6 +95,9 @@
 
 <p>比较好的办法就是经常写, 把那些很low的文章顶到很多页之前, 就没人笑话了.</p>
 
+<!--more-->
+
+
 <p>新博客将<code>jekyll</code>换成了<code>octopress</code>, 因为喜欢这个博客主题, 同样是用markdown写博客, 代码高亮支持得很好, 自带的好看的<code>solarized dark</code>配色, 搭建流程参看<a href="http://shengmingzhiqing.com/blog/setup-octopress-with-github-pages.html/#octopress--github-pages">这篇博文</a></p>
 
 <h3>发博客很简单</h3>
@@ -134,6 +137,10 @@
 <p>看<a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">这篇博客</a>, 折腾完还要<code>Ctrl+C</code>再执行下<code>rake preview</code>, 并且注意, 如果你的分类中有中文博客里的代码会出bug, 需要自己hack一下, 或者像我压根就不用中文做分类名&hellip;</p>
 
 <p>最后推荐这份<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">教程</a>(不过这哥们貌似写完这份教程之后都没更博了囧)</p>
+
+<h4>添加&#8221;继续阅读&#8221;按钮</h4>
+
+<p><a href="http://shengmingzhiqing.com/blog/octopress-lean-modification-1.html/#section-8">教程在此</a>, 修改<code>_config.yml</code>, 查找到<code>excerpt_link: "Read on &amp;rarr;"</code>这一段, 默认设置是文中<code>&lt;!--more--&gt;</code>之前的内容会显示到首页上</p>
 </div>
 
 
@@ -173,6 +180,8 @@
     <p class="meta">
       
       
+        <a class="basic-alignment right" href="/blog/2015/03/17/webpy-502/" title="Next Post: [老博文迁移]web.py+fastcgi+nginx 502">[老博文迁移]web.py+fastcgi+nginx 502 &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -192,10 +201,51 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/03/18/jinja-practice/">[老博文迁移]jinja2模板使用经验</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/flask-token/">使用Flask实现用户认证API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/17/webpy-502/">[老博文迁移]web.py+fastcgi+nginx 502</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/03/15/new-blog/">新博客终于搭起来了</a>
       </li>
     
   </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/cxymrzero">@cxymrzero</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'cxymrzero',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
 
 
@@ -204,7 +254,8 @@
 <section>
   <h1>Categories</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/try/'>try (1)</a></li>
+    <li class='category'><a href='/blog/categories/python/'>python (3)</a></li>
+<li class='category'><a href='/blog/categories/try/'>try (1)</a></li>
 
   </ul>
 </section>

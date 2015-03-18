@@ -5,16 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Links - clean code</title>
+  <title>[老博文迁移]web.py+fastcgi+nginx 502 - clean code</title>
   <meta name="author" content="Mr.Zero">
 
   
-  <meta name="description" content="Links Mar 15th, 2015 11:37 pm o my dear friends! lily 写代码的女青年
-yuki 挥着皮鞭的PM
-lastmayday 师傅啊=w=
-刘志鹏学长 很nice的学长啊
-刘明亮 踩入算法坑的少年
-汪汪汪 喜欢读书的小姑娘 blogs 酷壳 &hellip;">
+  <meta name="description" content="用web.py照着官方文档在服务器上搭好了后台。这次很奇怪地出现了一个Nginx 502 Bad Gateway的错误。 执行上面的kill `pgrep -f "python /path/to/www/index.py"`会出现错误提示，可是启动脚本的时候明明是提示spawn-fcgi: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,7 +18,7 @@ lastmayday 师傅啊=w=
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cxymrzero.github.io/links/">
+  <link rel="canonical" href="http://cxymrzero.github.io/blog/2015/03/17/webpy-502/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
@@ -71,73 +66,95 @@ lastmayday 师傅啊=w=
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Links</h1>
-    <p class="meta">
-
-
-
-
-<time class='entry-date' datetime='2015-03-15T23:37:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:37 pm</span></time></p>
-  </header>
-  
-  <h3>o my dear friends!</h3>
-
-<ul>
-<li><a href="http://www.lilyslily.com/">lily</a> 写代码的女青年</li>
-<li><a href="http://smilyyuki.lofter.com/">yuki</a> 挥着皮鞭的PM</li>
-<li><a href="http://lastmayday.org/">lastmayday</a>  师傅啊=w=</li>
-<li><a href="http://hustlzp.com/">刘志鹏学长</a>  很nice的学长啊</li>
-<li><a href="http://www.cnblogs.com/rootial/">刘明亮</a>  踩入算法坑的少年</li>
-<li><a href="http://sylviawong1995.github.io/">汪汪汪</a>  喜欢读书的小姑娘</li>
-</ul>
-
-
-<h3>blogs</h3>
-
-<ul>
-<li><a href="http://coolshell.cn/">酷壳</a></li>
-<li><a href="http://www.cnblogs.com/vamei/">Vamei</a></li>
-</ul>
-
-
-<h3>useful links</h3>
-
-<ul>
-<li><a href="http://readfree.me/">readfree</a> 很全的电(dao)子(ban)书, <a href="http://readfree.me/wenli/">豆瓣chrome插件</a></li>
-<li><a href="http://www.readfar.com/">readfar</a>同上</li>
-<li><a href="http://www.yuedudna.com/users/64327898/book/2015">阅读DNA</a> 统计分析你在豆瓣上的读书情况</li>
-<li><a href="http://jgraph.github.io/mxgraph/javascript/examples/grapheditor/www/index.html">在线流程图制作</a></li>
-<li><a href="http://subhd.com/">字幕站</a> 射手之后字幕解决方案</li>
-</ul>
-
-
-  
-    <footer>
+    
+      <h1 class="entry-title">[老博文迁移]web.py+fastcgi+nginx 502</h1>
+    
+    
       <p class="meta">
         
+
+
+
+
+<time class='entry-date' datetime='2015-03-17T23:45:42+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:45 pm</span></time>
         
-
-
-
-
-<time class='entry-date' datetime='2015-03-15T23:37:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:37 pm</span></time>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://cxymrzero.github.io">Comments</a>
         
       </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>用<code>web.py</code>照着<a href="http://webpy.org/cookbook/fastcgi-nginx.zh-cn">官方文档</a>在服务器上搭好了后台。这次很奇怪地出现了一个Nginx 502 Bad Gateway的错误。</p>
+
+<p>执行上面的<code>kill `pgrep -f "python /path/to/www/index.py"`</code>会出现错误提示，可是启动脚本的时候明明是提示<code>spawn-fcgi: child spawned successfully: PID: 32401</code>的信息的，然后还可以继续执行<code>spawn-fcgi -d /path/to/www -f /path/to/www/index.py -a 127.0.0.1 -p 9002</code>的脚本
+，同样会提示成功。</p>
+
+<!--more-->
+
+
+<p>原因是<strong>进程确实创建成功了，但是又马上终止了！！</strong>
+这时用<code>spawn-fcgi</code>的<code>-n</code>选项就能看到错误信息了。原来是index.py里少了一行<code>import os</code>，一开始就出错了，而不是访问某个具体地址时会报错。类似的情况在php下面也容易碰到，php的语法错导致php5-fpm一开启就死掉，用<code>php5-fpm -e</code>可以查看错误原因。</p>
+
+<p>这里还要注意是否是按照官网上的步骤配置的web.py部署条件，有没有安装web.py, spawn-fcgi和flup，如果没有安装可以用<code>sudo pip install web.py</code>，<code>sudo apt-get install spawn-fcgi</code>，<code>sudo apt-get install python-flup</code>（ubuntu下），没安装依赖也会导致同样的错误。</p>
+
+<p>解决是google到<a href="http://python.6.x6.nabble.com/CPyUG-spawn-fcgi-web-py-td2737790.html">这里</a>的解决方案。</p>
+
+<p>(2014-9-10 于博客园)</p>
+
+<p>迁移批注:<br/>
+这是在部署<a href="http://new.bingyan.net/">冰岩新官网</a>出bug后写的博文, 其实是使用<code>web.py</code>线上代码和开发环境不一致导致的(服务器采用Nginx+FastCGI, 本地是直接解释器运行), <code>web.py</code>在部署时还得根据环境改代码, 这种做法是非常操蛋的, 我也没找到最佳实践, 而<code>flask</code>就不存在类似问题. 另外<code>web.py</code>的作者已经饮弹自尽, 没有继续开发了, 加上文档缺失等原因, <code>web.py</code>已经被抛弃了, 不过它足够简单, 作为Python web开发入门的学习框架还是很合适的, 它也是我的初恋, 相爱相杀! <code>tornado</code>与它写法很相似, 闲下来我会学习的!</p>
+
+<p><code>502 Bad Gateway</code>其实很常见, 字面意思是网关错误, 原因几乎都是前端<code>Nginx</code>将请求反向代理到后端的进程, 如<code>uwsgi</code>或<code>php-fpm</code>等进程管理工具跑起来的进程, 没有成功运行导致的, 这种情况首先应该检查进程有没有起, 生产环境与开发环境是否不同.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
       
-        <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/links/index.html" data-via="" data-counturl="http://cxymrzero.github.io/links/index.html" >Tweet</a>
+
+<span class="byline author vcard">Posted by <span class="fn">Mr.Zero</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-03-17T23:45:42+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:45 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/python/'>python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/blog/2015/03/17/webpy-502/" data-via="" data-counturl="http://cxymrzero.github.io/blog/2015/03/17/webpy-502/" >Tweet</a>
   
   
   
 </div>
 
+    
+    <p class="meta">
       
-    </footer>
-  
+        <a class="basic-alignment left" href="/blog/2015/03/15/new-blog/" title="Previous Post: 新博客终于搭起来了">&laquo; 新博客终于搭起来了</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/18/flask-token/" title="Next Post: 使用Flask实现用户认证API">使用Flask实现用户认证API &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
   <section>
@@ -232,8 +249,8 @@ lastmayday 师傅啊=w=
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://cxymrzero.github.io/links/index.html';
-        var disqus_url = 'http://cxymrzero.github.io/links/index.html';
+        var disqus_identifier = 'http://cxymrzero.github.io/blog/2015/03/17/webpy-502/';
+        var disqus_url = 'http://cxymrzero.github.io/blog/2015/03/17/webpy-502/';
         var disqus_script = 'embed.js';
       
     (function () {
