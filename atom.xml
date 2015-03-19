@@ -4,7 +4,7 @@
   <title><![CDATA[clean code]]></title>
   <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-03-18T17:09:21+08:00</updated>
+  <updated>2015-03-19T16:14:04+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -12,6 +12,356 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[[翻译]Python文件读写]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/19/python-file/"/>
+    <updated>2015-03-19T13:22:38+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/19/python-file</id>
+    <content type="html"><![CDATA[<p>原文: <a href="http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python">Reading and Writing Files in Python</a></p>
+
+<h3>概览</h3>
+
+<p>在Python中, 读写文件不需要import任何库, 第一步是使用<code>open</code>函数获取一个文件对象</p>
+
+<h3>文件类型</h3>
+
+<p>文件通常被分为<code>文本文件</code>或<code>二进制文件</code>, <code>文本文件</code>通常是由很多行组成的序列(sequence), 而每一行又是很多字符(characters)组成的序列. 每一行由<code>EOL(End Of Line)</code>终结, 最常见的行终结符是<code>\n</code>, 又叫换行符. 反斜杠(backslash)表明下一个字符将被当作一个新行(<em>译注: 这里没理解</em>). 基本上不是文本文件的文件就是二进制文件, 二进制文件只能被了解其文件结构的应用处理.</p>
+
+<h3>Open()</h3>
+
+<p>我们使用内置的<code>open()</code>函数打开一个文件. <code>open()</code>返回一个文件对象, 一般会传入两个参数. 语法是:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">file_object</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>  <span class="c"># file_object是储存文件对象的变量</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>打开方式(mode)</h3>
+
+<p><code>mode</code>参数是可以省略的, 缺省条件下为<code>'r'</code><br/>
+<code>mode</code>参数可以是:</p>
+
+<ul>
+<li>&lsquo;r&rsquo;, 读文件</li>
+<li>&lsquo;w&rsquo;, 仅写文件(如果有同名文件会被覆盖)</li>
+<li>&lsquo;a&rsquo;, 添加文本; 所有写入的内容都会被自动添加到文件末尾</li>
+<li>&lsquo;r+&rsquo;, 读写文件</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;workfile&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span> <span class="n">f</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接下来文件对象函数将被调用. 最常用的两个函数是<code>read</code>和<code>write</code>.</p>
+
+<h3>创建一个文本文件</h3>
+
+<p>让我们先来创建一个新文本文件. 你可以随便给它取名字, 在这个例子中我们叫它<code>newfile.txt</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;newfile.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;hello world in the new file</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;and another line</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在我们打开<code>newfile.txt</code>, 可以看到如下内容:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>cat newfile.txt
+</span><span class='line'>hello world in the new file
+</span><span class='line'>and another line
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>如何读文本文件</h3>
+
+<p>我们可以用不同的方法来读一个文本文件.</p>
+
+<h4><code>file.read()</code></h4>
+
+<p>如果你想得到一个包含文件中所有字符的字符串, 你可以用<code>file.read()</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+hello world in the new file
+and another line
+</code></pre>
+
+<p>我们也可以通过使用<code>file.read(n)</code>来指定字符串应该返回的字符的个数, <code>n</code>确定了字符个数. 下面这段代码读取文本中的前5个字符并将它们作为字符串返回.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+hello
+</code></pre>
+
+<h4>file.readline()</h4>
+
+<p><code>readline()</code>函数会逐行读取文件(而非一次读取整个文件), 调用<code>readline()</code>会获取文件第一行, 之后的调用会返回接下来的行. 通常它会从文件读取单行并返回一个包含直到<code>\n</code>的字符串</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="nb">file</span><span class="o">.</span><span class="n">readline</span><span class="p">():</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+hello world in the new file
+</code></pre>
+
+<h4>file.readlines()</h4>
+
+<p><code>readlines()</code>将整个文件作为一个用<code>\n</code>分隔的列表返回</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="nb">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+['hello world in the new file\n', 'and another line\n']
+</code></pre>
+
+<h3>循环遍历一个文件对象</h3>
+
+<p>读取文件的行时, 你可以循环遍历这个文件对象. 这在内存占用上是高效的, 并且写法简单.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">file</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">line</span><span class="p">,</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+hello world in the new file
+and another line
+</code></pre>
+
+<h3>file.write()</h3>
+
+<p>写方法需要一个参数, 待写入的字符串. 写入后如果要换行, 在末尾添加一个<code>\n</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;newfile.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;This is a test</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;And here is another line</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>close()</h3>
+
+<p>当你对文件的操作结束后, 调用<code>f.close()</code>来关闭它并且释放打开这个文件所占用的系统资源. 调用<code>f.close()</code>后, 对这个文件的操作都会失败.</p>
+
+<h3>文件句柄(file handler)的用法</h3>
+
+<p>让我们看看一些使用不同方法的例子</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c"># 打开文本文件:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 读文本文件:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 一次读一行:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="o">.</span><span class="n">txt</span><span class="s">&quot;, &quot;r&quot;)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">fh</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 读取文件各行组成的列表:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt.&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 写文件:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 写入字符串列表:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">lines_of_text</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;a line of text&quot;</span><span class="p">,</span> <span class="s">&quot;another line of text&quot;</span><span class="p">,</span> <span class="s">&quot;a third line&quot;</span><span class="p">]</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">lines_of_text</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 在文件后追加内容:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;Hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello World again&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 关闭文件:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>with语句</h3>
+
+<p>另一种处理文件的方式是<code>with</code>语句. 使用<code>with</code>语句是很好的做法. 通过<code>with</code>语句, 你就有了更好的语法和异常处理.<br/>
+另外, 它会自动关闭文件. <code>with</code>语句提供了一种保证资源得到释放的方法.<br/>
+使用<code>with</code>打开文件很简单:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>让我们来看些例子</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;newtext.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>   <span class="c"># Use file to refer to the file object</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">do</span> <span class="n">something</span> <span class="k">with</span> <span class="n">data</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同样地, 你也可以循环遍历文件对象:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;newfile.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">line</span><span class="p">,</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意, 我们不需要写<code>file.close()</code>, 它会被自动调用.</p>
+
+<h3>使用<code>with</code>的例子</h3>
+
+<p>让我们通过一些例子来看看平常我们可以怎么用到它</p>
+
+<h4>用<code>with</code>写文件</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>逐行读取文件</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;hello.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>分割行</h4>
+
+<p>最后一个例子中, 我们将看到如何从一个文本文件中分割行. <code>split</code>函数将变量<code>data</code>中包含的字符串以空格符为分割符分割开. 你也可以根据任何你想要的分割符分割, 例如<code>line.split(':')</code>会用冒号分割字符串</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">words</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+Because multiple values are returned by split, they are returned as an array.
+['hello', 'world,', 'how', 'are', 'you', 'today?']
+['today', 'is', 'saturday']
+</code></pre>
+
+<h3>扩展阅读</h3>
+
+<p>[1] <a href="http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files">http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files</a><br/>
+[2] <a href="http://www.pythonforbeginners.com/cheatsheet/python-file-handling/">http://www.pythonforbeginners.com/cheatsheet/python-file-handling/</a><br/>
+[3] <a href="http://en.wikibooks.org/wiki/Non-Programmer's_Tutorial_for_Python_3/">http://en.wikibooks.org/wiki/Non-Programmer&#8217;s_Tutorial_for_Python_3/</a><br/>
+[4] <a href="http://chryswoods.com/beginning_python/">http://chryswoods.com/beginning_python/</a></p>
+
+<h3>译后记</h3>
+
+<p>呼, 终于译完了这篇水文&hellip;完全新手向的一篇文章, 译完才发现比我以为的要浅好多, 算是复习文件操作吧~</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[[老博文迁移]推土小记]]></title>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | clean code]]></title>
   <link href="http://cxymrzero.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-03-18T17:09:21+08:00</updated>
+  <updated>2015-03-19T16:14:04+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -14,21 +14,572 @@
 
   
   <entry>
-    <title type="html"><![CDATA[[老博文迁移]jinja2模板使用经验]]></title>
-    <link href="http://cxymrzero.github.io/blog/2015/03/18/jinja-practice/"/>
-    <updated>2015-03-18T13:19:01+08:00</updated>
-    <id>http://cxymrzero.github.io/blog/2015/03/18/jinja-practice</id>
-    <content type="html"><![CDATA[<p>用<code>jinja2</code>写模板的时候遇到了一些问题，记录一下</p>
+    <title type="html"><![CDATA[[翻译]Python文件读写]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/19/python-file/"/>
+    <updated>2015-03-19T13:22:38+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/19/python-file</id>
+    <content type="html"><![CDATA[<p>原文: <a href="http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python">Reading and Writing Files in Python</a></p>
 
-<!--more-->
+<h3>概览</h3>
 
+<p>在Python中, 读写文件不需要import任何库, 第一步是使用<code>open</code>函数获取一个文件对象</p>
 
-<h3>抽出base.html作为模板</h3>
+<h3>文件类型</h3>
 
-<p>之前的小项目写得都很不规范，模板都是能用就行，基本上只用到<code>if</code>语句，<code>for</code>语句和变量。导航栏都是复制粘贴，没有把共同的部分抽出来。写模板的时候还应该注意一下不要直接在原来的html上改，这样容易把html改乱，应该新建一个<code>template</code>目录，再一个个写模板，这样更好</p>
+<p>文件通常被分为<code>文本文件</code>或<code>二进制文件</code>, <code>文本文件</code>通常是由很多行组成的序列(sequence), 而每一行又是很多字符(characters)组成的序列. 每一行由<code>EOL(End Of Line)</code>终结, 最常见的行终结符是<code>\n</code>, 又叫换行符. 反斜杠(backslash)表明下一个字符将被当作一个新行(<em>译注: 这里没理解</em>). 基本上不是文本文件的文件就是二进制文件, 二进制文件只能被了解其文件结构的应用处理.</p>
 
-<p>参照<a href="http://jinja.pocoo.org/docs/dev/templates/">jinja2的文档</a>抽出公共部分，如
-<figure class='code'><figcaption><span> (jinja0.html)</span> <a href='/downloads/code/html/jinja0.html'>download</a></figcaption>
+<h3>Open()</h3>
+
+<p>我们使用内置的<code>open()</code>函数打开一个文件. <code>open()</code>返回一个文件对象, 一般会传入两个参数. 语法是:
+<code>py
+file_object = open(filename, mode)  # file_object是储存文件对象的变量
+</code></p>
+
+<h3>打开方式(mode)</h3>
+
+<p><code>mode</code>参数是可以省略的, 缺省条件下为<code>'r'</code><br/>
+<code>mode</code>参数可以是:</p>
+
+<ul>
+<li>&lsquo;r&rsquo;, 读文件</li>
+<li>&lsquo;w&rsquo;, 仅写文件(如果有同名文件会被覆盖)</li>
+<li>&lsquo;a&rsquo;, 添加文本; 所有写入的内容都会被自动添加到文件末尾</li>
+<li>&lsquo;r+&rsquo;, 读写文件
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+<span class='line-number'>202</span>
+<span class='line-number'>203</span>
+<span class='line-number'>204</span>
+<span class='line-number'>205</span>
+<span class='line-number'>206</span>
+<span class='line-number'>207</span>
+<span class='line-number'>208</span>
+<span class='line-number'>209</span>
+<span class='line-number'>210</span>
+<span class='line-number'>211</span>
+<span class='line-number'>212</span>
+<span class='line-number'>213</span>
+<span class='line-number'>214</span>
+<span class='line-number'>215</span>
+<span class='line-number'>216</span>
+<span class='line-number'>217</span>
+<span class='line-number'>218</span>
+<span class='line-number'>219</span>
+<span class='line-number'>220</span>
+<span class='line-number'>221</span>
+<span class='line-number'>222</span>
+<span class='line-number'>223</span>
+<span class='line-number'>224</span>
+<span class='line-number'>225</span>
+<span class='line-number'>226</span>
+<span class='line-number'>227</span>
+<span class='line-number'>228</span>
+<span class='line-number'>229</span>
+<span class='line-number'>230</span>
+<span class='line-number'>231</span>
+<span class='line-number'>232</span>
+<span class='line-number'>233</span>
+<span class='line-number'>234</span>
+<span class='line-number'>235</span>
+<span class='line-number'>236</span>
+<span class='line-number'>237</span>
+<span class='line-number'>238</span>
+<span class='line-number'>239</span>
+<span class='line-number'>240</span>
+<span class='line-number'>241</span>
+<span class='line-number'>242</span>
+<span class='line-number'>243</span>
+<span class='line-number'>244</span>
+<span class='line-number'>245</span>
+<span class='line-number'>246</span>
+<span class='line-number'>247</span>
+<span class='line-number'>248</span>
+<span class='line-number'>249</span>
+<span class='line-number'>250</span>
+<span class='line-number'>251</span>
+<span class='line-number'>252</span>
+<span class='line-number'>253</span>
+<span class='line-number'>254</span>
+<span class='line-number'>255</span>
+<span class='line-number'>256</span>
+<span class='line-number'>257</span>
+<span class='line-number'>258</span>
+<span class='line-number'>259</span>
+<span class='line-number'>260</span>
+<span class='line-number'>261</span>
+<span class='line-number'>262</span>
+<span class='line-number'>263</span>
+<span class='line-number'>264</span>
+<span class='line-number'>265</span>
+<span class='line-number'>266</span>
+<span class='line-number'>267</span>
+<span class='line-number'>268</span>
+<span class='line-number'>269</span>
+<span class='line-number'>270</span>
+<span class='line-number'>271</span>
+<span class='line-number'>272</span>
+<span class='line-number'>273</span>
+<span class='line-number'>274</span>
+<span class='line-number'>275</span>
+<span class='line-number'>276</span>
+<span class='line-number'>277</span>
+<span class='line-number'>278</span>
+<span class='line-number'>279</span>
+<span class='line-number'>280</span>
+<span class='line-number'>281</span>
+<span class='line-number'>282</span>
+<span class='line-number'>283</span>
+<span class='line-number'>284</span>
+<span class='line-number'>285</span>
+<span class='line-number'>286</span>
+<span class='line-number'>287</span>
+<span class='line-number'>288</span>
+<span class='line-number'>289</span>
+<span class='line-number'>290</span>
+<span class='line-number'>291</span>
+<span class='line-number'>292</span>
+<span class='line-number'>293</span>
+<span class='line-number'>294</span>
+<span class='line-number'>295</span>
+<span class='line-number'>296</span>
+<span class='line-number'>297</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>&lt;blockquote&gt;&lt;blockquote&gt;&lt;blockquote&gt;&lt;p&gt;f = open(&lsquo;workfile&rsquo;, &lsquo;w&rsquo;)
+</span><span class='line'>print f
+</span><span class='line'>&lt;code&gt;``
+</span><span class='line'>接下来文件对象函数将被调用. 最常用的两个函数是&lt;/code&gt;read&lt;code&gt;和&lt;/code&gt;write`.&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/li&gt;
+</span><span class='line'>&lt;/ul&gt;
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;创建一个文本文件&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;让我们先来创建一个新文本文件. 你可以随便给它取名字, 在这个例子中我们叫它&lt;code&gt;newfile.txt&lt;/code&gt;
+</span><span class='line'>&lt;code&gt;py
+</span><span class='line'>file = open("newfile.txt", "w")
+</span><span class='line'>file.write("hello world in the new file\n")
+</span><span class='line'>file.write("and another line\n")
+</span><span class='line'>file.close()
+</span><span class='line'>&lt;/code&gt;
+</span><span class='line'>现在我们打开&lt;code&gt;newfile.txt&lt;/code&gt;, 可以看到如下内容:
+</span><span class='line'>&lt;code&gt;sh
+</span><span class='line'>$ cat newfile.txt
+</span><span class='line'>hello world in the new file
+</span><span class='line'>and another line
+</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;如何读文本文件&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;我们可以用不同的方法来读一个文本文件.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h4&gt;&lt;code&gt;file.read()&lt;/code&gt;&lt;/h4&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;如果你想得到一个包含文件中所有字符的字符串, 你可以用&lt;code&gt;file.read()&lt;/code&gt;
+</span><span class='line'>&lt;code&gt;py
+</span><span class='line'>file = open('newfile.txt', 'r')
+</span><span class='line'>print file.read()
+</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'>
+</span><span class='line'>hello world in the new file
+</span><span class='line'>and another line
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;我们也可以通过使用&lt;code&gt;file.read(n)&lt;/code&gt;来指定字符串应该返回的字符的个数, &lt;code&gt;n&lt;/code&gt;确定了字符个数. 下面这段代码读取文本中的前5个字符并将它们作为字符串返回.
+</span><span class='line'>&lt;code&gt;py
+</span><span class='line'>file = open('newfile.txt', 'r')
+</span><span class='line'>print file.read(5)
+</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'>
+</span><span class='line'>hello
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h4&gt;file.readline()&lt;/h4&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;&lt;code&gt;readline()&lt;/code&gt;函数会逐行读取文件(而非一次读取整个文件), 调用&lt;code&gt;readline()&lt;/code&gt;会获取文件第一行, 之后的调用会返回接下来的行. 通常它会从文件读取单行并返回一个包含直到&lt;code&gt;\n&lt;/code&gt;的字符串
+</span><span class='line'>&lt;code&gt;py
+</span><span class='line'>file = open('newfile.txt', 'r')
+</span><span class='line'>print file.readline():
+</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'>
+</span><span class='line'>hello world in the new file
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h4&gt;file.readlines()&lt;/h4&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;&lt;code&gt;readlines()&lt;/code&gt;将整个文件作为一个用&lt;code&gt;\n&lt;/code&gt;分隔的列表返回
+</span><span class='line'>&lt;code&gt;py
+</span><span class='line'>file = open('newfile.txt', 'r')
+</span><span class='line'>print file.readlines()
+</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'>
+</span><span class='line'>['hello world in the new file\n', 'and another line\n']
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;循环遍历一个文件对象&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;读取文件的行时, 你可以循环遍历这个文件对象. 这在内存占用上是高效的, 并且写法简单.
+</span><span class='line'>&lt;code&gt;py
+</span><span class='line'>file = open('newfile.txt', 'r')
+</span><span class='line'>for line in file:
+</span><span class='line'>    print line,
+</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'>
+</span><span class='line'>hello world in the new file
+</span><span class='line'>and another line
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;file.write()&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;写方法需要一个参数, 待写入的字符串. 写入后如果要换行, 在末尾添加一个&lt;code&gt;\n&lt;/code&gt;
+</span><span class='line'>&lt;code&gt;py
+</span><span class='line'>file = open("newfile.txt", "w")
+</span><span class='line'>file.write("This is a test\n")
+</span><span class='line'>file.write("And here is another line\n")
+</span><span class='line'>file.close()
+</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;close()&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;当你对文件的操作结束后, 调用&lt;code&gt;f.close()&lt;/code&gt;来关闭它并且释放打开这个文件所占用的系统资源. 调用&lt;code&gt;f.close()&lt;/code&gt;后, 对这个文件的操作都会失败.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;文件句柄(file handler)的用法&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;让我们看看一些使用不同方法的例子&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;# 打开文本文件:
+</span><span class='line'>fh = open("hello.txt", "r")
+</span><span class='line'>
+</span><span class='line'># 读文本文件:
+</span><span class='line'>fh = open("hello.txt","r")
+</span><span class='line'>print fh.read()
+</span><span class='line'>
+</span><span class='line'># 一次读一行:
+</span><span class='line'>fh = open("hello".txt", "r")
+</span><span class='line'>print fh.readline()
+</span><span class='line'>
+</span><span class='line'># 读取文件各行组成的列表:
+</span><span class='line'>fh = open("hello.txt.", "r")
+</span><span class='line'>print fh.readlines()
+</span><span class='line'>
+</span><span class='line'># 写文件:
+</span><span class='line'>fh = open("hello.txt","w")
+</span><span class='line'>fh.write("Hello World")
+</span><span class='line'>fh.close()
+</span><span class='line'>
+</span><span class='line'># 写入字符串列表:
+</span><span class='line'>fh = open("hello.txt", "w")
+</span><span class='line'>lines_of_text = ["a line of text", "another line of text", "a third line"]
+</span><span class='line'>fh.writelines(lines_of_text)
+</span><span class='line'>fh.close()
+</span><span class='line'>
+</span><span class='line'># 在文件后追加内容:
+</span><span class='line'>fh = open("Hello.txt", "a")
+</span><span class='line'>fh.write("Hello World again")
+</span><span class='line'>fh.close
+</span><span class='line'>
+</span><span class='line'># 关闭文件:
+</span><span class='line'>fh = open("hello.txt", "r")
+</span><span class='line'>print fh.read()
+</span><span class='line'>fh.close()
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;with语句&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;另一种处理文件的方式是&lt;code&gt;with&lt;/code&gt;语句. 使用&lt;code&gt;with&lt;/code&gt;语句是很好的做法. 通过&lt;code&gt;with&lt;/code&gt;语句, 你就有了更好的语法和异常处理.&lt;br/&gt;
+</span><span class='line'>另外, 它会自动关闭文件. &lt;code&gt;with&lt;/code&gt;语句提供了一种保证资源得到释放的方法.&lt;br/&gt;
+</span><span class='line'>使用&lt;code&gt;with&lt;/code&gt;打开文件很简单:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open(filename) as file:
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;让我们来看些例子&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open("newtext.txt") as file:   # Use file to refer to the file object
+</span><span class='line'>    data = file.read()
+</span><span class='line'>    do something with data
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;同样地, 你也可以循环遍历文件对象:&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;with open("newfile.txt") as f:
+</span><span class='line'>    for line in f:
+</span><span class='line'>        print line,
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;注意, 我们不需要写&lt;code&gt;file.close()&lt;/code&gt;, 它会被自动调用.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;使用&lt;code&gt;with&lt;/code&gt;的例子&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;让我们通过一些例子来看看平常我们可以怎么用到它&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h4&gt;用&lt;code&gt;with&lt;/code&gt;写文件&lt;/h4&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open("hello.txt", "w") as f:
+</span><span class='line'>    f.write("Hello World")
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h4&gt;逐行读取文件&lt;/h4&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open('hello.txt') as f:
+</span><span class='line'>    data = f.readlines()
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h4&gt;分割行&lt;/h4&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;最后一个例子中, 我们将看到如何从一个文本文件中分割行. &lt;code&gt;split&lt;/code&gt;函数将变量&lt;code&gt;data&lt;/code&gt;中包含的字符串以空格符为分割符分割开. 你也可以根据任何你想要的分割符分割, 例如&lt;code&gt;line.split(':')&lt;/code&gt;会用冒号分割字符串&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open('data.txt', 'r') as f:
+</span><span class='line'>    data = f.readlines()
+</span><span class='line'>
+</span><span class='line'>    for line in data:
+</span><span class='line'>        words = line.split()
+</span><span class='line'>        print words
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'>
+</span><span class='line'>Because multiple values are returned by split, they are returned as an array.
+</span><span class='line'>['hello', 'world,', 'how', 'are', 'you', 'today?']
+</span><span class='line'>['today', 'is', 'saturday']
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;扩展阅读&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;[1] &lt;a href="http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files"&gt;http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files&lt;/a&gt;&lt;br/&gt;
+</span><span class='line'>[2] &lt;a href="http://www.pythonforbeginners.com/cheatsheet/python-file-handling/"&gt;http://www.pythonforbeginners.com/cheatsheet/python-file-handling/&lt;/a&gt;&lt;br/&gt;
+</span><span class='line'>[3] &lt;a href="http://en.wikibooks.org/wiki/Non-Programmer's_Tutorial_for_Python_3/"&gt;http://en.wikibooks.org/wiki/Non-Programmer's_Tutorial_for_Python_3/&lt;/a&gt;&lt;br/&gt;
+</span><span class='line'>[4] &lt;a href="http://chryswoods.com/beginning_python/"&gt;http://chryswoods.com/beginning_python/&lt;/a&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;译后记&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;呼, 终于译完了这篇水文&hellip;完全新手向的一篇文章, 译完才发现比我以为的要浅好多, 算是复习文件操作吧~&lt;/p&gt;
+</span><span class='line'>]]&gt;&lt;/content&gt;
+</span><span class='line'>  &lt;/entry&gt;
+</span><span class='line'>  
+</span><span class='line'>  &lt;entry&gt;
+</span><span class='line'>    &lt;title type="html"&gt;&lt;![CDATA[[老博文迁移]jinja2模板使用经验]]&gt;&lt;/title&gt;
+</span><span class='line'>    &lt;link href="http://cxymrzero.github.io/blog/2015/03/18/jinja-practice/"/&gt;
+</span><span class='line'>    &lt;updated&gt;2015-03-18T13:19:01+08:00&lt;/updated&gt;
+</span><span class='line'>    &lt;id&gt;http://cxymrzero.github.io/blog/2015/03/18/jinja-practice&lt;/id&gt;
+</span><span class='line'>    &lt;content type="html"&gt;&lt;![CDATA[&lt;p&gt;用&lt;code&gt;jinja2&lt;/code&gt;写模板的时候遇到了一些问题，记录一下&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;!--more--&gt;
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;抽出base.html作为模板&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;之前的小项目写得都很不规范，模板都是能用就行，基本上只用到&lt;code&gt;if&lt;/code&gt;语句，&lt;code&gt;for&lt;/code&gt;语句和变量。导航栏都是复制粘贴，没有把共同的部分抽出来。写模板的时候还应该注意一下不要直接在原来的html上改，这样容易把html改乱，应该新建一个&lt;code&gt;template&lt;/code&gt;目录，再一个个写模板，这样更好&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;参照&lt;a href="http://jinja.pocoo.org/docs/dev/templates/"&gt;jinja2的文档&lt;/a&gt;抽出公共部分，如
+</span><span class='line'><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (jinja0.html)</span> <a href='/downloads/code/html/jinja0.html'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -63,24 +614,24 @@
 </span><span class='line'>        {% endblock %}
 </span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
 </span><span class='line'><span class="nt">&lt;/body&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>在子模板中填充对应的<code>block</code>就行，如
-对于在base.html里有但是子模板里没有的<code>block</code>，对应位置会采用base.html里的内容</p>
-
-<p><figure class='code'><figcaption><span> (jinja1.html)</span> <a href='/downloads/code/html/jinja1.html'>download</a></figcaption>
+</span></code></pre></td></tr></table></div></figure>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;在子模板中填充对应的&lt;code&gt;block&lt;/code&gt;就行，如
+</span><span class='line'>对于在base.html里有但是子模板里没有的&lt;code&gt;block&lt;/code&gt;，对应位置会采用base.html里的内容&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<figure class='code'><figcaption><span> (jinja1.html)</span> <a href='/downloads/code/html/jinja1.html'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'>{% block title %}
 </span><span class='line'>我是标题
 </span><span class='line'>{% endblock %}
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h3>导航栏怎么设置为active?</h3>
-
-<p>很多用到导航栏的情况都会有当前所在位置高亮的设置，假设CSS中<code>.active</code>设为高亮了，那么在jinja2中就能给base.html传值，如：
-<figure class='code'><figcaption><span> (jinja2.html)</span> <a href='/downloads/code/html/jinja2.html'>download</a></figcaption>
+</span></code></pre></td></tr></table></div></figure>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;导航栏怎么设置为active?&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;很多用到导航栏的情况都会有当前所在位置高亮的设置，假设CSS中&lt;code&gt;.active&lt;/code&gt;设为高亮了，那么在jinja2中就能给base.html传值，如：
+</span><span class='line'><figure class='code'><figcaption><span> (jinja2.html)</span> <a href='/downloads/code/html/jinja2.html'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -194,61 +745,60 @@
 </span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
 </span><span class='line'><span class="nt">&lt;/ul&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
-在子模板中，向base.html传<code>active</code>的值就行了，我们不只可以通过py文件向jinja2传值，还能在不同模板之间传值
-<figure class='code'><figcaption><span> (jinja3.html)</span> <a href='/downloads/code/html/jinja3.html'>download</a></figcaption>
+</span><span class='line'>在子模板中，向base.html传&lt;code&gt;active&lt;/code&gt;的值就行了，我们不只可以通过py文件向jinja2传值，还能在不同模板之间传值
+</span><span class='line'><figure class='code'><figcaption><span> (jinja3.html)</span> <a href='/downloads/code/html/jinja3.html'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'>{% extends &quot;base.html&quot; %}
 </span><span class='line'>{% set active = &quot;group&quot; %}
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>这样导航栏就能根据相应的内容显示高亮的<code>li</code>了！更多内容参考<a href="http://jinja.pocoo.org/docs/dev/tricks/">官方文档</a></p>
-
-<h3>如何获取列表的长度？</h3>
-
-<p>jinja2支持很多Python的语法，于是我尝试调用<code>len(lst)</code>函数，会报错。
-要获取列表的长度，应该写成<code>lst|length</code>或是它的别称<code>lst|count</code>
-参考<a href="http://stackoverflow.com/questions/1465249/jinja2-get-lengths-of-list">这个问题</a></p>
-
-<p><em>2014-9-10 于博客园</em></p>
-
-<p>迁移批注:<br/>
-这篇博文由于包含<code>jinja2</code>的模板语法, 在解析时会与<code>liquid</code>发生冲突而报错, 于是我采用<a href="http://octopress.org/docs/blogging/code/">载入代码文件</a>的方式解决了这个问题!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用Flask实现用户认证API]]></title>
-    <link href="http://cxymrzero.github.io/blog/2015/03/18/flask-token/"/>
-    <updated>2015-03-18T00:32:28+08:00</updated>
-    <id>http://cxymrzero.github.io/blog/2015/03/18/flask-token</id>
-    <content type="html"><![CDATA[<p>我们在开发网站时会采用<code>session</code>和<code>cookie</code>的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个<code>token(令牌)</code>的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次<code>token</code>是否有效, 无效的情况包括<code>token</code>无法被解析等. 另一个问题是如果<code>token</code>被泄露, 用户的安全将受到威胁, 所以应当对这个<code>token</code>设置一个过期时间, 超过这个时间后应当重新登录, 这样可以将用户信息泄露的风险降低.</p>
-
-<!--more-->
-
-
-<h3>生成和使用<code>token</code></h3>
-
-<p>有个很棒的Python第三方库叫<code>itsdangerous</code>, 包含许多常见安全问题的解决方案, 比如文件名等等.</p>
-
-<h4>生成<code>token</code></h4>
-
-<p><code>TimedJSONWebSignatureSerializer</code>能将包含用户id的字典, 如<code>{'user_id': 1}</code>设置一个具有过期时间的<code>数字证书(Signature)</code>, 需要注意的是, 设置的<code>secret key</code>一定要足够安全, 在<code>flask</code>应用中, 我们采用<code>flask</code>配置中的<code>secret key</code></p>
-
-<pre><code class="python">from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from itsdangerous import SignatureExpired, BadSignature
-from config import config
-
-
-def gen_token(user, expiration=1440*31*60):  # 单位为秒, 设定31天过期
-    s = Serializer(config.SECRET_KEY, expires_in=expiration)
-    return s.dumps({'id': user.id})  # user为model中封装过的对象
-</code></pre>
-
-<h4>验证<code>token</code>合法性以及是否过期</h4>
-
-<p><code>装饰器(decorator)</code>是<code>Python</code>一个很有用的语法糖, 可以有效地减少重复代码. 在每个需要验证<code>token</code>的场景都用装饰器包裹一层, 就能验证无效<code>token</code>和过期<code>token</code>了~<br/>
-&#8220;`python
+</span></code></pre></td></tr></table></div></figure>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;这样导航栏就能根据相应的内容显示高亮的&lt;code&gt;li&lt;/code&gt;了！更多内容参考&lt;a href=&#8221;http://jinja.pocoo.org/docs/dev/tricks/&#8221;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;如何获取列表的长度？&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;jinja2支持很多Python的语法，于是我尝试调用&lt;code&gt;len(lst)&lt;/code&gt;函数，会报错。
+</span><span class='line'>要获取列表的长度，应该写成&lt;code&gt;lst|length&lt;/code&gt;或是它的别称&lt;code&gt;lst|count&lt;/code&gt;
+</span><span class='line'>参考&lt;a href=&#8221;http://stackoverflow.com/questions/1465249/jinja2-get-lengths-of-list&#8221;&gt;这个问题&lt;/a&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;&lt;em&gt;2014-9-10 于博客园&lt;/em&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;迁移批注:&lt;br/&gt;
+</span><span class='line'>这篇博文由于包含&lt;code&gt;jinja2&lt;/code&gt;的模板语法, 在解析时会与&lt;code&gt;liquid&lt;/code&gt;发生冲突而报错, 于是我采用&lt;a href=&#8221;http://octopress.org/docs/blogging/code/&#8221;&gt;载入代码文件&lt;/a&gt;的方式解决了这个问题!&lt;/p&gt;
+</span><span class='line'>]]&gt;&lt;/content&gt;
+</span><span class='line'>  &lt;/entry&gt;
+</span><span class='line'>  
+</span><span class='line'>  &lt;entry&gt;
+</span><span class='line'>    &lt;title type=&#8221;html&#8221;&gt;&lt;![CDATA[使用Flask实现用户认证API]]&gt;&lt;/title&gt;
+</span><span class='line'>    &lt;link href=&#8221;http://cxymrzero.github.io/blog/2015/03/18/flask-token/&#8221;/&gt;
+</span><span class='line'>    &lt;updated&gt;2015-03-18T00:32:28+08:00&lt;/updated&gt;
+</span><span class='line'>    &lt;id&gt;http://cxymrzero.github.io/blog/2015/03/18/flask-token&lt;/id&gt;
+</span><span class='line'>    &lt;content type=&#8221;html&#8221;&gt;&lt;![CDATA[&lt;p&gt;我们在开发网站时会采用&lt;code&gt;session&lt;/code&gt;和&lt;code&gt;cookie&lt;/code&gt;的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个&lt;code&gt;token(令牌)&lt;/code&gt;的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次&lt;code&gt;token&lt;/code&gt;是否有效, 无效的情况包括&lt;code&gt;token&lt;/code&gt;无法被解析等. 另一个问题是如果&lt;code&gt;token&lt;/code&gt;被泄露, 用户的安全将受到威胁, 所以应当对这个&lt;code&gt;token&lt;/code&gt;设置一个过期时间, 超过这个时间后应当重新登录, 这样可以将用户信息泄露的风险降低.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;!&#8211;more&#8211;&gt;
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;h3&gt;生成和使用&lt;code&gt;token&lt;/code&gt;&lt;/h3&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;有个很棒的Python第三方库叫&lt;code&gt;itsdangerous&lt;/code&gt;, 包含许多常见安全问题的解决方案, 比如文件名等等.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h4&gt;生成&lt;code&gt;token&lt;/code&gt;&lt;/h4&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;&lt;code&gt;TimedJSONWebSignatureSerializer&lt;/code&gt;能将包含用户id的字典, 如&lt;code&gt;{&#8216;user_id&#8217;: 1}&lt;/code&gt;设置一个具有过期时间的&lt;code&gt;数字证书(Signature)&lt;/code&gt;, 需要注意的是, 设置的&lt;code&gt;secret key&lt;/code&gt;一定要足够安全, 在&lt;code&gt;flask&lt;/code&gt;应用中, 我们采用&lt;code&gt;flask&lt;/code&gt;配置中的&lt;code&gt;secret key&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code class=&#8221;python&#8221;&gt;from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+</span><span class='line'>from itsdangerous import SignatureExpired, BadSignature
+</span><span class='line'>from config import config
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>def gen_token(user, expiration=1440*31*60):  # 单位为秒, 设定31天过期
+</span><span class='line'>    s = Serializer(config.SECRET_KEY, expires_in=expiration)
+</span><span class='line'>    return s.dumps({&#8216;id&#8217;: user.id})  # user为model中封装过的对象
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h4&gt;验证&lt;code&gt;token&lt;/code&gt;合法性以及是否过期&lt;/h4&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;&lt;code&gt;装饰器(decorator)&lt;/code&gt;是&lt;code&gt;Python&lt;/code&gt;一个很有用的语法糖, 可以有效地减少重复代码. 在每个需要验证&lt;code&gt;token&lt;/code&gt;的场景都用装饰器包裹一层, 就能验证无效&lt;code&gt;token&lt;/code&gt;和过期&lt;code&gt;token&lt;/code&gt;了~&lt;br/&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>python
 from functools import wraps</p>
 
 <p>def token_required(func):
