@@ -4,7 +4,7 @@
   <title><![CDATA[clean code]]></title>
   <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-03-19T16:14:04+08:00</updated>
+  <updated>2015-03-19T16:16:53+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -23,6 +23,9 @@
 <h3>概览</h3>
 
 <p>在Python中, 读写文件不需要import任何库, 第一步是使用<code>open</code>函数获取一个文件对象</p>
+
+<!-- more -->
+
 
 <h3>文件类型</h3>
 
