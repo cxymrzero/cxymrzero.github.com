@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | clean code]]></title>
   <link href="http://cxymrzero.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-03-19T16:16:53+08:00</updated>
+  <updated>2015-04-16T21:43:26+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -14,41 +14,247 @@
 
   
   <entry>
-    <title type="html"><![CDATA[[翻译]Python文件读写]]></title>
-    <link href="http://cxymrzero.github.io/blog/2015/03/19/python-file/"/>
-    <updated>2015-03-19T13:22:38+08:00</updated>
-    <id>http://cxymrzero.github.io/blog/2015/03/19/python-file</id>
-    <content type="html"><![CDATA[<p>原文: <a href="http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python">Reading and Writing Files in Python</a></p>
+    <title type="html"><![CDATA[[翻译]Python漫游指南 - 编程风格]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style/"/>
+    <updated>2015-03-22T22:56:11+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style</id>
+    <content type="html"><![CDATA[<p>原文: <a href="http://docs.python-guide.org/en/latest/writing/style/">Code Style</a></p>
 
-<h3>概览</h3>
+<p>如果你问Python程序员他们最喜欢Python的什么，他们通常会说是Python的可读性。实际上，良好的可读性是Python设计时的一个核心思想，这是根据一个广为认可的事实 <em>比起写，代码更容易被人读</em> 的思想设计的。</p>
 
-<p>在Python中, 读写文件不需要import任何库, 第一步是使用<code>open</code>函数获取一个文件对象</p>
+<p>Python代码易读易懂的一个原因是它相对完善的代码风格的规范和<em>Pythonic</em>的成语。</p>
 
 <!-- more -->
 
 
-<h3>文件类型</h3>
+<p>另外，当一个Python老手(<em>Pythonista</em>)指出一段代码不够<em>Pythonic</em>，通常意味着这几行代码没有按照一般的代码规范来并且没有用公认的最好的(通常是最易读的)方式表达其意图。</p>
 
-<p>文件通常被分为<code>文本文件</code>或<code>二进制文件</code>, <code>文本文件</code>通常是由很多行组成的序列(sequence), 而每一行又是很多字符(characters)组成的序列. 每一行由<code>EOL(End Of Line)</code>终结, 最常见的行终结符是<code>\n</code>, 又叫换行符. 反斜杠(backslash)表明下一个字符将被当作一个新行(<em>译注: 这里没理解</em>). 基本上不是文本文件的文件就是二进制文件, 二进制文件只能被了解其文件结构的应用处理.</p>
+<p>在某些情况下是找不到一个大家都认可的方式去用Python表达一个意图的，不过很少有这种情况。</p>
 
-<h3>Open()</h3>
+<h3>一般概念</h3>
 
-<p>我们使用内置的<code>open()</code>函数打开一个文件. <code>open()</code>返回一个文件对象, 一般会传入两个参数. 语法是:
+<h4>明确的代码</h4>
+
+<p>虽然在Python中，一切黑魔法都有可能发生，但我们更推荐最明确和最直接的方式。<br/>
+<strong>Bad</strong>
 <code>py
-file_object = open(filename, mode)  # file_object是储存文件对象的变量
-</code></p>
+def make_complex(*args):
+    x, y = args
+    return dict(**locals())
+</code>
+<strong>Good</strong>
+<code>py
+def make_complex(x, y):
+    return {'x': x, 'y': y}
+</code>
+在上面的正面例子中，x、y明确地被函数接收，返回了一个明确的字典。通过读第一行和最后一行，使用这个函数的开发者就能准确知道怎样使用这个函数了，然而反面教材就完全不是那回事了。</p>
 
-<h3>打开方式(mode)</h3>
+<h4>一行一个语句</h4>
 
-<p><code>mode</code>参数是可以省略的, 缺省条件下为<code>'r'</code><br/>
-<code>mode</code>参数可以是:</p>
+<p>虽然有些复合语句，比如列表推导式，因为它们的简洁和丰富的表达能力被允许和推荐使用，但是将两个不能联合使用的语句放到同一行是一种很糟糕的做法。<br/>
+<strong>Bad</strong>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">print</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">one</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;;</span> <span class="k">print</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">two</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="k">print</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">one</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">if</span> <span class="o">&lt;</span><span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span> <span class="ow">and</span> <span class="o">&lt;</span><span class="n">other</span> <span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># do something</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">**</span><span class="n">Good</span><span class="o">**</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">py</span>
+</span><span class='line'><span class="k">print</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">one</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'><span class="k">print</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">two</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">one</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">cond1</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">cond2</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">other</span> <span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">if</span> <span class="n">cond1</span> <span class="ow">and</span> <span class="n">cond2</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># do something</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4>函数参数</h4>
+
+<p>有四种不同方法向函数传递参数：<br/>
+1. <strong>位置参数</strong>是必须的并且没有默认值。它们是参数的最简单形式，并且它们适用于很少的、是函数含义一部分并且顺序很自然的函数参数。比如在<code>send(message, recipient)</code>或<code>point(x, y)</code>中，用函数的人不难记住这两个函数需要两个参数和参数间的顺序。<br/>
+在那两个例子中，调用函数时也可以使用参数名，并且如果这样做就可以交换两个参数的顺序了，比如调用<code>send(recipient='World', message='Hello')</code>和<code>point(y=2, x=1)</code>但是这会降低可读性，并且比起更直接地调用<code>send('Hello', 'World')</code>和<code>point(1, 2)</code>这是没有必要的冗余。<br/>
+2. <strong>关键字参数</strong><br/>
+不是必须的并且有默认值。它们常常被作为可选参数传递给函数。当一个函数有超过2至3个可选参数时，它的特点就变得更让人难以记住了，这时使用有默认值的关键字参数就会很有用。比如，一个更完整的<code>send</code>函数可以被定义为<code>send(message, to, cc=None, bcc=None)</code>。这里<code>cc</code>和<code>bcc</code>是可选的，并且在没有其它参数传入时值为<code>None</code>。</p>
+
+<p>在Python中有多种方法调用一个有关键字参数的函数，比如可以按照参数定义的顺序而不显式地命名参数来调用，比如<code>send('Hello', 'World', 'Cthulhu', 'God')</code>会向上帝发送一个密件副本。也可以像<code>send('Hello again', 'World', bcc='God', cc='Cthulhu')</code>这样用其它的顺序命名参数。除非有充分的理由不按照最接近函数定义的语法<code>send('Hello', 'World', cc='Cthulhu', bcc='God')</code>来，否则最好避免出现这两种可能性。</p>
+
+<p>作为旁注，我要说，按照<a href="http://en.wikipedia.org/wiki/You_ain't_gonna_need_it">YAGNI</a> 原则来，通常去掉一个“只是为了以防万一”而加上的可选参数(和函数当中的逻辑)比在需要时添加一个新的可选参数和它的逻辑要难。<br/>
+3. <strong>可变参数列表</strong><br/>
+第三种向函数传递参数的方法。如果一个函数的作用用一组数目可扩展的位置参数能更好地表示的话，它就能用<code>*args</code>结构定义。在函数体中，<code>args</code>会成为一个包含所有位置参数的元组。比如<code>send(message, *args)</code>可以将每个接收者作为参数被调用：<code>send('Hello', 'God', 'Mom', 'Cthulhu')</code>在函数体中<code>args</code>会等价于<code>('God', 'Mom', 'Cthulhu')</code>。</p>
+
+<p>但是这种结构有些缺陷，要小心使用。如果一个函数接受一系列具有共同特征的参数，通常将函数定义为接受一个列表或者其它序列的参数的函数会更清晰。在这里，如果<code>send</code>有多个接收者，最好显式地定义它：<code>send(message, recipients)</code>并用<code>send('Hello', ['God', 'Mom', 'Cthulhu'])</code>来调用它。这样，函数的使用者事先就能将接收者列表制造为一个列表，并且可以向其中传递任何的序列，包括不能被解包成其它序列的迭代器。<br/>
+4. <strong>可变关键字参数列表</strong><br/>
+最后一种向函数传递参数的方法。如果函数需要一组不确定的命名参数，就可以用<strong>kwargs</strong>结构。在函数体中，<strong>kwargs</strong>会是一个字典，其中包含所有没被函数特征中的其它关键字参数获取的有变量名的参数。</p>
+
+<p>同样需要注意<em>可变参数列表</em>中的情形，因为类似的原因：这些强大的工具应该在的确有必要时才被用到，并且如果更简单、整洁的结构就足够表明函数的意图时就不应该使用它们。</p>
+
+<p>哪些参数是位置参数、哪些参数是可选关键字参数和是否使用高级的可变参数是写函数的程序员决定的，如果能明智地遵循上面的建议，就可以写出这样的Python函数：</p>
 
 <ul>
-<li>&lsquo;r&rsquo;, 读文件</li>
-<li>&lsquo;w&rsquo;, 仅写文件(如果有同名文件会被覆盖)</li>
-<li>&lsquo;a&rsquo;, 添加文本; 所有写入的内容都会被自动添加到文件末尾</li>
-<li>&lsquo;r+&rsquo;, 读写文件
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<li>易读（参数名不需要解释）</li>
+<li>易修改（添加一个新的关键字参数不会破坏代码的其它部分）</li>
+</ul>
+
+
+<h4>别用魔棒</h4>
+
+<p>作为黑客的强大工具，Python有非常多的钩子和工具，能让你做几乎任何的技巧性的玩法。比如，可以做这些事：</p>
+
+<ul>
+<li>修改对象是怎么创建和实例化的</li>
+<li>修改Python解释器是怎么导入模块的</li>
+<li>甚至可以（如果需要也推荐）在Python中嵌入C例程</li>
+</ul>
+
+
+<p>但是所有这些选项都有很多缺点，用最直接的方法来达到你的目标总是会更好。最主要的缺点是用这些结构时可读性会大大降低。许多代码分析工具，像pylint或pyflakes，都不能解析这些“魔术”代码。</p>
+
+<p>我们认为一个Python开发者应该了解这些几乎无穷无尽的可能性，因为这让我们具有信心，没有什么能阻碍我们。然而，知道怎么做、尤其是什么时候<strong>不</strong>用它们非常重要。  r</p>
+
+<p>就像一个功夫高手，一个Pythonista知道如何用一只手指杀人，实际上却从不这么干。</p>
+
+<h4>我们都是负责的用户</h4>
+
+<p>正如上面我们看到的，Python允许很多技巧，其中有些包含潜在的危险。一个很好的例子就是，任何客户端代码都可以重载一个对象的属性和方法：Python中没有private关键字。这种和像Java这样防御性很强、有很多手段来避免误用的语言非常不同的设计思想被称为“我们都是负责的用户”。</p>
+
+<p>这不意味着没有属性被认为是私有的、Python中不可能进行合适的封装。相反，Python社区不依赖开发者在自己和别人的代码之间建一堵堵墙，而是更倾向于依赖一系列的公约来指示这些元素不应该被直接访问。</p>
+
+<p>对私有变量和实现细节最主要的公约就是给所有“内部变量”加上下划线前缀。如果客户端代码破坏了这种规则访问了这些被标记的元素，任何因为代码修改导致的误操作或者问题都应该由客户端承担责任。</p>
+
+<p>慷慨地使用这条公约是被鼓励的：任何不想被客户端代码使用的方法或属性都应该加上一个下划线前缀。这会保证责任更好地分离、现有代码更好修改；将私有属性公开化总是可以的，但是将公有属性私有化可能就要麻烦多了。</p>
+
+<h4>返回值</h4>
+
+<p>当一个函数变得越来越复杂，不难碰到在一个函数体中用多个return语句的情况。然而为了保证清晰的缩进和可持续发展的可读性水准，最好避免从很多函数体输出点返回有意义的值。</p>
+
+<p>有两种主要情况会在函数体中返回值：函数的结果在函数正常执行后返回，和指示错误输入参数或者导致函数无法完成它的计算或任务的其它情况。</p>
+
+<p>如果你不希望在第二种情况中抛出异常，可能就需要返回一个值，比如None或者False来指示错误的输入参数或者其它原因导致函数不能像需要的那样正确执行。在这种情况下，在错误的上下文被发现时，越早返回越好。这会让函数的结构变得扁平化：所有那条因为错误而返回的语句之后的代码都可以假设满足进一步计算函数主要结果的条件。通常是要有多个这样的返回语句的。</p>
+
+<p>然而，当一个函数在正常流程中有多个主要退出点时，调试返回结果就变得困难了，所以保持一个退出点会更好。这对制造出代码轨迹也有好处，有多个退出点可能表明你的代码需要重构了。</p>
+
+<pre><code class="py">def complex_function(a, b, c):
+    if not a:
+        return None  # 抛出异常会更好
+    if not b:
+        return None  # 抛出异常会更好
+    # 一些用a、b和c来计算x的复杂代码
+    # 如果成功了要忍住返回x的诱惑
+    if not x:
+        # 一些对x的Plan-B的计算
+    return x  # 维护代码时，一个为返回值x设置的单退出点会很好
+</code></pre>
+
+<h3>成语</h3>
+
+<p>一个编程成语简单来说就是写代码的一种<em>方法</em>。编程成语的想法在<a href="http://c2.com/cgi/wiki?ProgrammingIdiom">c2</a>和<a href="http://stackoverflow.com/questions/302459/what-is-a-programming-idiom">Stack Overflow</a>中已经得到了充分说明。</p>
+
+<p>地道的Python代码通常被称作很Pythonic。</p>
+
+<p>尽管通常有一种，并且更可取地仅仅只有一种明显的方法来解决问题；<em>那种</em>写地道的Python代码的方法，对于新人来说可能很不明显。所以好的成语需要有意识地去掌握。</p>
+
+<p>下面介绍几个常用的成语：</p>
+
+<h4>解包</h4>
+
+<p>如果你知道一个列表或元组的长度，你可以通过解包给其中的元素命名。比如<code>enumerate()</code>会为列表中的每一项提供一个二元组：
+<code>py
+for index, item in enumerate(some_list):
+    # 用index和item来干点什么
+</code>
+你也可以用它来交换两个变量：
+<code>py
+a, b = b, a
+</code>
+嵌套序列解包也行：
+<code>py
+a, (b, c) = 1, (2, 3)
+</code>
+Python3中，<a href="http://www.python.org/dev/peps/pep-3132">PEP 3132</a>介绍了一个扩展的解包的新方式：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">middle</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">middle</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">4</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="c">#### 创建一个会被忽略的变量</span>
+</span><span class='line'><span class="err">如果你需要给什么东西赋值（比如在序列解包中），但是后面不会用到那个变量，用</span><span class="sb">`__`</span><span class="err">：</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">filename</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">foobar</span><span class="o">.</span><span class="n">txt</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'><span class="n">basename</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">.&amp;</span><span class="n">rsquo</span><span class="p">;)</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<pre><code>注意：
+很多Python风格指南推荐对需要抛弃的变量使用单下划线"_"，而不是这里推荐的双下划线"__"。问题是单下划线"_"通常是作为[gettext()](http://docs.python.org/library/gettext.html#gettext.gettext)函数的别名来使用的，并且还被在交互式提示环境中来保存上一次操作用。用双下划线来替换掉它可以和它一样清晰，也几乎差不多方便，并且还消除了意外干扰其它用到它的情况的风险。
+</code></pre>
+
+<h4>创建一个长度为N的相同元素的列表</h4>
+
+<p>使用列表<code>*</code>操作符
+<code>py
+four_nones = [None] * 4
+</code></p>
+
+<h4>创建一个长度为N的元素为列表的列表</h4>
+
+<p>因为列表是可变的，<code>*</code>操作符（像上面的一样）会创造一个包含N个对<strong>相同</strong>列表的引用的列表，这可能不是你想要的。我们用列表推导来代替它：
+<code>py
+four_lists = [[] for __ in xrange(4)]
+</code>
+一个创建字符串的常见成语是对空字符串调用<a href="http://docs.python.org/library/stdtypes.html#str.join">str.join()</a>
+<code>py
+letters = ['s', 'p', 'a', 'm']
+word = ''.join(letters)
+</code>
+这会将变量word赋值为&#8217;spam&#8217;。这条成语可以用在列表和元组上。</p>
+
+<p>有时候我们需要在在一个集合中进行查找。让我们来看看两种选择：列表和字典。<br/>
+例如下面的代码：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -313,276 +519,510 @@ file_object = open(filename, mode)  # file_object是储存文件对象的变量
 <span class='line-number'>263</span>
 <span class='line-number'>264</span>
 <span class='line-number'>265</span>
-<span class='line-number'>266</span>
-<span class='line-number'>267</span>
-<span class='line-number'>268</span>
-<span class='line-number'>269</span>
-<span class='line-number'>270</span>
-<span class='line-number'>271</span>
-<span class='line-number'>272</span>
-<span class='line-number'>273</span>
-<span class='line-number'>274</span>
-<span class='line-number'>275</span>
-<span class='line-number'>276</span>
-<span class='line-number'>277</span>
-<span class='line-number'>278</span>
-<span class='line-number'>279</span>
-<span class='line-number'>280</span>
-<span class='line-number'>281</span>
-<span class='line-number'>282</span>
-<span class='line-number'>283</span>
-<span class='line-number'>284</span>
-<span class='line-number'>285</span>
-<span class='line-number'>286</span>
-<span class='line-number'>287</span>
-<span class='line-number'>288</span>
-<span class='line-number'>289</span>
-<span class='line-number'>290</span>
-<span class='line-number'>291</span>
-<span class='line-number'>292</span>
-<span class='line-number'>293</span>
-<span class='line-number'>294</span>
-<span class='line-number'>295</span>
-<span class='line-number'>296</span>
-<span class='line-number'>297</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>
-</span><span class='line'>&lt;blockquote&gt;&lt;blockquote&gt;&lt;blockquote&gt;&lt;p&gt;f = open(&lsquo;workfile&rsquo;, &lsquo;w&rsquo;)
-</span><span class='line'>print f
-</span><span class='line'>&lt;code&gt;``
-</span><span class='line'>接下来文件对象函数将被调用. 最常用的两个函数是&lt;/code&gt;read&lt;code&gt;和&lt;/code&gt;write`.&lt;/p&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/blockquote&gt;&lt;/li&gt;
-</span><span class='line'>&lt;/ul&gt;
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;h3&gt;创建一个文本文件&lt;/h3&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;让我们先来创建一个新文本文件. 你可以随便给它取名字, 在这个例子中我们叫它&lt;code&gt;newfile.txt&lt;/code&gt;
-</span><span class='line'>&lt;code&gt;py
-</span><span class='line'>file = open("newfile.txt", "w")
-</span><span class='line'>file.write("hello world in the new file\n")
-</span><span class='line'>file.write("and another line\n")
-</span><span class='line'>file.close()
-</span><span class='line'>&lt;/code&gt;
-</span><span class='line'>现在我们打开&lt;code&gt;newfile.txt&lt;/code&gt;, 可以看到如下内容:
-</span><span class='line'>&lt;code&gt;sh
-</span><span class='line'>$ cat newfile.txt
-</span><span class='line'>hello world in the new file
-</span><span class='line'>and another line
-</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h3&gt;如何读文本文件&lt;/h3&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;我们可以用不同的方法来读一个文本文件.&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h4&gt;&lt;code&gt;file.read()&lt;/code&gt;&lt;/h4&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;如果你想得到一个包含文件中所有字符的字符串, 你可以用&lt;code&gt;file.read()&lt;/code&gt;
-</span><span class='line'>&lt;code&gt;py
-</span><span class='line'>file = open('newfile.txt', 'r')
-</span><span class='line'>print file.read()
-</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
-</span><span class='line'>
-</span><span class='line'>hello world in the new file
-</span><span class='line'>and another line
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;我们也可以通过使用&lt;code&gt;file.read(n)&lt;/code&gt;来指定字符串应该返回的字符的个数, &lt;code&gt;n&lt;/code&gt;确定了字符个数. 下面这段代码读取文本中的前5个字符并将它们作为字符串返回.
-</span><span class='line'>&lt;code&gt;py
-</span><span class='line'>file = open('newfile.txt', 'r')
-</span><span class='line'>print file.read(5)
-</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
-</span><span class='line'>
-</span><span class='line'>hello
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h4&gt;file.readline()&lt;/h4&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;&lt;code&gt;readline()&lt;/code&gt;函数会逐行读取文件(而非一次读取整个文件), 调用&lt;code&gt;readline()&lt;/code&gt;会获取文件第一行, 之后的调用会返回接下来的行. 通常它会从文件读取单行并返回一个包含直到&lt;code&gt;\n&lt;/code&gt;的字符串
-</span><span class='line'>&lt;code&gt;py
-</span><span class='line'>file = open('newfile.txt', 'r')
-</span><span class='line'>print file.readline():
-</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
-</span><span class='line'>
-</span><span class='line'>hello world in the new file
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h4&gt;file.readlines()&lt;/h4&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;&lt;code&gt;readlines()&lt;/code&gt;将整个文件作为一个用&lt;code&gt;\n&lt;/code&gt;分隔的列表返回
-</span><span class='line'>&lt;code&gt;py
-</span><span class='line'>file = open('newfile.txt', 'r')
-</span><span class='line'>print file.readlines()
-</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span><span class="s">&#39;: [], &amp;lsquo;p&amp;rsquo;: [], &amp;lsquo;a&amp;rsquo;: [], &amp;rsquo;m&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+</span><span class='line'><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span><span class="s">&#39;, &amp;lsquo;p&amp;rsquo;, &amp;lsquo;a&amp;rsquo;, &amp;rsquo;m&#39;</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">lookup_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span><span class="s">&#39; in d&lt;/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'>['hello world in the new file\n', 'and another line\n']
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">def</span> <span class="nf">lookup_list</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">s</span><span class="s">&#39; in l</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="sb">``</span>
+</span><span class='line'><span class="err">尽管这两个函数看起来几乎一模一样，因为</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">lookup_dict</span><span class="err">`利用了</span><span class="n">Python</span><span class="err">中的字典是哈希表的事实，这两个查找函数之间的性能差异是很大的。</span><span class="n">Python</span><span class="err">会不得不遍历列表中的每个项目来找到匹配的情形，这是非常耗时的。通过分析字典的哈希，在字典中查找键值可以被非常迅速地完成。要获得更多信息看这个</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://stackoverflow.com/questions/513882/python-list-vs-dict-for-look-up-table&quot;</span><span class="o">&gt;</span><span class="n">StackOverflow</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">页面</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;循环遍历一个文件对象&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="n">Python</span><span class="err">之禅</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;读取文件的行时, 你可以循环遍历这个文件对象. 这在内存占用上是高效的, 并且写法简单.
-</span><span class='line'>&lt;code&gt;py
-</span><span class='line'>file = open('newfile.txt', 'r')
-</span><span class='line'>for line in file:
-</span><span class='line'>    print line,
-</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">也作为</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://www.python.org/dev/peps/pep-0020&quot;</span><span class="o">&gt;</span><span class="n">PEP</span> <span class="mi">20</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">被人了解，</span><span class="n">Python</span><span class="err">设计的指导原则</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="kn">import</span> <span class="nn">this</span>
+</span><span class='line'><span class="n">The</span> <span class="n">Zen</span> <span class="n">of</span> <span class="n">Python</span><span class="p">,</span> <span class="n">by</span> <span class="n">Tim</span> <span class="n">Peters</span>
 </span><span class='line'>
-</span><span class='line'>hello world in the new file
-</span><span class='line'>and another line
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="n">Beautiful</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">ugly</span><span class="o">.</span>
+</span><span class='line'><span class="n">Explicit</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">implicit</span><span class="o">.</span>
+</span><span class='line'><span class="n">Simple</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="nb">complex</span><span class="o">.</span>
+</span><span class='line'><span class="n">Complex</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">complicated</span><span class="o">.</span>
+</span><span class='line'><span class="n">Flat</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">nested</span><span class="o">.</span>
+</span><span class='line'><span class="n">Sparse</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">dense</span><span class="o">.</span>
+</span><span class='line'><span class="n">Readability</span> <span class="n">counts</span><span class="o">.</span>
+</span><span class='line'><span class="n">Special</span> <span class="n">cases</span> <span class="n">aren</span><span class="s">&#39;t special enough to break the rules.</span>
+</span><span class='line'><span class="n">Although</span> <span class="n">practicality</span> <span class="n">beats</span> <span class="n">purity</span><span class="o">.</span>
+</span><span class='line'><span class="n">Errors</span> <span class="n">should</span> <span class="n">never</span> <span class="k">pass</span> <span class="n">silently</span><span class="o">.</span>
+</span><span class='line'><span class="n">Unless</span> <span class="n">explicitly</span> <span class="n">silenced</span><span class="o">.</span>
+</span><span class='line'><span class="n">In</span> <span class="n">the</span> <span class="n">face</span> <span class="n">of</span> <span class="n">ambiguity</span><span class="p">,</span> <span class="n">refuse</span> <span class="n">the</span> <span class="n">temptation</span> <span class="n">to</span> <span class="n">guess</span><span class="o">.</span>
+</span><span class='line'><span class="n">There</span> <span class="n">should</span> <span class="n">be</span> <span class="n">one</span><span class="o">--</span> <span class="ow">and</span> <span class="n">preferably</span> <span class="n">only</span> <span class="n">one</span> <span class="o">--</span><span class="n">obvious</span> <span class="n">way</span> <span class="n">to</span> <span class="n">do</span> <span class="n">it</span><span class="o">.</span>
+</span><span class='line'><span class="n">Although</span> <span class="n">that</span> <span class="n">way</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">obvious</span> <span class="n">at</span> <span class="n">first</span> <span class="n">unless</span> <span class="n">you</span><span class="s">&#39;re Dutch.</span>
+</span><span class='line'><span class="n">Now</span> <span class="ow">is</span> <span class="n">better</span> <span class="n">than</span> <span class="n">never</span><span class="o">.</span>
+</span><span class='line'><span class="n">Although</span> <span class="n">never</span> <span class="ow">is</span> <span class="n">often</span> <span class="n">better</span> <span class="n">than</span> <span class="o">*</span><span class="n">right</span><span class="o">*</span> <span class="n">now</span><span class="o">.</span>
+</span><span class='line'><span class="n">If</span> <span class="n">the</span> <span class="n">implementation</span> <span class="ow">is</span> <span class="n">hard</span> <span class="n">to</span> <span class="n">explain</span><span class="p">,</span> <span class="n">it</span><span class="s">&#39;s a bad idea.</span>
+</span><span class='line'><span class="n">If</span> <span class="n">the</span> <span class="n">implementation</span> <span class="ow">is</span> <span class="n">easy</span> <span class="n">to</span> <span class="n">explain</span><span class="p">,</span> <span class="n">it</span> <span class="n">may</span> <span class="n">be</span> <span class="n">a</span> <span class="n">good</span> <span class="n">idea</span><span class="o">.</span>
+</span><span class='line'><span class="n">Namespaces</span> <span class="n">are</span> <span class="n">one</span> <span class="n">honking</span> <span class="n">great</span> <span class="n">idea</span> <span class="o">--</span> <span class="n">let</span><span class="s">&#39;s do more of those!</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;file.write()&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">更多好的</span><span class="n">Python</span><span class="err">风格的例子，看</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://stackoverflow.com/questions/228181/the-zen-of-python&quot;</span><span class="o">&gt;</span><span class="err">这个</span><span class="n">Stack</span> <span class="n">Overflow</span><span class="err">的问题</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">或</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://artifex.org/~hblanks/talks/2011/pep20_by_example.pdf&quot;</span><span class="o">&gt;</span><span class="err">这些来自一个</span><span class="n">Python</span><span class="err">用户组的幻灯</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;写方法需要一个参数, 待写入的字符串. 写入后如果要换行, 在末尾添加一个&lt;code&gt;\n&lt;/code&gt;
-</span><span class='line'>&lt;code&gt;py
-</span><span class='line'>file = open("newfile.txt", "w")
-</span><span class='line'>file.write("This is a test\n")
-</span><span class='line'>file.write("And here is another line\n")
-</span><span class='line'>file.close()
-</span><span class='line'>&lt;/code&gt;&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="n">PEP</span> <span class="mi">8</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;close()&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://www.python.org/dev/peps/pep-0008&quot;</span><span class="o">&gt;</span><span class="n">PEP</span> <span class="mi">8</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">是</span><span class="n">Python</span><span class="err">实际上执行的编程风格指南。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;当你对文件的操作结束后, 调用&lt;code&gt;f.close()&lt;/code&gt;来关闭它并且释放打开这个文件所占用的系统资源. 调用&lt;code&gt;f.close()&lt;/code&gt;后, 对这个文件的操作都会失败.&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">将你的</span><span class="n">Python</span><span class="err">代码装换成</span><span class="n">PEP</span> <span class="mi">8</span><span class="err">的整体上是个很好的想法，这能让你的代码在和其他开发者一起做项目时更持续。有一个命令行程序，</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;https://github.com/jcrocholl/pep8&quot;</span><span class="o">&gt;</span><span class="n">pep8</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">可以检查你的代码是否符合要求。在终端中输入下面的命令来安装它：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;文件句柄(file handler)的用法&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">$</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pep8</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;让我们看看一些使用不同方法的例子&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">在你的一个或者一系列文件跑一下来查看是否有任何冲突：</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;# 打开文本文件:
-</span><span class='line'>fh = open("hello.txt", "r")
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">$</span> <span class="n">pep8</span> <span class="n">optparse</span><span class="o">.</span><span class="n">py</span>
+</span><span class='line'><span class="n">optparse</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">69</span><span class="p">:</span><span class="mi">11</span><span class="p">:</span> <span class="n">E401</span> <span class="n">multiple</span> <span class="n">imports</span> <span class="n">on</span> <span class="n">one</span> <span class="n">line</span>
+</span><span class='line'><span class="n">optparse</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">77</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span> <span class="n">E302</span> <span class="n">expected</span> <span class="mi">2</span> <span class="n">blank</span> <span class="n">lines</span><span class="p">,</span> <span class="n">found</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">optparse</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">88</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span> <span class="n">E301</span> <span class="n">expected</span> <span class="mi">1</span> <span class="n">blank</span> <span class="n">line</span><span class="p">,</span> <span class="n">found</span> <span class="mi">0</span>
+</span><span class='line'><span class="n">optparse</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">222</span><span class="p">:</span><span class="mi">34</span><span class="p">:</span> <span class="n">W602</span> <span class="n">deprecated</span> <span class="n">form</span> <span class="n">of</span> <span class="n">raising</span> <span class="n">exception</span>
+</span><span class='line'><span class="n">optparse</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">347</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span> <span class="n">E211</span> <span class="n">whitespace</span> <span class="n">before</span> <span class="s">&#39;(&#39;</span>
+</span><span class='line'><span class="n">optparse</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">357</span><span class="p">:</span><span class="mi">17</span><span class="p">:</span> <span class="n">E201</span> <span class="n">whitespace</span> <span class="n">after</span> <span class="s">&#39;{&#39;</span>
+</span><span class='line'><span class="n">optparse</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">472</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span> <span class="n">E221</span> <span class="n">multiple</span> <span class="n">spaces</span> <span class="n">before</span> <span class="n">operator</span>
+</span><span class='line'><span class="n">optparse</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">544</span><span class="p">:</span><span class="mi">21</span><span class="p">:</span> <span class="n">W601</span> <span class="o">.</span><span class="n">has_key</span><span class="p">()</span> <span class="ow">is</span> <span class="n">deprecated</span><span class="p">,</span> <span class="n">use</span> <span class="s">&#39;in&#39;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'># 读文本文件:
-</span><span class='line'>fh = open("hello.txt","r")
-</span><span class='line'>print fh.read()
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">约定</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'># 一次读一行:
-</span><span class='line'>fh = open("hello".txt", "r")
-</span><span class='line'>print fh.readline()
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">这里有些约定你应该遵守来让你的代码更易读。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'># 读取文件各行组成的列表:
-</span><span class='line'>fh = open("hello.txt.", "r")
-</span><span class='line'>print fh.readlines()
+</span><span class='line'><span class="o">&lt;</span><span class="n">h4</span><span class="o">&gt;</span><span class="err">检查一个变量是否等于常量</span><span class="o">&lt;/</span><span class="n">h4</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'># 写文件:
-</span><span class='line'>fh = open("hello.txt","w")
-</span><span class='line'>fh.write("Hello World")
-</span><span class='line'>fh.close()
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">你不用显式地将一个值与</span><span class="bp">True</span><span class="err">或</span><span class="bp">None</span><span class="err">或</span><span class="mi">0</span><span class="err">进行比较，你可以将它加到</span><span class="k">if</span><span class="err">语句后就行了。查看</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://docs.python.org/library/stdtypes.html#truth-value-testing&quot;</span><span class="o">&gt;</span><span class="n">Truth</span> <span class="n">Value</span> <span class="n">Testing</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">来查看一个值为</span><span class="n">false</span><span class="err">的列表。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'># 写入字符串列表:
-</span><span class='line'>fh = open("hello.txt", "w")
-</span><span class='line'>lines_of_text = ["a line of text", "another line of text", "a third line"]
-</span><span class='line'>fh.writelines(lines_of_text)
-</span><span class='line'>fh.close()
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Bad</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'># 在文件后追加内容:
-</span><span class='line'>fh = open("Hello.txt", "a")
-</span><span class='line'>fh.write("Hello World again")
-</span><span class='line'>fh.close
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;True!&#39;</span>
 </span><span class='line'>
-</span><span class='line'># 关闭文件:
-</span><span class='line'>fh = open("hello.txt", "r")
-</span><span class='line'>print fh.read()
-</span><span class='line'>fh.close()
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is None!&#39;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;with语句&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Good</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;另一种处理文件的方式是&lt;code&gt;with&lt;/code&gt;语句. 使用&lt;code&gt;with&lt;/code&gt;语句是很好的做法. 通过&lt;code&gt;with&lt;/code&gt;语句, 你就有了更好的语法和异常处理.&lt;br/&gt;
-</span><span class='line'>另外, 它会自动关闭文件. &lt;code&gt;with&lt;/code&gt;语句提供了一种保证资源得到释放的方法.&lt;br/&gt;
-</span><span class='line'>使用&lt;code&gt;with&lt;/code&gt;打开文件很简单:&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="c"># Just check the value</span>
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is truthy!&#39;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open(filename) as file:
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="c"># or check for the opposite</span>
+</span><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">attr</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is falsey!&#39;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;让我们来看些例子&lt;/p&gt;
+</span><span class='line'><span class="c"># or, since None is considered false, explicitly check for it</span>
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is None!&#39;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open("newtext.txt") as file:   # Use file to refer to the file object
-</span><span class='line'>    data = file.read()
-</span><span class='line'>    do something with data
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">h4</span><span class="o">&gt;</span><span class="err">获得一个字典元素</span><span class="o">&lt;/</span><span class="n">h4</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;同样地, 你也可以循环遍历文件对象:&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">不要用</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://docs.python.org/library/stdtypes.html#dict.has_key&quot;</span><span class="o">&gt;</span><span class="nb">dict</span><span class="o">.</span><span class="n">has_key</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">方法，用</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">key</span> <span class="ow">in</span> <span class="n">d</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">语法来代替它，或者向</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://docs.python.org/library/stdtypes.html#dict.get&quot;</span><span class="o">&gt;</span><span class="nb">dict</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">方法传递一个默认参数。</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Bad</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;with open("newfile.txt") as f:
-</span><span class='line'>    for line in f:
-</span><span class='line'>        print line,
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;hello&#39;</span><span class="p">:</span> <span class="s">&#39;world&#39;</span><span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;hello&#39;</span><span class="p">]</span>    <span class="c"># prints &#39;world&#39;</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;default_value&#39;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;注意, 我们不需要写&lt;code&gt;file.close()&lt;/code&gt;, 它会被自动调用.&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Good</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;使用&lt;code&gt;with&lt;/code&gt;的例子&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;hello&#39;</span><span class="p">:</span> <span class="s">&#39;world&#39;</span><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;让我们通过一些例子来看看平常我们可以怎么用到它&lt;/p&gt;
+</span><span class='line'><span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">,</span> <span class="s">&#39;default_value&#39;</span><span class="p">)</span> <span class="c"># prints &#39;world&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;thingy&#39;</span><span class="p">,</span> <span class="s">&#39;default_value&#39;</span><span class="p">)</span> <span class="c"># prints &#39;default_value&#39;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h4&gt;用&lt;code&gt;with&lt;/code&gt;写文件&lt;/h4&gt;
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="k">if</span> <span class="s">&#39;hello&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;hello&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open("hello.txt", "w") as f:
-</span><span class='line'>    f.write("Hello World")
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">h4</span><span class="o">&gt;</span><span class="err">更短的操纵列表的方法</span><span class="o">&lt;/</span><span class="n">h4</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h4&gt;逐行读取文件&lt;/h4&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://docs.python.org/tutorial/datastructures.html#list-comprehensions&quot;</span><span class="o">&gt;</span><span class="err">列表推导</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">提供了一种强大的、简洁的方法来操纵列表。同样地，</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://docs.python.org/library/functions.html#map&quot;</span><span class="o">&gt;</span><span class="nb">map</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">和</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://docs.python.org/library/functions.html#filter&quot;</span><span class="o">&gt;</span><span class="nb">filter</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">函数可以用一种不同的、更简洁的语法对列表执行操作。</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Bad</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open('hello.txt') as f:
-</span><span class='line'>    data = f.readlines()
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="c"># Filter elements greater than 4</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">4</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h4&gt;分割行&lt;/h4&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Good</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;最后一个例子中, 我们将看到如何从一个文本文件中分割行. &lt;code&gt;split&lt;/code&gt;函数将变量&lt;code&gt;data&lt;/code&gt;中包含的字符串以空格符为分割符分割开. 你也可以根据任何你想要的分割符分割, 例如&lt;code&gt;line.split(':')&lt;/code&gt;会用冒号分割字符串&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">4</span><span class="p">]</span>
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="mi">4</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code class="py"&gt;with open('data.txt', 'r') as f:
-</span><span class='line'>    data = f.readlines()
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Bad</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>    for line in data:
-</span><span class='line'>        words = line.split()
-</span><span class='line'>        print words
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="c"># Add three to all list members.</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+</span><span class='line'>    <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">3</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;输出:
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Good</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>Because multiple values are returned by split, they are returned as an array.
-</span><span class='line'>['hello', 'world,', 'how', 'are', 'you', 'today?']
-</span><span class='line'>['today', 'is', 'saturday']
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">]</span>
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;扩展阅读&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">使用</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://docs.python.org/library/functions.html#enumerate&quot;</span><span class="o">&gt;</span><span class="nb">enumerate</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">来对列表中你的位置进行计数。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;[1] &lt;a href="http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files"&gt;http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files&lt;/a&gt;&lt;br/&gt;
-</span><span class='line'>[2] &lt;a href="http://www.pythonforbeginners.com/cheatsheet/python-file-handling/"&gt;http://www.pythonforbeginners.com/cheatsheet/python-file-handling/&lt;/a&gt;&lt;br/&gt;
-</span><span class='line'>[3] &lt;a href="http://en.wikibooks.org/wiki/Non-Programmer's_Tutorial_for_Python_3/"&gt;http://en.wikibooks.org/wiki/Non-Programmer's_Tutorial_for_Python_3/&lt;/a&gt;&lt;br/&gt;
-</span><span class='line'>[4] &lt;a href="http://chryswoods.com/beginning_python/"&gt;http://chryswoods.com/beginning_python/&lt;/a&gt;&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span>
+</span><span class='line'><span class="c"># prints</span>
+</span><span class='line'><span class="c"># 0 3</span>
+</span><span class='line'><span class="c"># 1 4</span>
+</span><span class='line'><span class="c"># 2 5</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;译后记&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://docs.python.org/library/functions.html#enumerate&quot;</span><span class="o">&gt;</span><span class="nb">enumerate</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="err">函数比手动处理计数器的可读性更好。更重要的是，它对迭代器的优化更好。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;呼, 终于译完了这篇水文&hellip;完全新手向的一篇文章, 译完才发现比我以为的要浅好多, 算是复习文件操作吧~&lt;/p&gt;
-</span><span class='line'>]]&gt;&lt;/content&gt;
-</span><span class='line'>  &lt;/entry&gt;
-</span><span class='line'>  
-</span><span class='line'>  &lt;entry&gt;
-</span><span class='line'>    &lt;title type="html"&gt;&lt;![CDATA[[老博文迁移]jinja2模板使用经验]]&gt;&lt;/title&gt;
-</span><span class='line'>    &lt;link href="http://cxymrzero.github.io/blog/2015/03/18/jinja-practice/"/&gt;
-</span><span class='line'>    &lt;updated&gt;2015-03-18T13:19:01+08:00&lt;/updated&gt;
-</span><span class='line'>    &lt;id&gt;http://cxymrzero.github.io/blog/2015/03/18/jinja-practice&lt;/id&gt;
-</span><span class='line'>    &lt;content type="html"&gt;&lt;![CDATA[&lt;p&gt;用&lt;code&gt;jinja2&lt;/code&gt;写模板的时候遇到了一些问题，记录一下&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">h4</span><span class="o">&gt;</span><span class="err">读文件</span><span class="o">&lt;/</span><span class="n">h4</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;!--more--&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">用</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">with</span> <span class="nb">open</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">语法来读文件，这样会自动地为你关闭文件。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Bad</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;h3&gt;抽出base.html作为模板&lt;/h3&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;file.txt&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="k">print</span> <span class="n">a</span>
+</span><span class='line'><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;之前的小项目写得都很不规范，模板都是能用就行，基本上只用到&lt;code&gt;if&lt;/code&gt;语句，&lt;code&gt;for&lt;/code&gt;语句和变量。导航栏都是复制粘贴，没有把共同的部分抽出来。写模板的时候还应该注意一下不要直接在原来的html上改，这样容易把html改乱，应该新建一个&lt;code&gt;template&lt;/code&gt;目录，再一个个写模板，这样更好&lt;/p&gt;
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Good</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'>&lt;p&gt;参照&lt;a href="http://jinja.pocoo.org/docs/dev/templates/"&gt;jinja2的文档&lt;/a&gt;抽出公共部分，如
-</span><span class='line'><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span> (jinja0.html)</span> <a href='/downloads/code/html/jinja0.html'>download</a></figcaption>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;file.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">line</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">with</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">语句会更好因为它会保证你总是会关闭文件，甚至在</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">with</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">块中有异常抛出的情况下。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h4</span><span class="o">&gt;</span><span class="err">换行</span><span class="o">&lt;/</span><span class="n">h4</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">当代码逻辑上的一行比可接受的限制长时，你需要将它分割到多个物理行中。如果行尾是一个反斜杠，</span><span class="n">Python</span><span class="err">解释器会将连续的行连接起来。在有些情况下这很有用，但是通常应该避免这样做，因为这很脆弱：将一个空格加到行尾的反斜杠后就会破坏代码并且可能造成意料之外的错误。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">一个更好的解决方案是在你的元素周围使用括号。</span><span class="n">Python</span><span class="err">解释器会将一个行尾未闭合括号后的下一行连接起来，直到括号闭合。同样的行为对花括号和方括号也成立。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Bad</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="n">my_very_big_string</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;For a long time I used to go to bed early. Sometimes, </span><span class="se">\</span>
+</span><span class='line'><span class="s">    when I had put out my candle, my eyes would close so quickly that I had not even </span><span class="se">\</span>
+</span><span class='line'><span class="s">    time to say “I’m going to sleep.”&quot;&quot;&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">from</span> <span class="nn">some.deep.module.inside.a.module</span> <span class="kn">import</span> <span class="n">a_nice_function</span><span class="p">,</span> <span class="n">another_nice_function</span><span class="p">,</span> \
+</span><span class='line'>    <span class="n">yet_another_nice_function</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">strong</span><span class="o">&gt;</span><span class="n">Good</span><span class="o">&lt;/</span><span class="n">strong</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;py&quot;</span><span class="o">&gt;</span><span class="n">my_very_big_string</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class='line'>    <span class="s">&quot;For a long time I used to go to bed early. Sometimes, &quot;</span>
+</span><span class='line'>    <span class="s">&quot;when I had put out my candle, my eyes would close so quickly &quot;</span>
+</span><span class='line'>    <span class="s">&quot;that I had not even time to say “I’m going to sleep.”&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">from</span> <span class="nn">some.deep.module.inside.a.module</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>    <span class="n">a_nice_function</span><span class="p">,</span> <span class="n">another_nice_function</span><span class="p">,</span> <span class="n">yet_another_nice_function</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">然而更多情况下，不得不分割一个逻辑行意味着你试图同时做太多事，这可能会降低可读性。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">译后记</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">这篇文章的翻译动笔是在</span><span class="mi">3</span><span class="err">月</span><span class="mi">22</span><span class="err">日，今天已经是</span><span class="mi">4</span><span class="err">月</span><span class="mi">16</span><span class="err">日了，中间拖延了将近一个月，实际上大部分都是我今天一口气翻译完的。而且由于这篇文章一直没翻译完，导致想写的其它几篇也不能开始写。首先自我检讨下，确实没把这篇文章的翻译放在心上，因为找实习一直在打码，不过如今实习找完了，就有时间充实下自己和自己的博客了。另外，本来对这篇文章期望值相当高的，结果翻译完发现大部分内容我早已掌握，对我的帮助实际上不大，这种一直在语法上绕来绕去其实还是有点无聊，后面会翻译或者写一些更有实用价值的文章。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">翻译这件事还是很难的，不过翻完这篇长文，我也掌握了一些技巧，比如</span><span class="n">it</span><span class="s">&#39;s开头的无主被动句型要调整语序、灵活地选用更地道的汉语、长句子拆分为多个短句……总得来说还是熟能生巧。&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">另外，有译得不好的地方请在留言指出，请你吃棒棒糖。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'><span class="p">]]</span><span class="o">&gt;&lt;/</span><span class="n">content</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;/</span><span class="n">entry</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">&lt;</span><span class="n">entry</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">title</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;html&quot;</span><span class="o">&gt;&lt;</span><span class="err">!</span><span class="p">[</span><span class="n">CDATA</span><span class="p">[[</span><span class="err">翻译</span><span class="p">]</span><span class="n">Python</span><span class="err">文件读写</span><span class="p">]]</span><span class="o">&gt;&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">link</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://cxymrzero.github.io/blog/2015/03/19/python-file/&quot;</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">updated</span><span class="o">&gt;</span><span class="mi">2015</span><span class="o">-</span><span class="mo">03</span><span class="o">-</span><span class="mi">19</span><span class="n">T13</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">38</span><span class="o">+</span><span class="mi">08</span><span class="p">:</span><span class="mo">00</span><span class="o">&lt;/</span><span class="n">updated</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="nb">id</span><span class="o">&gt;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">cxymrzero</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">blog</span><span class="o">/</span><span class="mi">2015</span><span class="o">/</span><span class="mo">03</span><span class="o">/</span><span class="mi">19</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="nb">file</span><span class="o">&lt;/</span><span class="nb">id</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="o">&lt;</span><span class="n">content</span> <span class="nb">type</span><span class="o">=</span><span class="s">&quot;html&quot;</span><span class="o">&gt;&lt;</span><span class="err">!</span><span class="p">[</span><span class="n">CDATA</span><span class="p">[</span><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">原文</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s">&quot;http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python&quot;</span><span class="o">&gt;</span><span class="n">Reading</span> <span class="ow">and</span> <span class="n">Writing</span> <span class="n">Files</span> <span class="ow">in</span> <span class="n">Python</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">概览</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">在</span><span class="n">Python</span><span class="err">中</span><span class="p">,</span> <span class="err">读写文件不需要</span><span class="n">import</span><span class="err">任何库</span><span class="p">,</span> <span class="err">第一步是使用</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">open</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">函数获取一个文件对象</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="err">!</span><span class="o">--</span> <span class="n">more</span> <span class="o">--&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">文件类型</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">文件通常被分为</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">文本文件</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">或</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">二进制文件</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">文本文件</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">通常是由很多行组成的序列</span><span class="p">(</span><span class="n">sequence</span><span class="p">),</span> <span class="err">而每一行又是很多字符</span><span class="p">(</span><span class="n">characters</span><span class="p">)</span><span class="err">组成的序列</span><span class="o">.</span> <span class="err">每一行由</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">EOL</span><span class="p">(</span><span class="n">End</span> <span class="n">Of</span> <span class="n">Line</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">终结</span><span class="p">,</span> <span class="err">最常见的行终结符是</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>\<span class="n">n</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="p">,</span> <span class="err">又叫换行符</span><span class="o">.</span> <span class="err">反斜杠</span><span class="p">(</span><span class="n">backslash</span><span class="p">)</span><span class="err">表明下一个字符将被当作一个新行</span><span class="p">(</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="err">译注</span><span class="p">:</span> <span class="err">这里没理解</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">)</span><span class="o">.</span> <span class="err">基本上不是文本文件的文件就是二进制文件</span><span class="p">,</span> <span class="err">二进制文件只能被了解其文件结构的应用处理</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="n">Open</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="err">我们使用内置的</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">open</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">函数打开一个文件</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">open</span><span class="p">()</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">返回一个文件对象</span><span class="p">,</span> <span class="err">一般会传入两个参数</span><span class="o">.</span> <span class="err">语法是</span><span class="p">:</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">py</span>
+</span><span class='line'><span class="n">file_object</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>  <span class="c"># file_object是储存文件对象的变量</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">打开方式</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">mode</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">参数是可以省略的</span><span class="p">,</span> <span class="err">缺省条件下为</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="s">&#39;r&#39;</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">mode</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">参数可以是</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">r</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="err">读文件</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">w</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="err">仅写文件</span><span class="p">(</span><span class="err">如果有同名文件会被覆盖</span><span class="p">)</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">a</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="err">添加文本</span><span class="p">;</span> <span class="err">所有写入的内容都会被自动添加到文件末尾</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">r</span><span class="o">+&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="err">读写文件</span>
+</span></code></pre></td></tr></table></div></figure>
+
+<blockquote><blockquote><blockquote><p>f = open(&lsquo;workfile&rsquo;, &lsquo;w&rsquo;)
+print f
+<code>``
+接下来文件对象函数将被调用. 最常用的两个函数是</code>read<code>和</code>write`.</p></blockquote></blockquote></blockquote></li>
+</ul>
+
+
+<h3>创建一个文本文件</h3>
+
+<p>让我们先来创建一个新文本文件. 你可以随便给它取名字, 在这个例子中我们叫它<code>newfile.txt</code>
+<code>py
+file = open("newfile.txt", "w")
+file.write("hello world in the new file\n")
+file.write("and another line\n")
+file.close()
+</code>
+现在我们打开<code>newfile.txt</code>, 可以看到如下内容:
+<code>sh
+$ cat newfile.txt
+hello world in the new file
+and another line
+</code></p>
+
+<h3>如何读文本文件</h3>
+
+<p>我们可以用不同的方法来读一个文本文件.</p>
+
+<h4><code>file.read()</code></h4>
+
+<p>如果你想得到一个包含文件中所有字符的字符串, 你可以用<code>file.read()</code>
+<code>py
+file = open('newfile.txt', 'r')
+print file.read()
+</code></p>
+
+<pre><code>输出:
+
+hello world in the new file
+and another line
+</code></pre>
+
+<p>我们也可以通过使用<code>file.read(n)</code>来指定字符串应该返回的字符的个数, <code>n</code>确定了字符个数. 下面这段代码读取文本中的前5个字符并将它们作为字符串返回.
+<code>py
+file = open('newfile.txt', 'r')
+print file.read(5)
+</code></p>
+
+<pre><code>输出:
+
+hello
+</code></pre>
+
+<h4>file.readline()</h4>
+
+<p><code>readline()</code>函数会逐行读取文件(而非一次读取整个文件), 调用<code>readline()</code>会获取文件第一行, 之后的调用会返回接下来的行. 通常它会从文件读取单行并返回一个包含直到<code>\n</code>的字符串
+<code>py
+file = open('newfile.txt', 'r')
+print file.readline():
+</code></p>
+
+<pre><code>输出:
+
+hello world in the new file
+</code></pre>
+
+<h4>file.readlines()</h4>
+
+<p><code>readlines()</code>将整个文件作为一个用<code>\n</code>分隔的列表返回
+<code>py
+file = open('newfile.txt', 'r')
+print file.readlines()
+</code></p>
+
+<pre><code>输出:
+
+['hello world in the new file\n', 'and another line\n']
+</code></pre>
+
+<h3>循环遍历一个文件对象</h3>
+
+<p>读取文件的行时, 你可以循环遍历这个文件对象. 这在内存占用上是高效的, 并且写法简单.
+<code>py
+file = open('newfile.txt', 'r')
+for line in file:
+    print line,
+</code></p>
+
+<pre><code>输出:
+
+hello world in the new file
+and another line
+</code></pre>
+
+<h3>file.write()</h3>
+
+<p>写方法需要一个参数, 待写入的字符串. 写入后如果要换行, 在末尾添加一个<code>\n</code>
+<code>py
+file = open("newfile.txt", "w")
+file.write("This is a test\n")
+file.write("And here is another line\n")
+file.close()
+</code></p>
+
+<h3>close()</h3>
+
+<p>当你对文件的操作结束后, 调用<code>f.close()</code>来关闭它并且释放打开这个文件所占用的系统资源. 调用<code>f.close()</code>后, 对这个文件的操作都会失败.</p>
+
+<h3>文件句柄(file handler)的用法</h3>
+
+<p>让我们看看一些使用不同方法的例子</p>
+
+<pre><code># 打开文本文件:
+fh = open("hello.txt", "r")
+
+# 读文本文件:
+fh = open("hello.txt","r")
+print fh.read()
+
+# 一次读一行:
+fh = open("hello".txt", "r")
+print fh.readline()
+
+# 读取文件各行组成的列表:
+fh = open("hello.txt.", "r")
+print fh.readlines()
+
+# 写文件:
+fh = open("hello.txt","w")
+fh.write("Hello World")
+fh.close()
+
+# 写入字符串列表:
+fh = open("hello.txt", "w")
+lines_of_text = ["a line of text", "another line of text", "a third line"]
+fh.writelines(lines_of_text)
+fh.close()
+
+# 在文件后追加内容:
+fh = open("Hello.txt", "a")
+fh.write("Hello World again")
+fh.close()
+
+# 关闭文件:
+fh = open("hello.txt", "r")
+print fh.read()
+fh.close()
+</code></pre>
+
+<h3>with语句</h3>
+
+<p>另一种处理文件的方式是<code>with</code>语句. 使用<code>with</code>语句是很好的做法. 通过<code>with</code>语句, 你就有了更好的语法和异常处理.<br/>
+另外, 它会自动关闭文件. <code>with</code>语句提供了一种保证资源得到释放的方法.<br/>
+使用<code>with</code>打开文件很简单:</p>
+
+<pre><code class="py">with open(filename) as file:
+</code></pre>
+
+<p>让我们来看些例子</p>
+
+<pre><code class="py">with open("newtext.txt") as file:   # Use file to refer to the file object
+    data = file.read()
+    do something with data
+</code></pre>
+
+<p>同样地, 你也可以循环遍历文件对象:</p>
+
+<pre><code>with open("newfile.txt") as f:
+    for line in f:
+        print line,
+</code></pre>
+
+<p>注意, 我们不需要写<code>file.close()</code>, 它会被自动调用.</p>
+
+<h3>使用<code>with</code>的例子</h3>
+
+<p>让我们通过一些例子来看看平常我们可以怎么用到它</p>
+
+<h4>用<code>with</code>写文件</h4>
+
+<pre><code class="py">with open("hello.txt", "w") as f:
+    f.write("Hello World")
+</code></pre>
+
+<h4>逐行读取文件</h4>
+
+<pre><code class="py">with open('hello.txt') as f:
+    data = f.readlines()
+</code></pre>
+
+<h4>分割行</h4>
+
+<p>最后一个例子中, 我们将看到如何从一个文本文件中分割行. <code>split</code>函数将变量<code>data</code>中包含的字符串以空格符为分割符分割开. 你也可以根据任何你想要的分割符分割, 例如<code>line.split(':')</code>会用冒号分割字符串</p>
+
+<pre><code class="py">with open('data.txt', 'r') as f:
+    data = f.readlines()
+
+    for line in data:
+        words = line.split()
+        print words
+</code></pre>
+
+<pre><code>输出:
+
+Because multiple values are returned by split, they are returned as an array.
+['hello', 'world,', 'how', 'are', 'you', 'today?']
+['today', 'is', 'saturday']
+</code></pre>
+
+<h3>扩展阅读</h3>
+
+<p>[1] <a href="http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files">http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files</a><br/>
+[2] <a href="http://www.pythonforbeginners.com/cheatsheet/python-file-handling/">http://www.pythonforbeginners.com/cheatsheet/python-file-handling/</a><br/>
+[3] <a href="http://en.wikibooks.org/wiki/Non-Programmer's_Tutorial_for_Python_3/">http://en.wikibooks.org/wiki/Non-Programmer&#8217;s_Tutorial_for_Python_3/</a><br/>
+[4] <a href="http://chryswoods.com/beginning_python/">http://chryswoods.com/beginning_python/</a></p>
+
+<h3>译后记</h3>
+
+<p>呼, 终于译完了这篇水文&hellip;完全新手向的一篇文章, 译完才发现比我以为的要浅好多, 算是复习文件操作吧~</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[老博文迁移]jinja2模板使用经验]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/jinja-practice/"/>
+    <updated>2015-03-18T13:19:01+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/jinja-practice</id>
+    <content type="html"><![CDATA[<p>用<code>jinja2</code>写模板的时候遇到了一些问题，记录一下</p>
+
+<!--more-->
+
+
+<h3>抽出base.html作为模板</h3>
+
+<p>之前的小项目写得都很不规范，模板都是能用就行，基本上只用到<code>if</code>语句，<code>for</code>语句和变量。导航栏都是复制粘贴，没有把共同的部分抽出来。写模板的时候还应该注意一下不要直接在原来的html上改，这样容易把html改乱，应该新建一个<code>template</code>目录，再一个个写模板，这样更好</p>
+
+<p>参照<a href="http://jinja.pocoo.org/docs/dev/templates/">jinja2的文档</a>抽出公共部分，如
+<figure class='code'><figcaption><span> (jinja0.html)</span> <a href='/downloads/code/html/jinja0.html'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -617,24 +1057,24 @@ file_object = open(filename, mode)  # file_object是储存文件对象的变量
 </span><span class='line'>        {% endblock %}
 </span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
 </span><span class='line'><span class="nt">&lt;/body&gt;</span>
-</span></code></pre></td></tr></table></div></figure>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;在子模板中填充对应的&lt;code&gt;block&lt;/code&gt;就行，如
-</span><span class='line'>对于在base.html里有但是子模板里没有的&lt;code&gt;block&lt;/code&gt;，对应位置会采用base.html里的内容&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;<figure class='code'><figcaption><span> (jinja1.html)</span> <a href='/downloads/code/html/jinja1.html'>download</a></figcaption>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>在子模板中填充对应的<code>block</code>就行，如
+对于在base.html里有但是子模板里没有的<code>block</code>，对应位置会采用base.html里的内容</p>
+
+<p><figure class='code'><figcaption><span> (jinja1.html)</span> <a href='/downloads/code/html/jinja1.html'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'>{% block title %}
 </span><span class='line'>我是标题
 </span><span class='line'>{% endblock %}
-</span></code></pre></td></tr></table></div></figure>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h3&gt;导航栏怎么设置为active?&lt;/h3&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;很多用到导航栏的情况都会有当前所在位置高亮的设置，假设CSS中&lt;code&gt;.active&lt;/code&gt;设为高亮了，那么在jinja2中就能给base.html传值，如：
-</span><span class='line'><figure class='code'><figcaption><span> (jinja2.html)</span> <a href='/downloads/code/html/jinja2.html'>download</a></figcaption>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>导航栏怎么设置为active?</h3>
+
+<p>很多用到导航栏的情况都会有当前所在位置高亮的设置，假设CSS中<code>.active</code>设为高亮了，那么在jinja2中就能给base.html传值，如：
+<figure class='code'><figcaption><span> (jinja2.html)</span> <a href='/downloads/code/html/jinja2.html'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -748,60 +1188,61 @@ file_object = open(filename, mode)  # file_object是储存文件对象的变量
 </span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
 </span><span class='line'><span class="nt">&lt;/ul&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
-</span><span class='line'>在子模板中，向base.html传&lt;code&gt;active&lt;/code&gt;的值就行了，我们不只可以通过py文件向jinja2传值，还能在不同模板之间传值
-</span><span class='line'><figure class='code'><figcaption><span> (jinja3.html)</span> <a href='/downloads/code/html/jinja3.html'>download</a></figcaption>
+在子模板中，向base.html传<code>active</code>的值就行了，我们不只可以通过py文件向jinja2传值，还能在不同模板之间传值
+<figure class='code'><figcaption><span> (jinja3.html)</span> <a href='/downloads/code/html/jinja3.html'>download</a></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'>{% extends &quot;base.html&quot; %}
 </span><span class='line'>{% set active = &quot;group&quot; %}
-</span></code></pre></td></tr></table></div></figure>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;这样导航栏就能根据相应的内容显示高亮的&lt;code&gt;li&lt;/code&gt;了！更多内容参考&lt;a href=&#8221;http://jinja.pocoo.org/docs/dev/tricks/&#8221;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h3&gt;如何获取列表的长度？&lt;/h3&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;jinja2支持很多Python的语法，于是我尝试调用&lt;code&gt;len(lst)&lt;/code&gt;函数，会报错。
-</span><span class='line'>要获取列表的长度，应该写成&lt;code&gt;lst|length&lt;/code&gt;或是它的别称&lt;code&gt;lst|count&lt;/code&gt;
-</span><span class='line'>参考&lt;a href=&#8221;http://stackoverflow.com/questions/1465249/jinja2-get-lengths-of-list&#8221;&gt;这个问题&lt;/a&gt;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;&lt;em&gt;2014-9-10 于博客园&lt;/em&gt;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;迁移批注:&lt;br/&gt;
-</span><span class='line'>这篇博文由于包含&lt;code&gt;jinja2&lt;/code&gt;的模板语法, 在解析时会与&lt;code&gt;liquid&lt;/code&gt;发生冲突而报错, 于是我采用&lt;a href=&#8221;http://octopress.org/docs/blogging/code/&#8221;&gt;载入代码文件&lt;/a&gt;的方式解决了这个问题!&lt;/p&gt;
-</span><span class='line'>]]&gt;&lt;/content&gt;
-</span><span class='line'>  &lt;/entry&gt;
-</span><span class='line'>  
-</span><span class='line'>  &lt;entry&gt;
-</span><span class='line'>    &lt;title type=&#8221;html&#8221;&gt;&lt;![CDATA[使用Flask实现用户认证API]]&gt;&lt;/title&gt;
-</span><span class='line'>    &lt;link href=&#8221;http://cxymrzero.github.io/blog/2015/03/18/flask-token/&#8221;/&gt;
-</span><span class='line'>    &lt;updated&gt;2015-03-18T00:32:28+08:00&lt;/updated&gt;
-</span><span class='line'>    &lt;id&gt;http://cxymrzero.github.io/blog/2015/03/18/flask-token&lt;/id&gt;
-</span><span class='line'>    &lt;content type=&#8221;html&#8221;&gt;&lt;![CDATA[&lt;p&gt;我们在开发网站时会采用&lt;code&gt;session&lt;/code&gt;和&lt;code&gt;cookie&lt;/code&gt;的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个&lt;code&gt;token(令牌)&lt;/code&gt;的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次&lt;code&gt;token&lt;/code&gt;是否有效, 无效的情况包括&lt;code&gt;token&lt;/code&gt;无法被解析等. 另一个问题是如果&lt;code&gt;token&lt;/code&gt;被泄露, 用户的安全将受到威胁, 所以应当对这个&lt;code&gt;token&lt;/code&gt;设置一个过期时间, 超过这个时间后应当重新登录, 这样可以将用户信息泄露的风险降低.&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;!&#8211;more&#8211;&gt;
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>&lt;h3&gt;生成和使用&lt;code&gt;token&lt;/code&gt;&lt;/h3&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;有个很棒的Python第三方库叫&lt;code&gt;itsdangerous&lt;/code&gt;, 包含许多常见安全问题的解决方案, 比如文件名等等.&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h4&gt;生成&lt;code&gt;token&lt;/code&gt;&lt;/h4&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;&lt;code&gt;TimedJSONWebSignatureSerializer&lt;/code&gt;能将包含用户id的字典, 如&lt;code&gt;{&#8216;user_id&#8217;: 1}&lt;/code&gt;设置一个具有过期时间的&lt;code&gt;数字证书(Signature)&lt;/code&gt;, 需要注意的是, 设置的&lt;code&gt;secret key&lt;/code&gt;一定要足够安全, 在&lt;code&gt;flask&lt;/code&gt;应用中, 我们采用&lt;code&gt;flask&lt;/code&gt;配置中的&lt;code&gt;secret key&lt;/code&gt;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code class=&#8221;python&#8221;&gt;from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-</span><span class='line'>from itsdangerous import SignatureExpired, BadSignature
-</span><span class='line'>from config import config
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>def gen_token(user, expiration=1440*31*60):  # 单位为秒, 设定31天过期
-</span><span class='line'>    s = Serializer(config.SECRET_KEY, expires_in=expiration)
-</span><span class='line'>    return s.dumps({&#8216;id&#8217;: user.id})  # user为model中封装过的对象
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h4&gt;验证&lt;code&gt;token&lt;/code&gt;合法性以及是否过期&lt;/h4&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;&lt;code&gt;装饰器(decorator)&lt;/code&gt;是&lt;code&gt;Python&lt;/code&gt;一个很有用的语法糖, 可以有效地减少重复代码. 在每个需要验证&lt;code&gt;token&lt;/code&gt;的场景都用装饰器包裹一层, 就能验证无效&lt;code&gt;token&lt;/code&gt;和过期&lt;code&gt;token&lt;/code&gt;了~&lt;br/&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>python
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>这样导航栏就能根据相应的内容显示高亮的<code>li</code>了！更多内容参考<a href="http://jinja.pocoo.org/docs/dev/tricks/">官方文档</a></p>
+
+<h3>如何获取列表的长度？</h3>
+
+<p>jinja2支持很多Python的语法，于是我尝试调用<code>len(lst)</code>函数，会报错。
+要获取列表的长度，应该写成<code>lst|length</code>或是它的别称<code>lst|count</code>
+参考<a href="http://stackoverflow.com/questions/1465249/jinja2-get-lengths-of-list">这个问题</a></p>
+
+<p><em>2014-9-10 于博客园</em></p>
+
+<p>迁移批注:<br/>
+这篇博文由于包含<code>jinja2</code>的模板语法, 在解析时会与<code>liquid</code>发生冲突而报错, 于是我采用<a href="http://octopress.org/docs/blogging/code/">载入代码文件</a>的方式解决了这个问题!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用Flask实现用户认证API]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/flask-token/"/>
+    <updated>2015-03-18T00:32:28+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/flask-token</id>
+    <content type="html"><![CDATA[<p>我们在开发网站时会采用<code>session</code>和<code>cookie</code>的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个<code>token(令牌)</code>的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次<code>token</code>是否有效, 无效的情况包括<code>token</code>无法被解析等. 另一个问题是如果<code>token</code>被泄露, 用户的安全将受到威胁, 所以应当对这个<code>token</code>设置一个过期时间, 超过这个时间后应当重新登录, 这样可以将用户信息泄露的风险降低.</p>
+
+<!--more-->
+
+
+<h3>生成和使用<code>token</code></h3>
+
+<p>有个很棒的Python第三方库叫<code>itsdangerous</code>, 包含许多常见安全问题的解决方案, 比如文件名等等.</p>
+
+<h4>生成<code>token</code></h4>
+
+<p><code>TimedJSONWebSignatureSerializer</code>能将包含用户id的字典, 如<code>{'user_id': 1}</code>设置一个具有过期时间的<code>数字证书(Signature)</code>, 需要注意的是, 设置的<code>secret key</code>一定要足够安全, 在<code>flask</code>应用中, 我们采用<code>flask</code>配置中的<code>secret key</code></p>
+
+<pre><code class="python">from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import SignatureExpired, BadSignature
+from config import config
+
+
+def gen_token(user, expiration=1440*31*60):  # 单位为秒, 设定31天过期
+    s = Serializer(config.SECRET_KEY, expires_in=expiration)
+    return s.dumps({'id': user.id})  # user为model中封装过的对象
+</code></pre>
+
+<h4>验证<code>token</code>合法性以及是否过期</h4>
+
+<p><code>装饰器(decorator)</code>是<code>Python</code>一个很有用的语法糖, 可以有效地减少重复代码. 在每个需要验证<code>token</code>的场景都用装饰器包裹一层, 就能验证无效<code>token</code>和过期<code>token</code>了~<br/>
+&#8220;`python
 from functools import wraps</p>
 
 <p>def token_required(func):

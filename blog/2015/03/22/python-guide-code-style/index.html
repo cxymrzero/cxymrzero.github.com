@@ -1,0 +1,876 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>[翻译]Python漫游指南 - 编程风格 - clean code</title>
+  <meta name="author" content="Mr.Zero">
+
+  
+  <meta name="description" content="原文: Code Style 如果你问Python程序员他们最喜欢Python的什么，他们通常会说是Python的可读性。实际上，良好的可读性是Python设计时的一个核心思想，这是根据一个广为认可的事实 比起写，代码更容易被人读 的思想设计的。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">clean code</a></h1>
+  
+    <h2>i create stuff</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="cxymrzero.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+  <li><a href="/links">Links</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">[翻译]Python漫游指南 - 编程风格</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-03-22T22:56:11+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2015</span></span> <span class='time'>10:56 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://cxymrzero.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>原文: <a href="http://docs.python-guide.org/en/latest/writing/style/">Code Style</a></p>
+
+<p>如果你问Python程序员他们最喜欢Python的什么，他们通常会说是Python的可读性。实际上，良好的可读性是Python设计时的一个核心思想，这是根据一个广为认可的事实 <em>比起写，代码更容易被人读</em> 的思想设计的。</p>
+
+<p>Python代码易读易懂的一个原因是它相对完善的代码风格的规范和<em>Pythonic</em>的成语。</p>
+
+<!-- more -->
+
+
+<p>另外，当一个Python老手(<em>Pythonista</em>)指出一段代码不够<em>Pythonic</em>，通常意味着这几行代码没有按照一般的代码规范来并且没有用公认的最好的(通常是最易读的)方式表达其意图。</p>
+
+<p>在某些情况下是找不到一个大家都认可的方式去用Python表达一个意图的，不过很少有这种情况。</p>
+
+<h3>一般概念</h3>
+
+<h4>明确的代码</h4>
+
+<p>虽然在Python中，一切黑魔法都有可能发生，但我们更推荐最明确和最直接的方式。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">make_complex</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">args</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">make_complex</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的正面例子中，x、y明确地被函数接收，返回了一个明确的字典。通过读第一行和最后一行，使用这个函数的开发者就能准确知道怎样使用这个函数了，然而反面教材就完全不是那回事了。</p>
+
+<h4>一行一个语句</h4>
+
+<p>虽然有些复合语句，比如列表推导式，因为它们的简洁和丰富的表达能力被允许和推荐使用，但是将两个不能联合使用的语句放到同一行是一种很糟糕的做法。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">print</span> <span class="s">&#39;one&#39;</span><span class="p">;</span> <span class="k">print</span> <span class="s">&#39;two&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;one&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">&lt;</span><span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span> <span class="ow">and</span> <span class="o">&lt;</span><span class="n">other</span> <span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># do something</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">print</span> <span class="s">&#39;one&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;two&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;one&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cond1</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">cond2</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">other</span> <span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">if</span> <span class="n">cond1</span> <span class="ow">and</span> <span class="n">cond2</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># do something</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>函数参数</h4>
+
+<p>有四种不同方法向函数传递参数：<br/>
+1. <strong>位置参数</strong>是必须的并且没有默认值。它们是参数的最简单形式，并且它们适用于很少的、是函数含义一部分并且顺序很自然的函数参数。比如在<code>send(message, recipient)</code>或<code>point(x, y)</code>中，用函数的人不难记住这两个函数需要两个参数和参数间的顺序。<br/>
+在那两个例子中，调用函数时也可以使用参数名，并且如果这样做就可以交换两个参数的顺序了，比如调用<code>send(recipient='World', message='Hello')</code>和<code>point(y=2, x=1)</code>但是这会降低可读性，并且比起更直接地调用<code>send('Hello', 'World')</code>和<code>point(1, 2)</code>这是没有必要的冗余。<br/>
+2. <strong>关键字参数</strong><br/>
+不是必须的并且有默认值。它们常常被作为可选参数传递给函数。当一个函数有超过2至3个可选参数时，它的特点就变得更让人难以记住了，这时使用有默认值的关键字参数就会很有用。比如，一个更完整的<code>send</code>函数可以被定义为<code>send(message, to, cc=None, bcc=None)</code>。这里<code>cc</code>和<code>bcc</code>是可选的，并且在没有其它参数传入时值为<code>None</code>。</p>
+
+<p>在Python中有多种方法调用一个有关键字参数的函数，比如可以按照参数定义的顺序而不显式地命名参数来调用，比如<code>send('Hello', 'World', 'Cthulhu', 'God')</code>会向上帝发送一个密件副本。也可以像<code>send('Hello again', 'World', bcc='God', cc='Cthulhu')</code>这样用其它的顺序命名参数。除非有充分的理由不按照最接近函数定义的语法<code>send('Hello', 'World', cc='Cthulhu', bcc='God')</code>来，否则最好避免出现这两种可能性。</p>
+
+<p>作为旁注，我要说，按照<a href="http://en.wikipedia.org/wiki/You_ain't_gonna_need_it">YAGNI</a> 原则来，通常去掉一个“只是为了以防万一”而加上的可选参数(和函数当中的逻辑)比在需要时添加一个新的可选参数和它的逻辑要难。<br/>
+3. <strong>可变参数列表</strong><br/>
+第三种向函数传递参数的方法。如果一个函数的作用用一组数目可扩展的位置参数能更好地表示的话，它就能用<code>*args</code>结构定义。在函数体中，<code>args</code>会成为一个包含所有位置参数的元组。比如<code>send(message, *args)</code>可以将每个接收者作为参数被调用：<code>send('Hello', 'God', 'Mom', 'Cthulhu')</code>在函数体中<code>args</code>会等价于<code>('God', 'Mom', 'Cthulhu')</code>。</p>
+
+<p>但是这种结构有些缺陷，要小心使用。如果一个函数接受一系列具有共同特征的参数，通常将函数定义为接受一个列表或者其它序列的参数的函数会更清晰。在这里，如果<code>send</code>有多个接收者，最好显式地定义它：<code>send(message, recipients)</code>并用<code>send('Hello', ['God', 'Mom', 'Cthulhu'])</code>来调用它。这样，函数的使用者事先就能将接收者列表制造为一个列表，并且可以向其中传递任何的序列，包括不能被解包成其它序列的迭代器。<br/>
+4. <strong>可变关键字参数列表</strong><br/>
+最后一种向函数传递参数的方法。如果函数需要一组不确定的命名参数，就可以用<strong>kwargs</strong>结构。在函数体中，<strong>kwargs</strong>会是一个字典，其中包含所有没被函数特征中的其它关键字参数获取的有变量名的参数。</p>
+
+<p>同样需要注意<em>可变参数列表</em>中的情形，因为类似的原因：这些强大的工具应该在的确有必要时才被用到，并且如果更简单、整洁的结构就足够表明函数的意图时就不应该使用它们。</p>
+
+<p>哪些参数是位置参数、哪些参数是可选关键字参数和是否使用高级的可变参数是写函数的程序员决定的，如果能明智地遵循上面的建议，就可以写出这样的Python函数：</p>
+
+<ul>
+<li>易读（参数名不需要解释）</li>
+<li>易修改（添加一个新的关键字参数不会破坏代码的其它部分）</li>
+</ul>
+
+
+<h4>别用魔棒</h4>
+
+<p>作为黑客的强大工具，Python有非常多的钩子和工具，能让你做几乎任何的技巧性的玩法。比如，可以做这些事：</p>
+
+<ul>
+<li>修改对象是怎么创建和实例化的</li>
+<li>修改Python解释器是怎么导入模块的</li>
+<li>甚至可以（如果需要也推荐）在Python中嵌入C例程</li>
+</ul>
+
+
+<p>但是所有这些选项都有很多缺点，用最直接的方法来达到你的目标总是会更好。最主要的缺点是用这些结构时可读性会大大降低。许多代码分析工具，像pylint或pyflakes，都不能解析这些“魔术”代码。</p>
+
+<p>我们认为一个Python开发者应该了解这些几乎无穷无尽的可能性，因为这让我们具有信心，没有什么能阻碍我们。然而，知道怎么做、尤其是什么时候<strong>不</strong>用它们非常重要。  r</p>
+
+<p>就像一个功夫高手，一个Pythonista知道如何用一只手指杀人，实际上却从不这么干。</p>
+
+<h4>我们都是负责的用户</h4>
+
+<p>正如上面我们看到的，Python允许很多技巧，其中有些包含潜在的危险。一个很好的例子就是，任何客户端代码都可以重载一个对象的属性和方法：Python中没有private关键字。这种和像Java这样防御性很强、有很多手段来避免误用的语言非常不同的设计思想被称为“我们都是负责的用户”。</p>
+
+<p>这不意味着没有属性被认为是私有的、Python中不可能进行合适的封装。相反，Python社区不依赖开发者在自己和别人的代码之间建一堵堵墙，而是更倾向于依赖一系列的公约来指示这些元素不应该被直接访问。</p>
+
+<p>对私有变量和实现细节最主要的公约就是给所有“内部变量”加上下划线前缀。如果客户端代码破坏了这种规则访问了这些被标记的元素，任何因为代码修改导致的误操作或者问题都应该由客户端承担责任。</p>
+
+<p>慷慨地使用这条公约是被鼓励的：任何不想被客户端代码使用的方法或属性都应该加上一个下划线前缀。这会保证责任更好地分离、现有代码更好修改；将私有属性公开化总是可以的，但是将公有属性私有化可能就要麻烦多了。</p>
+
+<h4>返回值</h4>
+
+<p>当一个函数变得越来越复杂，不难碰到在一个函数体中用多个return语句的情况。然而为了保证清晰的缩进和可持续发展的可读性水准，最好避免从很多函数体输出点返回有意义的值。</p>
+
+<p>有两种主要情况会在函数体中返回值：函数的结果在函数正常执行后返回，和指示错误输入参数或者导致函数无法完成它的计算或任务的其它情况。</p>
+
+<p>如果你不希望在第二种情况中抛出异常，可能就需要返回一个值，比如None或者False来指示错误的输入参数或者其它原因导致函数不能像需要的那样正确执行。在这种情况下，在错误的上下文被发现时，越早返回越好。这会让函数的结构变得扁平化：所有那条因为错误而返回的语句之后的代码都可以假设满足进一步计算函数主要结果的条件。通常是要有多个这样的返回语句的。</p>
+
+<p>然而，当一个函数在正常流程中有多个主要退出点时，调试返回结果就变得困难了，所以保持一个退出点会更好。这对制造出代码轨迹也有好处，有多个退出点可能表明你的代码需要重构了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">complex_function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">a</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">return</span> <span class="bp">None</span>  <span class="c"># 抛出异常会更好</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">return</span> <span class="bp">None</span>  <span class="c"># 抛出异常会更好</span>
+</span><span class='line'>    <span class="c"># 一些用a、b和c来计算x的复杂代码</span>
+</span><span class='line'>    <span class="c"># 如果成功了要忍住返回x的诱惑</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">:</span>
+</span><span class='line'>        <span class="c"># 一些对x的Plan-B的计算</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">x</span>  <span class="c"># 维护代码时，一个为返回值x设置的单退出点会很好</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>成语</h3>
+
+<p>一个编程成语简单来说就是写代码的一种<em>方法</em>。编程成语的想法在<a href="http://c2.com/cgi/wiki?ProgrammingIdiom">c2</a>和<a href="http://stackoverflow.com/questions/302459/what-is-a-programming-idiom">Stack Overflow</a>中已经得到了充分说明。</p>
+
+<p>地道的Python代码通常被称作很Pythonic。</p>
+
+<p>尽管通常有一种，并且更可取地仅仅只有一种明显的方法来解决问题；<em>那种</em>写地道的Python代码的方法，对于新人来说可能很不明显。所以好的成语需要有意识地去掌握。</p>
+
+<p>下面介绍几个常用的成语：</p>
+
+<h4>解包</h4>
+
+<p>如果你知道一个列表或元组的长度，你可以通过解包给其中的元素命名。比如<code>enumerate()</code>会为列表中的每一项提供一个二元组：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">some_list</span><span class="p">):</span>
+</span><span class='line'>    <span class="c"># 用index和item来干点什么</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你也可以用它来交换两个变量：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>嵌套序列解包也行：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Python3中，<a href="http://www.python.org/dev/peps/pep-3132">PEP 3132</a>介绍了一个扩展的解包的新方式：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</span><span class='line'><span class="c"># a = 1, rest = [2, 3]</span>
+</span><span class='line'><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">middle</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+</span><span class='line'><span class="c"># a = 1, middle = [2, 3], c = 4</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>创建一个会被忽略的变量</h4>
+
+<p>如果你需要给什么东西赋值（比如在序列解包中），但是后面不会用到那个变量，用<code>__</code>：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;foobar.txt&#39;</span>
+</span><span class='line'><span class="n">basename</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>注意：
+很多Python风格指南推荐对需要抛弃的变量使用单下划线"_"，而不是这里推荐的双下划线"__"。问题是单下划线"_"通常是作为[gettext()](http://docs.python.org/library/gettext.html#gettext.gettext)函数的别名来使用的，并且还被在交互式提示环境中来保存上一次操作用。用双下划线来替换掉它可以和它一样清晰，也几乎差不多方便，并且还消除了意外干扰其它用到它的情况的风险。
+</code></pre>
+
+<h4>创建一个长度为N的相同元素的列表</h4>
+
+<p>使用列表<code>*</code>操作符</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">four_nones</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>创建一个长度为N的元素为列表的列表</h4>
+
+<p>因为列表是可变的，<code>*</code>操作符（像上面的一样）会创造一个包含N个对<strong>相同</strong>列表的引用的列表，这可能不是你想要的。我们用列表推导来代替它：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">four_lists</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">__</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个创建字符串的常见成语是对空字符串调用<a href="http://docs.python.org/library/stdtypes.html#str.join">str.join()</a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="n">word</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这会将变量word赋值为&#8217;spam&#8217;。这条成语可以用在列表和元组上。</p>
+
+<p>有时候我们需要在在一个集合中进行查找。让我们来看看两种选择：列表和字典。<br/>
+例如下面的代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;s&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&#39;p&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&#39;m&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+</span><span class='line'><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">lookup_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&#39;s&#39;</span> <span class="ow">in</span> <span class="n">d</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">lookup_list</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&#39;s&#39;</span> <span class="ow">in</span> <span class="n">l</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>尽管这两个函数看起来几乎一模一样，因为<code>lookup_dict</code>利用了Python中的字典是哈希表的事实，这两个查找函数之间的性能差异是很大的。Python会不得不遍历列表中的每个项目来找到匹配的情形，这是非常耗时的。通过分析字典的哈希，在字典中查找键值可以被非常迅速地完成。要获得更多信息看这个<a href="http://stackoverflow.com/questions/513882/python-list-vs-dict-for-look-up-table">StackOverflow</a>页面</p>
+
+<h3>Python之禅</h3>
+
+<p>也作为<a href="http://www.python.org/dev/peps/pep-0020">PEP 20</a>被人了解，Python设计的指导原则</p>
+
+<pre><code>&gt;&gt;&gt; import this
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+</code></pre>
+
+<p>更多好的Python风格的例子，看<a href="http://stackoverflow.com/questions/228181/the-zen-of-python">这个Stack Overflow的问题</a>或<a href="http://artifex.org/~hblanks/talks/2011/pep20_by_example.pdf">这些来自一个Python用户组的幻灯</a></p>
+
+<h3>PEP 8</h3>
+
+<p><a href="http://www.python.org/dev/peps/pep-0008">PEP 8</a>是Python实际上执行的编程风格指南。</p>
+
+<p>将你的Python代码装换成PEP 8的整体上是个很好的想法，这能让你的代码在和其他开发者一起做项目时更持续。有一个命令行程序，<a href="https://github.com/jcrocholl/pep8">pep8</a>可以检查你的代码是否符合要求。在终端中输入下面的命令来安装它：</p>
+
+<pre><code>$ pip install pep8
+</code></pre>
+
+<p>在你的一个或者一系列文件跑一下来查看是否有任何冲突：</p>
+
+<pre><code>$ pep8 optparse.py
+optparse.py:69:11: E401 multiple imports on one line
+optparse.py:77:1: E302 expected 2 blank lines, found 1
+optparse.py:88:5: E301 expected 1 blank line, found 0
+optparse.py:222:34: W602 deprecated form of raising exception
+optparse.py:347:31: E211 whitespace before '('
+optparse.py:357:17: E201 whitespace after '{'
+optparse.py:472:29: E221 multiple spaces before operator
+optparse.py:544:21: W601 .has_key() is deprecated, use 'in'
+</code></pre>
+
+<h3>约定</h3>
+
+<p>这里有些约定你应该遵守来让你的代码更易读。</p>
+
+<h4>检查一个变量是否等于常量</h4>
+
+<p>你不用显式地将一个值与True或None或0进行比较，你可以将它加到if语句后就行了。查看<a href="http://docs.python.org/library/stdtypes.html#truth-value-testing">Truth Value Testing</a>来查看一个值为false的列表。</p>
+
+<p><strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;True!&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is None!&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c"># Just check the value</span>
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is truthy!&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># or check for the opposite</span>
+</span><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">attr</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is falsey!&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># or, since None is considered false, explicitly check for it</span>
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is None!&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>获得一个字典元素</h4>
+
+<p>不要用<a href="http://docs.python.org/library/stdtypes.html#dict.has_key">dict.has_key()</a>方法，用<code>key in d</code>语法来代替它，或者向<a href="http://docs.python.org/library/stdtypes.html#dict.get">dict.get()</a>方法传递一个默认参数。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;hello&#39;</span><span class="p">:</span> <span class="s">&#39;world&#39;</span><span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;hello&#39;</span><span class="p">]</span>    <span class="c"># prints &#39;world&#39;</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;default_value&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;hello&#39;</span><span class="p">:</span> <span class="s">&#39;world&#39;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">,</span> <span class="s">&#39;default_value&#39;</span><span class="p">)</span> <span class="c"># prints &#39;world&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;thingy&#39;</span><span class="p">,</span> <span class="s">&#39;default_value&#39;</span><span class="p">)</span> <span class="c"># prints &#39;default_value&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="k">if</span> <span class="s">&#39;hello&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;hello&#39;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>更短的操纵列表的方法</h4>
+
+<p><a href="http://docs.python.org/tutorial/datastructures.html#list-comprehensions">列表推导</a>提供了一种强大的、简洁的方法来操纵列表。同样地，<a href="http://docs.python.org/library/functions.html#map">map()</a>和<a href="http://docs.python.org/library/functions.html#filter">filter()</a>函数可以用一种不同的、更简洁的语法对列表执行操作。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c"># Filter elements greater than 4</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">]</span>
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c"># Add three to all list members.</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+</span><span class='line'>    <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">]</span>
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用<a href="http://docs.python.org/library/functions.html#enumerate">enumerate()</a>来对列表中你的位置进行计数。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span>
+</span><span class='line'><span class="c"># prints</span>
+</span><span class='line'><span class="c"># 0 3</span>
+</span><span class='line'><span class="c"># 1 4</span>
+</span><span class='line'><span class="c"># 2 5</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://docs.python.org/library/functions.html#enumerate">enumerate()</a>函数比手动处理计数器的可读性更好。更重要的是，它对迭代器的优化更好。</p>
+
+<h4>读文件</h4>
+
+<p>用<code>with open</code>语法来读文件，这样会自动地为你关闭文件。</p>
+
+<p><strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;file.txt&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="k">print</span> <span class="n">a</span>
+</span><span class='line'><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;file.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">line</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>with</code>语句会更好因为它会保证你总是会关闭文件，甚至在<code>with</code>块中有异常抛出的情况下。</p>
+
+<h4>换行</h4>
+
+<p>当代码逻辑上的一行比可接受的限制长时，你需要将它分割到多个物理行中。如果行尾是一个反斜杠，Python解释器会将连续的行连接起来。在有些情况下这很有用，但是通常应该避免这样做，因为这很脆弱：将一个空格加到行尾的反斜杠后就会破坏代码并且可能造成意料之外的错误。</p>
+
+<p>一个更好的解决方案是在你的元素周围使用括号。Python解释器会将一个行尾未闭合括号后的下一行连接起来，直到括号闭合。同样的行为对花括号和方括号也成立。</p>
+
+<p><strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">my_very_big_string</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;For a long time I used to go to bed early. Sometimes, </span><span class="se">\</span>
+</span><span class='line'><span class="s">    when I had put out my candle, my eyes would close so quickly that I had not even </span><span class="se">\</span>
+</span><span class='line'><span class="s">    time to say “I’m going to sleep.”&quot;&quot;&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">from</span> <span class="nn">some.deep.module.inside.a.module</span> <span class="kn">import</span> <span class="n">a_nice_function</span><span class="p">,</span> <span class="n">another_nice_function</span><span class="p">,</span> \
+</span><span class='line'>    <span class="n">yet_another_nice_function</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">my_very_big_string</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class='line'>    <span class="s">&quot;For a long time I used to go to bed early. Sometimes, &quot;</span>
+</span><span class='line'>    <span class="s">&quot;when I had put out my candle, my eyes would close so quickly &quot;</span>
+</span><span class='line'>    <span class="s">&quot;that I had not even time to say “I’m going to sleep.”&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">from</span> <span class="nn">some.deep.module.inside.a.module</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>    <span class="n">a_nice_function</span><span class="p">,</span> <span class="n">another_nice_function</span><span class="p">,</span> <span class="n">yet_another_nice_function</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然而更多情况下，不得不分割一个逻辑行意味着你试图同时做太多事，这可能会降低可读性。</p>
+
+<h3>译后记</h3>
+
+<p>这篇文章的翻译动笔是在3月22日，今天已经是4月16日了，中间拖延了将近一个月，实际上大部分都是我今天一口气翻译完的。而且由于这篇文章一直没翻译完，导致想写的其它几篇也不能开始写。首先自我检讨下，确实没把这篇文章的翻译放在心上，因为找实习一直在打码，不过如今实习找完了，就有时间充实下自己和自己的博客了。另外，本来对这篇文章期望值相当高的，结果翻译完发现大部分内容我早已掌握，对我的帮助实际上不大，这种一直在语法上绕来绕去其实还是有点无聊，后面会翻译或者写一些更有实用价值的文章。</p>
+
+<p>翻译这件事还是很难的，不过翻完这篇长文，我也掌握了一些技巧，比如it&#8217;s开头的无主被动句型要调整语序、灵活地选用更地道的汉语、长句子拆分为多个短句……总得来说还是熟能生巧。</p>
+
+<p>另外，有译得不好的地方请在留言指出，请你吃棒棒糖。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Mr.Zero</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-03-22T22:56:11+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2015</span></span> <span class='time'>10:56 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/python/'>python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style/" data-via="" data-counturl="http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/03/19/python-file/" title="Previous Post: [翻译]Python文件读写">&laquo; [翻译]Python文件读写</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/03/22/python-guide-code-style/">[翻译]Python漫游指南 - 编程风格</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/19/python-file/">[翻译]Python文件读写</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/oh-so-sad/">[老博文迁移]推土小记</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/linux-pipe-1/">[老博文迁移]linux管道命令学习(一)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/linux-process/">[老博文迁移]linux进程管理</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/jinja-practice/">[老博文迁移]jinja2模板使用经验</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/18/flask-token/">使用Flask实现用户认证API</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/17/webpy-502/">[老博文迁移]web.py+fastcgi+nginx 502</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/15/new-blog/">新博客终于搭起来了</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/cxymrzero">@cxymrzero</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'cxymrzero',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/linux/'>linux (2)</a></li>
+<li class='category'><a href='/blog/categories/operation/'>operation (1)</a></li>
+<li class='category'><a href='/blog/categories/python/'>python (5)</a></li>
+<li class='category'><a href='/blog/categories/try/'>try (1)</a></li>
+
+  </ul>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Mr.Zero -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'cxymrzero';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style/';
+        var disqus_url = 'http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
