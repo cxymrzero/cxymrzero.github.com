@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Alg | clean code]]></title>
+  <link href="http://cxymrzero.github.io/blog/categories/alg/atom.xml" rel="self"/>
+  <link href="http://cxymrzero.github.io/"/>
+  <updated>2015-06-06T00:31:28+08:00</updated>
+  <id>http://cxymrzero.github.io/</id>
+  <author>
+    <name><![CDATA[Mr.Zero]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[HackerRank Maximise Sum题解]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/06/05/hackerrank-maximise-sum/"/>
+    <updated>2015-06-05T23:42:33+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/06/05/hackerrank-maximise-sum</id>
+    <content type="html"><![CDATA[<p>今晚被<a href="https://www.hackerrank.com/challenges/maximise-sum">这道题</a>折磨了好久，记录下。</p>
+
+<h3>题意</h3>
+
+<p>对数组的子序列（任意相连的元素）求和，找出所有和里对M的模中的最大值。</p>
+
+<!-- more -->
+
+
+<h3>思路</h3>
+
+<p>开始就想到能不能按照“最大子序列和问题”的思路解决，后来发现无论是分治递归求解还是复杂度为O(N)的算法在这个问题中都没有用，于是看了题解。<br/>
+在<a href="http://www.quora.com/What-is-the-logic-used-in-the-HackerRank-Maximise-Sum-problem#">Quora</a>上找到了题解，看了半天才看明白。大意是，对于输入的数组v中的元素v[i]，先找到v[i]之前所有数的和对M取模的值（包括v[i]），存到数组prefix中。这里有个技巧，
+<code>cpp
+ull tmp = 0;  // unsigned long long
+for (size_t i=0; i&lt;v_size; ++i) {
+    tmp += v[i];
+    tmp %= m;
+    prefix.push_back(tmp);
+}
+</code></p>
+
+<p>即<code>v[i] = (prefix[i-1] + m) % m</code>。<br/>
+对于新的数组prefix，保存了当前元素之前所有元素和除m的余数，对于prefix[i]，如果存在j &lt; i，使prefix[j] &lt; prefix[i]，则从j到i的这一段序列肯定不是我们想要的，这段子序列之和对m取模的值为prefix[i]-prefix[j]。所以我们要找出从prefix[0]到prefix[i-1]中比prefix[i]大的。我们需要维护一个有序数组，并且要不断往其中添加元素，C++的set由红黑树实现（题解中介绍），采用之。由于是有序的，只要找到递增数组中比prefix[i]大的第一个元素即可，即这个元素比prefix[i]大得越少越好，使用<code>s.upper_bound(prefix[i])</code>找出这里的迭代器。<br/>
+代码贴出来：</p>
+
+<pre><code class="cpp">#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+#include &lt;set&gt;
+
+using namespace std;
+
+typedef unsigned long long ull;
+
+ull find_result(const vector&lt;ull&gt; &amp;v, ull m) {
+    vector&lt;ull&gt; prefix;
+    set&lt;ull&gt; s;
+
+    // get prefix array
+    size_t v_size = v.size();
+    ull tmp = 0;
+    for (size_t i=0; i&lt;v_size; ++i) {
+        tmp += v[i];
+        tmp %= m;
+        prefix.push_back(tmp);
+    }
+
+    ull res = 0;
+    for (size_t i=0; i&lt;v_size; ++i) {
+        auto it = s.upper_bound(prefix[i]);
+        if (it != s.end()) {
+            tmp = (prefix[i] - *it + m) % m;
+            res = max(res, tmp);
+        }
+        s.insert(prefix[i]);
+        res = max(res, prefix[i]);
+    }
+    return res;
+}
+
+int main()
+{
+    int cnt;
+    scanf("%d", &amp;cnt);
+    vector&lt;ull&gt; v;
+    ull n, m, tmp;
+    for (int i=0; i&lt;cnt; ++i) {
+        scanf("%llu %llu", &amp;n, &amp;m);
+        v.clear();
+        for (int j=0; j&lt;n; ++j) {
+            scanf("%llu", &amp;tmp);
+            v.push_back(tmp);
+        }
+        printf("%llu\n", find_result(v, m));
+    }
+    return 0;
+}
+</code></pre>
+
+<h3>关于C++的部分</h3>
+
+<h4>看题解新学的set容器</h4>
+
+<p>set即集合，维护一个递增数组，两种方法注意下</p>
+
+<pre><code class="cpp">set&lt;int&gt; s;
+s.insert(1);
+s.insert(2);
+s.insert(3);
+auto it = s.upper_bound(2);
+cout &lt;&lt; *it &lt;&lt; endl;  // 输出3
+</code></pre>
+
+<p><code>upper_bound(val)</code>[<a href="http://www.cplusplus.com/reference/set/set/upper_bound/">http://www.cplusplus.com/reference/set/set/upper_bound/</a>]函数返回比val大的第一个元素的迭代器，要注意与<code>s.end()</code>比较下，看是否不存在比它大的元素。类似的函数还有<code>lower_bound(val)</code></p>
+
+<h4>vector一定要清空！！！</h4>
+
+<p>第一次交全没过！下了测试例子发现从第二组例子开始就没过了，仔细检查发现是vector没有清空搞的鬼，一堆超时的。从另一个角度也说明vector确实牛逼，被我塞了那么多组测试也没爆。。。</p>
+
+<p>总之多做题、多总结吧，想不出来看题解也是好的。</p>
+]]></content>
+  </entry>
+  
+</feed>
