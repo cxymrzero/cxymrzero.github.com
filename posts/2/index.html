@@ -9,7 +9,7 @@
   <meta name="author" content="Mr.Zero">
 
   
-  <meta name="description" content="啰嗦 去年大概这个时候, 用jekyll和github pages搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low! &hellip;">
+  <meta name="description" content="用web.py照着官方文档在服务器上搭好了后台。这次很奇怪地出现了一个Nginx 502 Bad Gateway的错误。 执行上面的kill `pgrep -f "python /path/to/www/index.py"`会出现错误提示，可是启动脚本的时候明明是提示spawn-fcgi: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -73,6 +73,46 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/03/17/webpy-502/">[老博文迁移]web.py+fastcgi+nginx 502</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-03-17T23:45:42+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:45 pm</span></time>
+        
+           | <a href="/blog/2015/03/17/webpy-502/#disqus_thread"
+             data-disqus-identifier="http://cxymrzero.github.io/blog/2015/03/17/webpy-502/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>用<code>web.py</code>照着<a href="http://webpy.org/cookbook/fastcgi-nginx.zh-cn">官方文档</a>在服务器上搭好了后台。这次很奇怪地出现了一个Nginx 502 Bad Gateway的错误。</p>
+
+<p>执行上面的<code>kill `pgrep -f "python /path/to/www/index.py"`</code>会出现错误提示，可是启动脚本的时候明明是提示<code>spawn-fcgi: child spawned successfully: PID: 32401</code>的信息的，然后还可以继续执行<code>spawn-fcgi -d /path/to/www -f /path/to/www/index.py -a 127.0.0.1 -p 9002</code>的脚本
+，同样会提示成功。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/03/17/webpy-502/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/03/15/new-blog/">新博客终于搭起来了</a></h1>
     
     
@@ -124,6 +164,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/06/07/euler-circuit/">判断欧拉回路</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/06/05/hackerrank-maximise-sum/">HackerRank Maximise Sum题解</a>
       </li>
     
@@ -157,10 +201,6 @@
     
       <li class="post">
         <a href="/blog/2015/03/18/flask-token/">使用Flask实现用户认证API</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/17/webpy-502/">[老博文迁移]web.py+fastcgi+nginx 502</a>
       </li>
     
   </ul>
@@ -201,7 +241,7 @@
 <section>
   <h1>Categories</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/alg/'>alg (1)</a></li>
+    <li class='category'><a href='/blog/categories/algorithm/'>algorithm (2)</a></li>
 <li class='category'><a href='/blog/categories/bb/'>bb (1)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>linux (2)</a></li>
 <li class='category'><a href='/blog/categories/operation/'>operation (1)</a></li>

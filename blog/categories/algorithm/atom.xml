@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Alg | clean code]]></title>
-  <link href="http://cxymrzero.github.io/blog/categories/alg/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Algorithm | clean code]]></title>
+  <link href="http://cxymrzero.github.io/blog/categories/algorithm/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-06-06T00:31:28+08:00</updated>
+  <updated>2015-06-07T16:32:25+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -12,6 +12,90 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[判断欧拉回路]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/06/07/euler-circuit/"/>
+    <updated>2015-06-07T16:04:42+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/06/07/euler-circuit</id>
+    <content type="html"><![CDATA[<p>昨天开始学习图算法，正好hihoCoder<a href="http://hihocoder.com/contest/hiho49/problem/1">这周的题目</a>是判断欧拉回路，AC之。</p>
+
+<!-- more  -->
+
+
+<h3>如何判断欧拉回路？</h3>
+
+<p>欧拉回路即小学时就学过的一笔画问题，不再分析了，判断条件为“奇点个数为0或2个的连通图”。所以首先要判断是否是连通图，从一个结点开始遍历图，如果最终存在结点没被访问，则不是连通图；然后计算奇点个数即可。</p>
+
+<h3>图的存储</h3>
+
+<p>第一次做图论的题目，怎么存就卡住了。首先想到的是邻接矩阵，但是邻接矩阵在结点数很多的情况下会占用很多内存，而且对于边数较少的图（稀疏图），大部分的边都是0，很浪费资源。所以一般用的是邻接表，开一个vector的数组，每个vector存该结点相邻的结点即可。</p>
+
+<h3>图的遍历</h3>
+
+<p>BFS和DFS听了很多了，即宽度优先搜索和深度优先搜索。深度优先就是访问一个结点A，假设与A相邻的结点还有B和C，接着访问B，再访问和B相邻的结点，直到不能再访问为止。DFS用到了栈，可以用递归隐式地调用栈，写起来就只有几行。BFS将与当前结点相邻的结点依次存入队列，再访问队列中的结点。</p>
+
+<p>一次AC，爽爽爽！贴上代码：</p>
+
+<pre><code class="cpp">#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+const int MAX_N = 10000 + 1;
+vector&lt;int&gt; g[MAX_N];
+int vis[MAX_N] = {};
+
+void dfs(int v) {
+    if (vis[v]) return;
+    vis[v] = 1;
+    for (int i=0; i&lt;g[v].size(); ++i) {
+        dfs(g[v][i]);
+    }
+}
+
+bool solve(int v) {
+    dfs(1);
+    for (int i=1; i&lt;=v; ++i) {
+        if (!vis[i])
+            return false;
+    }
+    return true;
+}
+
+int main()
+{
+    int v, e;
+    scanf("%d %d", &amp;v, &amp;e);
+    for (int i=0; i&lt;e; ++i) {
+        int s, t;
+        scanf("%d %d", &amp;s, &amp;t);
+        g[s].push_back(t);
+        g[t].push_back(s);
+    }
+
+    // 非连通图
+    if (!solve(v)) {
+        printf("Part\n");
+        return 0;
+    }
+
+    // 判断奇点个数是否为0或2
+    int odd_point_cnt = 0;
+    for (int i=1; i&lt;=v; ++i) {
+        size_t v_cnt = g[i].size();
+        if (v_cnt % 2)
+            ++odd_point_cnt;
+    }
+    if (odd_point_cnt==0 || odd_point_cnt==2) {
+        printf("Full\n");
+    } else
+        printf("Part\n");
+    return 0;
+}
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[HackerRank Maximise Sum题解]]></title>

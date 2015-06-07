@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://cxymrzero.github.io/blog/2015/06/07/euler-circuit/</loc>
+    <lastmod>2015-06-07T16:04:42+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://cxymrzero.github.io/blog/2015/06/05/hackerrank-maximise-sum/</loc>
     <lastmod>2015-06-05T23:42:33+08:00</lastmod>
   </url>
@@ -72,7 +76,7 @@
     <loc>http://cxymrzero.github.io/blog/categories/bb/</loc>
   </url>
   <url>
-    <loc>http://cxymrzero.github.io/blog/categories/alg/</loc>
+    <loc>http://cxymrzero.github.io/blog/categories/algorithm/</loc>
   </url>
   <url>
     <loc>http://cxymrzero.github.io/downloads/code/html/jinja0.html</loc>
