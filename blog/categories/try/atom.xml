@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Try | clean code]]></title>
   <link href="http://cxymrzero.github.io/blog/categories/try/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-06-19T13:03:13+08:00</updated>
+  <updated>2015-06-27T03:08:29+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[mac下向NTFS文件系统写入文件]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/06/27/mac-ntfs/"/>
+    <updated>2015-06-27T02:39:27+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/06/27/mac-ntfs</id>
+    <content type="html"><![CDATA[<p>mac下默认是不支持NTFS格式的文件系统的写入的，可以用NTFS Paragon这款软件（不过是收费的，要找破解版或者激活码，搜了好多都不能用）或者是免费的ntfsMounter（在我的系统上不能用，也不知道为什么。）</p>
+
+<!--more-->
+
+
+<p>那么作为一个程序员，我们只要拿起命令行武器，在系统中添加一个文件就ok了！</p>
+
+<p>首先需要找到你的移动硬盘的设备号(UUID)，打开终端，输入</p>
+
+<pre><code class="sh">diskutil info /Volumes/你的硬盘名 | grep UUID
+</code></pre>
+
+<p>这里你的硬盘名可以通过tab自动补齐，不用手动输入。可以找到一串长长的用<code>-</code>分隔开的字符串，如A9667400-4E6C-4A7C-8444-54E69C3EAD5E。输入</p>
+
+<pre><code class="sh">echo "UUID=A9667400-4E6C-4A7C-8444-54E69C3EAD5E none ntfs rw,auto,nobrowse" | sudo tee a /etc/fstab
+</code></pre>
+
+<p>就可以创建一个配置文件了。然而这时你的移动硬盘被隐藏起来了，不过还在<code>/Volumes</code>文件夹中，在桌面创建一个快捷方式吧！</p>
+
+<pre><code class="sh">ln -s /Volumes ~/Desktop/Volumes
+</code></pre>
+
+<p>推出你的移动硬盘，再插入电脑，会发现权限已经变了，大功告成！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[新博客终于搭起来了]]></title>
