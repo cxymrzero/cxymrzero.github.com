@@ -4,7 +4,7 @@
   <title><![CDATA[clean code]]></title>
   <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-06-27T03:08:29+08:00</updated>
+  <updated>2015-08-17T23:34:59+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[MyISAM与InnoDB区别]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb/"/>
+    <updated>2015-08-17T13:18:39+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb</id>
+    <content type="html"><![CDATA[<p>MyISAM和InnoDB是MySQL两种最常用的存储引擎，最近几次面试都有问到区别，感觉答得不好，今天专门抽时间研究下。</p>
+
+<h3>设计目标</h3>
+
+<p>InnoDB设计目标是处理大容量的数据，而MyISAM追求的是性能，两者产生的差异也是基于这点。 InnoDB是MySQL的默认存储引擎。</p>
+
+<h3>事务处理</h3>
+
+<p><strong>InnoDB支持事务和外键，MyISAM不支持。</strong>MyISAM强调的是性能，InnoDB支持的功能更加完整。InnoDB支持事务带来了一个好处，发生故障时可以通过事务日志来恢复数据库，MyISAM特别要命的一点是崩溃后不能安全恢复，所以对于表比较大的情况不要用。</p>
+
+<h3>效率和锁</h3>
+
+<p>两种存储引擎的效率差异来自于锁的方式差异，MyISAM是表锁，对数据库进行写操作时会锁住整个表，效率很低；确定要修改数据的范围时，InnoDB是行锁，只锁一行的数据，写操作很快。但也有特例，比如<code>UPDATE student SET age=10 WHERE name LIKE '王%'</code>，这种情况不能确定要<code>UPDATE</code>的行位置，InnoDB同样会锁住整个表。</p>
+
+<h3>索引</h3>
+
+<p>MyISAM支持全文索引，InnoDB不支持。</p>
+
+<h3>COUNT(*)</h3>
+
+<p>MyISAM保存了表的行数，InnoDB没有。也就是说，执行<code>SELECT COUNT(*) FROM student</code>的操作时，MyISAM可以直接给出结果，而InnoDB要先扫描全表。不过对于加了where条件的查询操作，效果是一样的。</p>
+
+<h3>AUTO_INCREMENT</h3>
+
+<p>InnoDB下只能对自增字段单独建索引，MyISAM下可以和其它列一起建联合索引。</p>
+
+<h3>然并卵</h3>
+
+<p>上面都是从网上东拼西凑总结出来的，有些博客相互还有冲突，醉了。有一点我特别奇怪，为什么MyISAM是表锁，InnoDB是行锁，MyISAM比InnoDB读性能还会好呢？搜了好多地方都没找到答案，老大苏武说其实不一定，只是某些情况会快一些，而且用MyISAM的人少。刚好最近我看公司的wiki，公司内部是强制用InnoDB做存储引擎的，我猜可能是出于事务和数据恢复的考虑。<br/>
+还有其它一些区别，不一一列出来了。感觉这篇博客还有要完善的地方，不过基本的知识点已经涉及到了，有空再进一步研究吧。</p>
+
+<h3>瞎扯</h3>
+
+<p>实习一个多月了，很多零散的东西都在印象笔记里，加上面了几家公司，有很多想总结整理的东西。这周立了个flag，一天一篇博客，希望能不食言。</p>
+
+<p>参考资料<br/>
+[1] <a href="http://www.php100.com/html/webkaifa/database/Mysql/2011/0326/7789.html">MyISAM InnoDB 区别</a><br/>
+[2] <a href="http://www.ha97.com/4197.html">MySQL存储引擎MyISAM与InnoDB的主要区别对比</a><br/>
+[3] <a href="http://coolshell.cn/articles/652.html">MySQL: InnoDB 还是 MyISAM?</a><br/>
+[4] <a href="http://book.douban.com/subject/4241826/">《高性能MySQL》</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[mac下向NTFS文件系统写入文件]]></title>
