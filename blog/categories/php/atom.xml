@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Php | clean code]]></title>
   <link href="http://cxymrzero.github.io/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-08-18T23:20:55+08:00</updated>
+  <updated>2015-08-18T23:28:50+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -61,6 +61,20 @@
 <p>更多的配置查手册吧。</p>
 
 <p>有时候执行完<code>curl_exec()</code>会发现没有任何东西返回，这时候需要<code>curl_errno()</code>和<code>curl_error()</code>来查看错误号和错误原因了，不过一定要放在<code>curl_exec()</code>后面，不要像我一样蠢……（躲角落哭）</p>
+
+<pre><code class="php">$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+curl_setopt($ch, CURLOPT_TIMEOUT, 10);  // 10s内拿不到数据就放弃
+$result = curl_exec($ch);
+
+// 请求失败时打入log
+if (curl_errno($ch)) {
+    $now = date('Y-m-d H:i:s');
+    crond_log("cannot get $url at $now", 'mochi_crond');
+}
+</code></pre>
 
 <p>别忘了PHP才是最好的语言！</p>
 

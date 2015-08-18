@@ -4,7 +4,7 @@
   <title><![CDATA[clean code]]></title>
   <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-08-18T23:20:55+08:00</updated>
+  <updated>2015-08-18T23:28:50+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -78,6 +78,33 @@
 <p>更多的配置查手册吧。</p>
 
 <p>有时候执行完<code>curl_exec()</code>会发现没有任何东西返回，这时候需要<code>curl_errno()</code>和<code>curl_error()</code>来查看错误号和错误原因了，不过一定要放在<code>curl_exec()</code>后面，不要像我一样蠢……（躲角落哭）</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
+</span><span class='line'><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="nv">$url</span><span class="p">);</span>
+</span><span class='line'><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="nv">$header</span><span class="p">);</span>
+</span><span class='line'><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_TIMEOUT</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>  <span class="c1">// 10s内拿不到数据就放弃</span>
+</span><span class='line'><span class="nv">$result</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'><span class="c1">// 请求失败时打入log</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nb">curl_errno</span><span class="p">(</span><span class="nv">$ch</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$now</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;Y-m-d H:i:s&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">crond_log</span><span class="p">(</span><span class="s2">&quot;cannot get </span><span class="si">$url</span><span class="s2"> at </span><span class="si">$now</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s1">&#39;mochi_crond&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>别忘了PHP才是最好的语言！</p>
 
