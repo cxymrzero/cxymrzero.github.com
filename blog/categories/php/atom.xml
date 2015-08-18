@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Php | clean code]]></title>
+  <link href="http://cxymrzero.github.io/blog/categories/php/atom.xml" rel="self"/>
+  <link href="http://cxymrzero.github.io/"/>
+  <updated>2015-08-18T23:16:22+08:00</updated>
+  <id>http://cxymrzero.github.io/</id>
+  <author>
+    <name><![CDATA[Mr.Zero]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[PHP cURL使用小结]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/08/18/php-curl/"/>
+    <updated>2015-08-18T22:46:31+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/08/18/php-curl</id>
+    <content type="html"><![CDATA[<p>实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。</p>
+
+<p>项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cURL外，<code>file_get_contents</code>这个函数也可以发起HTTP请求，不过不是专门干这个的，不好配置参数，还是cURL好。</p>
+
+<p>官方文档里的例子很有用：</p>
+
+<pre><code class="php">&lt;?php 
+        // create curl resource 
+        $ch = curl_init(); 
+
+        // set url 
+        curl_setopt($ch, CURLOPT_URL, "example.com"); 
+
+        //return the transfer as a string 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+
+        // $output contains the output string 
+        $output = curl_exec($ch); 
+
+        // close curl resource to free up system resources 
+        curl_close($ch);      
+?&gt;
+</code></pre>
+
+<p>主要就是对curl的选项进行配置，即<code>curl_setopt()</code>这个函数。有几个参数很重要：</p>
+
+<ul>
+<li><code>CURLOPT_URL</code>：url，没得说</li>
+<li><code>CURLOPT_RETURNTRANSFER</code>：设为1才会将响应结果存到变量，否则会echo到页面</li>
+<li><code>CURLOPT_HTTPHEADER</code>：设置一个HTTP请求头，必须为<code>array</code>，否则会报错</li>
+<li><code>CURLOPT_TIMEOUT</code>：设置cURL执行超时长度，单位是秒，注意是执行时间，而不是连接时间，那要用<code>CURLOPT_CONNECTTIMEOUT</code></li>
+<li><code>CURLOPT_TIMEOUT_MS</code>：同上，毫秒</li>
+</ul>
+
+
+<p>更多的配置查手册吧。</p>
+
+<p>有时候执行完<code>curl_exec()</code>会发现没有任何东西返回，这时候需要<code>curl_errno()</code>和<code>curl_error()</code>来查看错误号和错误原因了，不过一定要放在<code>curl_exec()</code>后面，不要像我一样蠢……（躲角落哭）</p>
+
+<p>别忘了PHP才是最好的语言！</p>
+
+<p>参考资料<br/>
+[1] <a href="http://php.net/manual/zh/book.curl.php">Client URL Library</a><br/>
+[2] <a href="http://stackoverflow.com/questions/2582057/setting-curls-timeout-in-php">Setting Curl&rsquo;s Timeout in PHP</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -10,7 +10,7 @@
   <meta name="author" content="Mr.Zero">
 
   
-  <meta name="description" content="MyISAM和InnoDB是MySQL两种最常用的存储引擎，最近几次面试都有问到区别，感觉答得不好，今天专门抽时间研究下。 设计目标 InnoDB设计目标是处理大容量的数据，而MyISAM追求的是性能，两者产生的差异也是基于这点。 InnoDB是MySQL的默认存储引擎。 ">
+  <meta name="description" content="实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。 项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,98 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/18/php-curl/">PHP cURL使用小结</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-18T22:46:31+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:46 pm</span></time>
+        
+           | <a href="/blog/2015/08/18/php-curl/#disqus_thread"
+             data-disqus-identifier="http://cxymrzero.github.io/blog/2015/08/18/php-curl/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。</p>
+
+<p>项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cURL外，<code>file_get_contents</code>这个函数也可以发起HTTP请求，不过不是专门干这个的，不好配置参数，还是cURL好。</p>
+
+<p>官方文档里的例子很有用：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>        <span class="c1">// create curl resource </span>
+</span><span class='line'>        <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// set url </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="s2">&quot;example.com&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//return the transfer as a string </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// $output contains the output string </span>
+</span><span class='line'>        <span class="nv">$output</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// close curl resource to free up system resources </span>
+</span><span class='line'>        <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>主要就是对curl的选项进行配置，即<code>curl_setopt()</code>这个函数。有几个参数很重要：</p>
+
+<ul>
+<li><code>CURLOPT_URL</code>：url，没得说</li>
+<li><code>CURLOPT_RETURNTRANSFER</code>：设为1才会将响应结果存到变量，否则会echo到页面</li>
+<li><code>CURLOPT_HTTPHEADER</code>：设置一个HTTP请求头，必须为<code>array</code>，否则会报错</li>
+<li><code>CURLOPT_TIMEOUT</code>：设置cURL执行超时长度，单位是秒，注意是执行时间，而不是连接时间，那要用<code>CURLOPT_CONNECTTIMEOUT</code></li>
+<li><code>CURLOPT_TIMEOUT_MS</code>：同上，毫秒</li>
+</ul>
+
+
+<p>更多的配置查手册吧。</p>
+
+<p>有时候执行完<code>curl_exec()</code>会发现没有任何东西返回，这时候需要<code>curl_errno()</code>和<code>curl_error()</code>来查看错误号和错误原因了，不过一定要放在<code>curl_exec()</code>后面，不要像我一样蠢……（躲角落哭）</p>
+
+<p>别忘了PHP才是最好的语言！</p>
+
+<p>参考资料<br/>
+[1] <a href="http://php.net/manual/zh/book.curl.php">Client URL Library</a><br/>
+[2] <a href="http://stackoverflow.com/questions/2582057/setting-curls-timeout-in-php">Setting Curl&rsquo;s Timeout in PHP</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -414,43 +506,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/03/18/linux-process/">[老博文迁移]linux进程管理</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-03-18T15:35:11+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>3:35 pm</span></time>
-        
-           | <a href="/blog/2015/03/18/linux-process/#disqus_thread"
-             data-disqus-identifier="http://cxymrzero.github.io/blog/2015/03/18/linux-process/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>作为一个新手，部署Python网站的时候总会出各种各样的问题，这个时候我就很想知道是哪个程序没有运行。这几天读了鸟哥私房菜的进程管理这一章，还没读完，先做下笔记。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2015/03/18/linux-process/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -464,6 +519,10 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/08/18/php-curl/">PHP cURL使用小结</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/08/17/myisam-innodb/">MyISAM与InnoDB区别</a>
@@ -499,10 +558,6 @@
     
       <li class="post">
         <a href="/blog/2015/03/18/linux-pipe-1/">[老博文迁移]linux管道命令学习(一)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/18/linux-process/">[老博文迁移]linux进程管理</a>
       </li>
     
   </ul>
@@ -548,6 +603,7 @@
 <li class='category'><a href='/blog/categories/database/'>database (1)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>linux (2)</a></li>
 <li class='category'><a href='/blog/categories/operation/'>operation (1)</a></li>
+<li class='category'><a href='/blog/categories/php/'>php (1)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (5)</a></li>
 <li class='category'><a href='/blog/categories/try/'>try (2)</a></li>
 

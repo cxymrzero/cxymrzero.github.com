@@ -6,11 +6,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="baidu-site-verification" content="jKZt25RHZv" />
-  <title>MyISAM与InnoDB区别 - clean code</title>
+  <title>PHP cURL使用小结 - clean code</title>
   <meta name="author" content="Mr.Zero">
 
   
-  <meta name="description" content="MyISAM和InnoDB是MySQL两种最常用的存储引擎，最近几次面试都有问到区别，感觉答得不好，今天专门抽时间研究下。 设计目标 InnoDB设计目标是处理大容量的数据，而MyISAM追求的是性能，两者产生的差异也是基于这点。 InnoDB是MySQL的默认存储引擎。 事务处理 &hellip;">
+  <meta name="description" content="实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。 项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb/">
+  <link rel="canonical" href="http://cxymrzero.github.io/blog/2015/08/18/php-curl/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
@@ -67,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">MyISAM与InnoDB区别</h1>
+      <h1 class="entry-title">PHP cURL使用小结</h1>
     
     
       <p class="meta">
@@ -76,7 +76,7 @@
 
 
 
-<time class='entry-date' datetime='2015-08-17T13:18:39+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:18 pm</span></time>
+<time class='entry-date' datetime='2015-08-18T22:46:31+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:46 pm</span></time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://cxymrzero.github.io">Comments</a>
@@ -86,49 +86,67 @@
   </header>
 
 
-<div class="entry-content"><p>MyISAM和InnoDB是MySQL两种最常用的存储引擎，最近几次面试都有问到区别，感觉答得不好，今天专门抽时间研究下。</p>
+<div class="entry-content"><p>实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。</p>
 
-<h3>设计目标</h3>
+<p>项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cURL外，<code>file_get_contents</code>这个函数也可以发起HTTP请求，不过不是专门干这个的，不好配置参数，还是cURL好。</p>
 
-<p>InnoDB设计目标是处理大容量的数据，而MyISAM追求的是性能，两者产生的差异也是基于这点。 InnoDB是MySQL的默认存储引擎。</p>
+<p>官方文档里的例子很有用：</p>
 
-<!--more-->
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>        <span class="c1">// create curl resource </span>
+</span><span class='line'>        <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// set url </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="s2">&quot;example.com&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//return the transfer as a string </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// $output contains the output string </span>
+</span><span class='line'>        <span class="nv">$output</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// close curl resource to free up system resources </span>
+</span><span class='line'>        <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>事务处理</h3>
+<p>主要就是对curl的选项进行配置，即<code>curl_setopt()</code>这个函数。有几个参数很重要：</p>
 
-<p><strong>InnoDB支持事务和外键，MyISAM不支持。</strong>MyISAM强调的是性能，InnoDB支持的功能更加完整。InnoDB支持事务带来了一个好处，发生故障时可以通过事务日志来恢复数据库，MyISAM特别要命的一点是崩溃后不能安全恢复，所以对于表比较大的情况不要用。</p>
+<ul>
+<li><code>CURLOPT_URL</code>：url，没得说</li>
+<li><code>CURLOPT_RETURNTRANSFER</code>：设为1才会将响应结果存到变量，否则会echo到页面</li>
+<li><code>CURLOPT_HTTPHEADER</code>：设置一个HTTP请求头，必须为<code>array</code>，否则会报错</li>
+<li><code>CURLOPT_TIMEOUT</code>：设置cURL执行超时长度，单位是秒，注意是执行时间，而不是连接时间，那要用<code>CURLOPT_CONNECTTIMEOUT</code></li>
+<li><code>CURLOPT_TIMEOUT_MS</code>：同上，毫秒</li>
+</ul>
 
-<h3>效率和锁</h3>
 
-<p>两种存储引擎的效率差异来自于锁的方式差异，MyISAM是表锁，对数据库进行写操作时会锁住整个表，效率很低；确定要修改数据的范围时，InnoDB是行锁，只锁一行的数据，写操作很快。但也有特例，比如<code>UPDATE student SET age=10 WHERE name LIKE '王%'</code>，这种情况不能确定要<code>UPDATE</code>的行位置，InnoDB同样会锁住整个表。</p>
+<p>更多的配置查手册吧。</p>
 
-<h3>索引</h3>
+<p>有时候执行完<code>curl_exec()</code>会发现没有任何东西返回，这时候需要<code>curl_errno()</code>和<code>curl_error()</code>来查看错误号和错误原因了，不过一定要放在<code>curl_exec()</code>后面，不要像我一样蠢……（躲角落哭）</p>
 
-<p>MyISAM支持全文索引，InnoDB不支持。</p>
-
-<h3>COUNT(*)</h3>
-
-<p>MyISAM保存了表的行数，InnoDB没有。也就是说，执行<code>SELECT COUNT(*) FROM student</code>的操作时，MyISAM可以直接给出结果，而InnoDB要先扫描全表。不过对于加了where条件的查询操作，效果是一样的。</p>
-
-<h3>AUTO_INCREMENT</h3>
-
-<p>InnoDB下只能对自增字段单独建索引，MyISAM下可以和其它列一起建联合索引。</p>
-
-<h3>然并卵</h3>
-
-<p>上面都是从网上东拼西凑总结出来的，有些博客相互还有冲突，醉了。有一点我特别奇怪，为什么MyISAM是表锁，InnoDB是行锁，MyISAM比InnoDB读性能还会好呢？搜了好多地方都没找到答案，老大苏武说其实不一定，只是某些情况会快一些，而且用MyISAM的人少。刚好最近我看公司的wiki，公司内部是强制用InnoDB做存储引擎的，我猜可能是出于事务和数据恢复的考虑。<br/>
-还有其它一些区别，不一一列出来了。感觉这篇博客还有要完善的地方，不过基本的知识点已经涉及到了，有空再进一步研究吧。</p>
-
-<h3>瞎扯</h3>
-
-<p>实习一个多月了，很多零散的东西都在印象笔记里，加上面了几家公司，有很多想总结整理的东西。这周立了个flag，一天一篇博客，希望能不食言。</p>
+<p>别忘了PHP才是最好的语言！</p>
 
 <p>参考资料<br/>
-[1] <a href="http://www.php100.com/html/webkaifa/database/Mysql/2011/0326/7789.html">MyISAM InnoDB 区别</a><br/>
-[2] <a href="http://www.ha97.com/4197.html">MySQL存储引擎MyISAM与InnoDB的主要区别对比</a><br/>
-[3] <a href="http://coolshell.cn/articles/652.html">MySQL: InnoDB 还是 MyISAM?</a><br/>
-[4] <a href="http://book.douban.com/subject/4241826/">《高性能MySQL》</a></p>
+[1] <a href="http://php.net/manual/zh/book.curl.php">Client URL Library</a><br/>
+[2] <a href="http://stackoverflow.com/questions/2582057/setting-curls-timeout-in-php">Setting Curl&rsquo;s Timeout in PHP</a></p>
 </div>
 
 
@@ -144,12 +162,12 @@
 
 
 
-<time class='entry-date' datetime='2015-08-17T13:18:39+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:18 pm</span></time>
+<time class='entry-date' datetime='2015-08-18T22:46:31+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:46 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/database/'>database</a>
+    <a class='category' href='/blog/categories/php/'>php</a>
   
 </span>
 
@@ -158,7 +176,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb/" data-via="" data-counturl="http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://cxymrzero.github.io/blog/2015/08/18/php-curl/" data-via="" data-counturl="http://cxymrzero.github.io/blog/2015/08/18/php-curl/" >Tweet</a>
   
   
   
@@ -167,10 +185,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/06/27/mac-ntfs/" title="Previous Post: mac下向NTFS文件系统写入文件">&laquo; mac下向NTFS文件系统写入文件</a>
+        <a class="basic-alignment left" href="/blog/2015/08/17/myisam-innodb/" title="Previous Post: MyISAM与InnoDB区别">&laquo; MyISAM与InnoDB区别</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/08/18/php-curl/" title="Next Post: PHP cURL使用小结">PHP cURL使用小结 &raquo;</a>
       
     </p>
   </footer>
@@ -298,8 +314,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb/';
-        var disqus_url = 'http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb/';
+        var disqus_identifier = 'http://cxymrzero.github.io/blog/2015/08/18/php-curl/';
+        var disqus_url = 'http://cxymrzero.github.io/blog/2015/08/18/php-curl/';
         var disqus_script = 'embed.js';
       
     (function () {
