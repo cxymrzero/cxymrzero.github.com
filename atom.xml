@@ -4,7 +4,7 @@
   <title><![CDATA[clean code]]></title>
   <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-08-18T23:16:22+08:00</updated>
+  <updated>2015-08-18T23:20:55+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -21,6 +21,11 @@
     <content type="html"><![CDATA[<p>实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。</p>
 
 <p>项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cURL外，<code>file_get_contents</code>这个函数也可以发起HTTP请求，不过不是专门干这个的，不好配置参数，还是cURL好。</p>
+
+<!--more-->
+
+
+<p></p>
 
 <p>官方文档里的例子很有用：</p>
 
