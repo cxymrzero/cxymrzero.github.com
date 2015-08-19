@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Php | clean code]]></title>
   <link href="http://cxymrzero.github.io/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-08-18T23:28:50+08:00</updated>
+  <updated>2015-08-19T23:10:56+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[PHP的两个时间函数]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/08/19/php-time/"/>
+    <updated>2015-08-19T22:44:42+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/08/19/php-time</id>
+    <content type="html"><![CDATA[<p>最近经常需要处理时间，一直在用这两个函数：</p>
+
+<h3><a href="http://php.net/manual/zh/function.date.php">date()</a></h3>
+
+<p><code>date()</code>可以将时间戳格式化成字符串，最常用的就是<code>YYYY-mm-dd HH:ii:ss</code>这种格式了。可以不加<code>$timestamp</code>参数，默认是当前时间。</p>
+
+<pre><code class="php">$time_str = date('Y-m-d H:i:s', $timestamp)
+</code></pre>
+
+<p>时间一般都会要前导零，记住这几个格式化占位符就不用查手册了。</p>
+
+<h3><a href="http://php.net/manual/zh/function.strtotime.php">strtotime()</a></h3>
+
+<p>这个函数其实感觉蛮诡异的……因为它可以<strong>尝试</strong>把<strong>美国英语日期格式的字符串</strong>解释成时间戳，可能会失败，所以感觉还是不要传比较复杂的字符串给它比较好……</p>
+
+<p>这是官方文档给的例子</p>
+
+<pre><code class="php">echo strtotime("now"), "\n";
+echo strtotime("10 September 2000"), "\n";
+echo strtotime("+1 day"), "\n";
+echo strtotime("+1 week"), "\n";
+echo strtotime("+1 week 2 days 4 hours 2 seconds"), "\n";
+echo strtotime("next Thursday"), "\n";
+echo strtotime("last Monday"), "\n";
+</code></pre>
+
+<p>在不知道有&#8221;-1 day&#8221;这种用法的时候我都是自己实现的……所以还是熟悉PHP的函数比较好。</p>
+
+<h3>注意时区</h3>
+
+<p>在程序入口处设置时区</p>
+
+<pre><code class="php">date_default_timezone_set('Asia/Shanghai');
+</code></pre>
+
+<p>明早就要做火车去深圳面试了，开心 =w=</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[PHP cURL使用小结]]></title>
