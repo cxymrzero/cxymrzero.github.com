@@ -4,7 +4,7 @@
   <title><![CDATA[clean code]]></title>
   <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
   <link href="http://cxymrzero.github.io/"/>
-  <updated>2015-08-19T23:10:56+08:00</updated>
+  <updated>2015-08-19T23:11:47+08:00</updated>
   <id>http://cxymrzero.github.io/</id>
   <author>
     <name><![CDATA[Mr.Zero]]></name>
@@ -30,6 +30,9 @@
 
 
 <p>时间一般都会要前导零，记住这几个格式化占位符就不用查手册了。</p>
+
+<!--more-->
+
 
 <h3><a href="http://php.net/manual/zh/function.strtotime.php">strtotime()</a></h3>
 
