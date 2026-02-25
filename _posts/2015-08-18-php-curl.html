@@ -1,0 +1,54 @@
+---
+layout: post
+title: "PHP cURL使用小结"
+date: 2015-08-18T22:46:31+08:00
+categories: ["php"]
+permalink: /blog/2015/08/18/php-curl/
+legacy: true
+---
+{% raw %}
+<p>实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。</p>
+
+<p>项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cURL外，<code>file_get_contents</code>这个函数也可以发起HTTP请求，不过不是专门干这个的，不好配置参数，还是cURL好。</p>
+
+<!--more-->
+
+
+<p></p>
+
+<p>官方文档里的例子很有用：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>        <span class="c1">// create curl resource </span>
+</span><span class='line'>        <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// set url </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="s2">&quot;example.com&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//return the transfer as a string </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// $output contains the output string </span>
+</span><span class='line'>        <span class="nv">$output</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// close curl resource to free up system resources </span>
+</span><span class='line'>        <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table>
+{% endraw %}

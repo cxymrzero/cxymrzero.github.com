@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="jKZt25RHZv" />
+  <title>[老博文迁移]jinja2模板使用经验 - clean code</title>
+  <meta name="author" content="Mr.Zero">
+
+  
+  <meta name="description" content="
+用jinja2写模板的时候遇到了一些问题，记录一下
+
+
+
+
+">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2015/03/18/jinja-practice/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <header role="banner"><hgroup>
+  <h1><a href="/">clean code</a></h1>
+  
+    <h2>i create stuff</h2>
+  
+  </hgroup>
+  </header>
+
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  </ul>
+
+  <form action="https://www.google.com/search" method="get">
+    <fieldset role="search">
+      <input type="hidden" name="sitesearch" value="localhost:4000">
+      <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    </fieldset>
+  </form>
+
+  <ul class="main-navigation">
+    <li><a href="/">Blog</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/links">Links</a></li>
+  </ul>
+  </nav>
+
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  <header>
+    <h1 class="entry-title">[老博文迁移]jinja2模板使用经验</h1>
+    <p class="meta">
+      <time class='entry-date' datetime='2015-03-18T13:19:01+08:00'>
+        <span class='date'>
+          <span class='date-month'>Mar</span>
+          <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+          <span class='date-year'>2015</span>
+        </span>
+        <span class='time'>1:19 pm</span>
+      </time>
+      | <a href="#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/18/jinja-practice/">Comments</a>
+    </p>
+  </header>
+
+  <div class="entry-content">
+    
+<p>用<code>jinja2</code>写模板的时候遇到了一些问题，记录一下</p>
+
+<!--more-->
+
+
+<h3>抽出base.html作为模板</h3>
+
+<p>之前的小项目写得都很不规范，模板都是能用就行，基本上只用到<code>if</code>语句，<code>for</code>语句和变量。导航栏都是复制粘贴，没有把共同的部分抽出来。写模板的时候还应该注意一下不要直接在原来的html上改，这样容易把html改乱，应该新建一个<code>template</code>目录，再一个个写模板，这样更好</p>
+
+<p>参照<a href="http://jinja.pocoo.org/docs/dev/templates/">jinja2的文档</a>抽出公共部分，如</p>
+
+<figure class='code'><figcaption><span> (jinja0.html)</span> <a href='/downloads/code/html/jinja0.html'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;&gt;</span>
+</span><span class='line'><span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;head&gt;</span>
+</span><span class='line'>{% block head %}
+</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;style.css&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;title&gt;</span>{% block title %}{% endblock %} - My Webpage<span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>{% endblock %}
+</span><span class='line'><span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>{% block content %}{% endblock %}<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        {% block footer %}
+</span><span class='line'>        <span class="ni">&amp;copy;</span> Copyright 2008 by <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://domain.invalid/&quot;</span><span class="nt">&gt;</span>you<span class="nt">&lt;/a&gt;</span>.
+</span><span class='line'>        {% endblock %}
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/body&gt;</span>
+</span></code></pre></td></tr></table>
+
+
+  </div>
+
+  <footer>
+    <p class="meta">
+      <span class="byline author vcard">Posted by <span class="fn">Mr.Zero</span></span>
+      <time class='entry-date' datetime='2015-03-18T13:19:01+08:00'>
+        <span class='date'>
+          <span class='date-month'>Mar</span>
+          <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+          <span class='date-year'>2015</span>
+        </span>
+        <span class='time'>1:19 pm</span>
+      </time>
+
+      
+      <span class="categories">
+        
+          <a class='category' href='/blog/categories/python/'>python</a>
+        
+      </span>
+      
+    </p>
+
+    <div class="sharing">
+      <a href="//twitter.com/share" class="twitter-share-button" data-url="http://localhost:4000/blog/2015/03/18/jinja-practice/" data-via="" data-counturl="http://localhost:4000/blog/2015/03/18/jinja-practice/" >Tweet</a>
+    </div>
+
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/03/18/flask-token/" title="Previous Post: 使用Flask实现用户认证API">&laquo; 使用Flask实现用户认证API</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/18/linux-process/" title="Next Post: [老博文迁移]linux进程管理">[老博文迁移]linux进程管理 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+    </div>
+
+    <aside class="sidebar">
+      <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2026/02/25/anti-burnout-notes/">《反倦怠能量站》读书笔记：重新找回你的能量感</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/19/php-time/">PHP的两个时间函数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/18/php-curl/">PHP cURL使用小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/17/myisam-innodb/">MyISAM与InnoDB区别</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/27/mac-ntfs/">mac下向NTFS文件系统写入文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/07/euler-circuit/">判断欧拉回路</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/05/hackerrank-maximise-sum/">HackerRank Maximise Sum题解</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/25/procrastination/">瞎扯淡 - 拖延症与项目延期</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/22/python-guide-code-style/">[翻译]Python漫游指南 - 编程风格</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/19/python-file/">[翻译]Python文件读写</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/algorithm/'>algorithm (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/bb/'>bb (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/database/'>database (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/linux/'>linux (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/operation/'>operation (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/php/'>php (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/python/'>python (5)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/reading/'>reading (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/try/'>try (2)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+    </aside>
+  </div>
+</body>
+</html>

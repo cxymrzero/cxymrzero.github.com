@@ -1,0 +1,19 @@
+---
+layout: post
+title: "PHP的两个时间函数"
+date: 2015-08-19T22:44:42+08:00
+categories: ["php"]
+permalink: /blog/2015/08/19/php-time/
+legacy: true
+---
+{% raw %}
+<p>最近经常需要处理时间，一直在用这两个函数：</p>
+
+<h3><a href="http://php.net/manual/zh/function.date.php">date()</a></h3>
+
+<p><code>date()</code>可以将时间戳格式化成字符串，最常用的就是<code>YYYY-mm-dd HH:ii:ss</code>这种格式了。可以不加<code>$timestamp</code>参数，默认是当前时间。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$time_str</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;Y-m-d H:i:s&#39;</span><span class="p">,</span> <span class="nv">$timestamp</span><span class="p">)</span>
+</span></code></pre></td></tr></table>
+{% endraw %}

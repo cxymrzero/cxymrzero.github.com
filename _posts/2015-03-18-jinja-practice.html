@@ -1,0 +1,57 @@
+---
+layout: post
+title: "[老博文迁移]jinja2模板使用经验"
+date: 2015-03-18T13:19:01+08:00
+categories: ["python"]
+permalink: /blog/2015/03/18/jinja-practice/
+legacy: true
+---
+{% raw %}
+<p>用<code>jinja2</code>写模板的时候遇到了一些问题，记录一下</p>
+
+<!--more-->
+
+
+<h3>抽出base.html作为模板</h3>
+
+<p>之前的小项目写得都很不规范，模板都是能用就行，基本上只用到<code>if</code>语句，<code>for</code>语句和变量。导航栏都是复制粘贴，没有把共同的部分抽出来。写模板的时候还应该注意一下不要直接在原来的html上改，这样容易把html改乱，应该新建一个<code>template</code>目录，再一个个写模板，这样更好</p>
+
+<p>参照<a href="http://jinja.pocoo.org/docs/dev/templates/">jinja2的文档</a>抽出公共部分，如</p>
+
+<figure class='code'><figcaption><span> (jinja0.html)</span> <a href='/downloads/code/html/jinja0.html'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;&gt;</span>
+</span><span class='line'><span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;head&gt;</span>
+</span><span class='line'>{% block head %}
+</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;style.css&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;title&gt;</span>{% block title %}{% endblock %} - My Webpage<span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>{% endblock %}
+</span><span class='line'><span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>{% block content %}{% endblock %}<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        {% block footer %}
+</span><span class='line'>        <span class="ni">&amp;copy;</span> Copyright 2008 by <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://domain.invalid/&quot;</span><span class="nt">&gt;</span>you<span class="nt">&lt;/a&gt;</span>.
+</span><span class='line'>        {% endblock %}
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/body&gt;</span>
+</span></code></pre></td></tr></table>
+{% endraw %}

@@ -1,0 +1,37 @@
+---
+layout: default
+---
+<div>
+<article role="article">
+  <header>
+    <h1 class="entry-title">{{ page.title }}</h1>
+  </header>
+
+  <div id="blog-archives" class="category">
+    {% assign posts = site.categories[page.category] %}
+    {% if posts %}
+      {% assign grouped = posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+      {% for year in grouped %}
+        <h2>{{ year.name }}</h2>
+        {% for post in year.items %}
+          <article>
+            <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
+            <time datetime="{{ post.date | date_to_xmlschema }}" pubdate>
+              <span class='month'>{{ post.date | date: '%b' }}</span>
+              <span class='day'>{{ post.date | date: '%d' }}</span>
+              <span class='year'>{{ post.date | date: '%Y' }}</span>
+            </time>
+            <footer>
+              <span class="categories">posted in
+                <a class='category' href='/blog/categories/{{ page.category | downcase | uri_escape }}/'>{{ page.category }}</a>
+              </span>
+            </footer>
+          </article>
+        {% endfor %}
+      {% endfor %}
+    {% else %}
+      <p>No posts in this category yet.</p>
+    {% endif %}
+  </div>
+</article>
+</div>

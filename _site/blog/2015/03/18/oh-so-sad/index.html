@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="jKZt25RHZv" />
+  <title>[老博文迁移]推土小记 - clean code</title>
+  <meta name="author" content="Mr.Zero">
+
+  
+  <meta name="description" content="
+十一这几天留在学校没回家跟胡扬，胡淼，强哥一起“推土”加上写一点新版新闻网的后台，这次来客串写点php。“推土”就是把原来的像17,43,45这几台跑windows的老机器尽量换成linux的，还有几台跑在45上的虚拟机都搬到13,14上。哎，想想之前做的有那么多网站就觉得好累。
+
+
+
+
+今天一天我完成了原来用...">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2015/03/18/oh-so-sad/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <header role="banner"><hgroup>
+  <h1><a href="/">clean code</a></h1>
+  
+    <h2>i create stuff</h2>
+  
+  </hgroup>
+  </header>
+
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  </ul>
+
+  <form action="https://www.google.com/search" method="get">
+    <fieldset role="search">
+      <input type="hidden" name="sitesearch" value="localhost:4000">
+      <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    </fieldset>
+  </form>
+
+  <ul class="main-navigation">
+    <li><a href="/">Blog</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/links">Links</a></li>
+  </ul>
+  </nav>
+
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  <header>
+    <h1 class="entry-title">[老博文迁移]推土小记</h1>
+    <p class="meta">
+      <time class='entry-date' datetime='2015-03-18T16:20:38+08:00'>
+        <span class='date'>
+          <span class='date-month'>Mar</span>
+          <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+          <span class='date-year'>2015</span>
+        </span>
+        <span class='time'>4:20 pm</span>
+      </time>
+      | <a href="#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/18/oh-so-sad/">Comments</a>
+    </p>
+  </header>
+
+  <div class="entry-content">
+    
+<p>十一这几天留在学校没回家跟胡扬，胡淼，强哥一起“推土”加上写一点新版新闻网的后台，这次来客串写点php。“推土”就是把原来的像17,43,45这几台跑windows的老机器尽量换成linux的，还有几台跑在45上的虚拟机都搬到13,14上。哎，想想之前做的有那么多网站就觉得好累。</p>
+
+<!-- more -->
+
+
+<p>今天一天我完成了原来用discuz搭的bbs的迁移，<a href="http://blog.bingyan.net/">冰岩博客</a>的迁移和华中大知多少的迁移，原先代码都在43上，数据库在17上，都是windows服务器，43上还有ftp服务，17上就什么都没有，dump下来的表都是用百度云上传的==！最后把它们全都放到13上了，整个都是体力劳动啊，后面应该想想一些重复的劳动怎样用脚本来解决掉。</p>
+
+<h3>数据库导出与导入</h3>
+
+<p><code>mysqldump -u username -p dbname &gt; name.sql</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">dbname</span><span class="p">;</span>
+</span><span class='line'><span class="n">USE</span> <span class="n">dbname</span><span class="p">;</span>
+</span><span class='line'><span class="k">SOURCE</span> <span class="n">name</span><span class="p">.</span><span class="k">sql</span><span class="p">;</span>
+</span></code></pre></td></tr></table>
+
+
+  </div>
+
+  <footer>
+    <p class="meta">
+      <span class="byline author vcard">Posted by <span class="fn">Mr.Zero</span></span>
+      <time class='entry-date' datetime='2015-03-18T16:20:38+08:00'>
+        <span class='date'>
+          <span class='date-month'>Mar</span>
+          <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+          <span class='date-year'>2015</span>
+        </span>
+        <span class='time'>4:20 pm</span>
+      </time>
+
+      
+      <span class="categories">
+        
+          <a class='category' href='/blog/categories/operation/'>operation</a>
+        
+      </span>
+      
+    </p>
+
+    <div class="sharing">
+      <a href="//twitter.com/share" class="twitter-share-button" data-url="http://localhost:4000/blog/2015/03/18/oh-so-sad/" data-via="" data-counturl="http://localhost:4000/blog/2015/03/18/oh-so-sad/" >Tweet</a>
+    </div>
+
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/03/18/linux-pipe-1/" title="Previous Post: [老博文迁移]linux管道命令学习(一)">&laquo; [老博文迁移]linux管道命令学习(一)</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/03/19/python-file/" title="Next Post: [翻译]Python文件读写">[翻译]Python文件读写 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+    </div>
+
+    <aside class="sidebar">
+      <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2026/02/25/anti-burnout-notes/">《反倦怠能量站》读书笔记：重新找回你的能量感</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/19/php-time/">PHP的两个时间函数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/18/php-curl/">PHP cURL使用小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/17/myisam-innodb/">MyISAM与InnoDB区别</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/27/mac-ntfs/">mac下向NTFS文件系统写入文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/07/euler-circuit/">判断欧拉回路</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/05/hackerrank-maximise-sum/">HackerRank Maximise Sum题解</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/25/procrastination/">瞎扯淡 - 拖延症与项目延期</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/22/python-guide-code-style/">[翻译]Python漫游指南 - 编程风格</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/19/python-file/">[翻译]Python文件读写</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/algorithm/'>algorithm (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/bb/'>bb (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/database/'>database (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/linux/'>linux (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/operation/'>operation (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/php/'>php (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/python/'>python (5)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/reading/'>reading (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/try/'>try (2)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+    </aside>
+  </div>
+</body>
+</html>

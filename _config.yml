@@ -1,0 +1,17 @@
+title: clean code
+subtitle: i create stuff
+author:
+  name: Mr.Zero
+url: http://cxymrzero.github.io
+baseurl: ""
+disqus_shortname: cxymrzero
+permalink: /blog/:year/:month/:day/:title/
+timezone: Asia/Shanghai
+excerpt_separator: "<!--more-->"
+markdown: kramdown
+kramdown:
+  input: GFM
+
+exclude:
+  - scripts
+  - blog/2015

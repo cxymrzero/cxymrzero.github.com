@@ -1,0 +1,2261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[clean code]]></title>
+  <link href="http://cxymrzero.github.io/atom.xml" rel="self"/>
+  <link href="http://cxymrzero.github.io/"/>
+  <updated>2015-08-19T23:11:47+08:00</updated>
+  <id>http://cxymrzero.github.io/</id>
+  <author>
+    <name><![CDATA[Mr.Zero]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[PHP的两个时间函数]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/08/19/php-time/"/>
+    <updated>2015-08-19T22:44:42+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/08/19/php-time</id>
+    <content type="html"><![CDATA[<p>最近经常需要处理时间，一直在用这两个函数：</p>
+
+<h3><a href="http://php.net/manual/zh/function.date.php">date()</a></h3>
+
+<p><code>date()</code>可以将时间戳格式化成字符串，最常用的就是<code>YYYY-mm-dd HH:ii:ss</code>这种格式了。可以不加<code>$timestamp</code>参数，默认是当前时间。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$time_str</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;Y-m-d H:i:s&#39;</span><span class="p">,</span> <span class="nv">$timestamp</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>时间一般都会要前导零，记住这几个格式化占位符就不用查手册了。</p>
+
+<!--more-->
+
+
+<h3><a href="http://php.net/manual/zh/function.strtotime.php">strtotime()</a></h3>
+
+<p>这个函数其实感觉蛮诡异的……因为它可以<strong>尝试</strong>把<strong>美国英语日期格式的字符串</strong>解释成时间戳，可能会失败，所以感觉还是不要传比较复杂的字符串给它比较好……</p>
+
+<p>这是官方文档给的例子</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">echo</span> <span class="nb">strtotime</span><span class="p">(</span><span class="s2">&quot;now&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nb">strtotime</span><span class="p">(</span><span class="s2">&quot;10 September 2000&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nb">strtotime</span><span class="p">(</span><span class="s2">&quot;+1 day&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nb">strtotime</span><span class="p">(</span><span class="s2">&quot;+1 week&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nb">strtotime</span><span class="p">(</span><span class="s2">&quot;+1 week 2 days 4 hours 2 seconds&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nb">strtotime</span><span class="p">(</span><span class="s2">&quot;next Thursday&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nb">strtotime</span><span class="p">(</span><span class="s2">&quot;last Monday&quot;</span><span class="p">),</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在不知道有&#8221;-1 day&#8221;这种用法的时候我都是自己实现的……所以还是熟悉PHP的函数比较好。</p>
+
+<h3>注意时区</h3>
+
+<p>在程序入口处设置时区</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nb">date_default_timezone_set</span><span class="p">(</span><span class="s1">&#39;Asia/Shanghai&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>明早就要做火车去深圳面试了，开心 =w=</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[PHP cURL使用小结]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/08/18/php-curl/"/>
+    <updated>2015-08-18T22:46:31+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/08/18/php-curl</id>
+    <content type="html"><![CDATA[<p>实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。</p>
+
+<p>项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cURL外，<code>file_get_contents</code>这个函数也可以发起HTTP请求，不过不是专门干这个的，不好配置参数，还是cURL好。</p>
+
+<!--more-->
+
+
+<p></p>
+
+<p>官方文档里的例子很有用：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>        <span class="c1">// create curl resource </span>
+</span><span class='line'>        <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// set url </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="s2">&quot;example.com&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//return the transfer as a string </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// $output contains the output string </span>
+</span><span class='line'>        <span class="nv">$output</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// close curl resource to free up system resources </span>
+</span><span class='line'>        <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>主要就是对curl的选项进行配置，即<code>curl_setopt()</code>这个函数。有几个参数很重要：</p>
+
+<ul>
+<li><code>CURLOPT_URL</code>：url，没得说</li>
+<li><code>CURLOPT_RETURNTRANSFER</code>：设为1才会将响应结果存到变量，否则会echo到页面</li>
+<li><code>CURLOPT_HTTPHEADER</code>：设置一个HTTP请求头，必须为<code>array</code>，否则会报错</li>
+<li><code>CURLOPT_TIMEOUT</code>：设置cURL执行超时长度，单位是秒，注意是执行时间，而不是连接时间，那要用<code>CURLOPT_CONNECTTIMEOUT</code></li>
+<li><code>CURLOPT_TIMEOUT_MS</code>：同上，毫秒</li>
+</ul>
+
+
+<p>更多的配置查手册吧。</p>
+
+<p>有时候执行完<code>curl_exec()</code>会发现没有任何东西返回，这时候需要<code>curl_errno()</code>和<code>curl_error()</code>来查看错误号和错误原因了，不过一定要放在<code>curl_exec()</code>后面，不要像我一样蠢……（躲角落哭）</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
+</span><span class='line'><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="nv">$url</span><span class="p">);</span>
+</span><span class='line'><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="nv">$header</span><span class="p">);</span>
+</span><span class='line'><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_TIMEOUT</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>  <span class="c1">// 10s内拿不到数据就放弃</span>
+</span><span class='line'><span class="nv">$result</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'><span class="c1">// 请求失败时打入log</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nb">curl_errno</span><span class="p">(</span><span class="nv">$ch</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$now</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;Y-m-d H:i:s&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">crond_log</span><span class="p">(</span><span class="s2">&quot;cannot get </span><span class="si">$url</span><span class="s2"> at </span><span class="si">$now</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s1">&#39;mochi_crond&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>别忘了PHP才是最好的语言！</p>
+
+<p>参考资料<br/>
+[1] <a href="http://php.net/manual/zh/book.curl.php">Client URL Library</a><br/>
+[2] <a href="http://stackoverflow.com/questions/2582057/setting-curls-timeout-in-php">Setting Curl&rsquo;s Timeout in PHP</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MyISAM与InnoDB区别]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb/"/>
+    <updated>2015-08-17T13:18:39+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/08/17/myisam-innodb</id>
+    <content type="html"><![CDATA[<p>MyISAM和InnoDB是MySQL两种最常用的存储引擎，最近几次面试都有问到区别，感觉答得不好，今天专门抽时间研究下。</p>
+
+<h3>设计目标</h3>
+
+<p>InnoDB设计目标是处理大容量的数据，而MyISAM追求的是性能，两者产生的差异也是基于这点。 InnoDB是MySQL的默认存储引擎。</p>
+
+<!--more-->
+
+
+<h3>事务处理</h3>
+
+<p><strong>InnoDB支持事务和外键，MyISAM不支持。</strong>MyISAM强调的是性能，InnoDB支持的功能更加完整。InnoDB支持事务带来了一个好处，发生故障时可以通过事务日志来恢复数据库，MyISAM特别要命的一点是崩溃后不能安全恢复，所以对于表比较大的情况不要用。</p>
+
+<h3>效率和锁</h3>
+
+<p>两种存储引擎的效率差异来自于锁的方式差异，MyISAM是表锁，对数据库进行写操作时会锁住整个表，效率很低；确定要修改数据的范围时，InnoDB是行锁，只锁一行的数据，写操作很快。但也有特例，比如<code>UPDATE student SET age=10 WHERE name LIKE '王%'</code>，这种情况不能确定要<code>UPDATE</code>的行位置，InnoDB同样会锁住整个表。</p>
+
+<h3>索引</h3>
+
+<p>MyISAM支持全文索引，InnoDB不支持。</p>
+
+<h3>COUNT(*)</h3>
+
+<p>MyISAM保存了表的行数，InnoDB没有。也就是说，执行<code>SELECT COUNT(*) FROM student</code>的操作时，MyISAM可以直接给出结果，而InnoDB要先扫描全表。不过对于加了where条件的查询操作，效果是一样的。</p>
+
+<h3>AUTO_INCREMENT</h3>
+
+<p>InnoDB下只能对自增字段单独建索引，MyISAM下可以和其它列一起建联合索引。</p>
+
+<h3>然并卵</h3>
+
+<p>上面都是从网上东拼西凑总结出来的，有些博客相互还有冲突，醉了。有一点我特别奇怪，为什么MyISAM是表锁，InnoDB是行锁，MyISAM比InnoDB读性能还会好呢？搜了好多地方都没找到答案，老大苏武说其实不一定，只是某些情况会快一些，而且用MyISAM的人少。刚好最近我看公司的wiki，公司内部是强制用InnoDB做存储引擎的，我猜可能是出于事务和数据恢复的考虑。<br/>
+还有其它一些区别，不一一列出来了。感觉这篇博客还有要完善的地方，不过基本的知识点已经涉及到了，有空再进一步研究吧。</p>
+
+<h3>瞎扯</h3>
+
+<p>实习一个多月了，很多零散的东西都在印象笔记里，加上面了几家公司，有很多想总结整理的东西。这周立了个flag，一天一篇博客，希望能不食言。</p>
+
+<p>参考资料<br/>
+[1] <a href="http://www.php100.com/html/webkaifa/database/Mysql/2011/0326/7789.html">MyISAM InnoDB 区别</a><br/>
+[2] <a href="http://www.ha97.com/4197.html">MySQL存储引擎MyISAM与InnoDB的主要区别对比</a><br/>
+[3] <a href="http://coolshell.cn/articles/652.html">MySQL: InnoDB 还是 MyISAM?</a><br/>
+[4] <a href="http://book.douban.com/subject/4241826/">《高性能MySQL》</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[mac下向NTFS文件系统写入文件]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/06/27/mac-ntfs/"/>
+    <updated>2015-06-27T02:39:27+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/06/27/mac-ntfs</id>
+    <content type="html"><![CDATA[<p>mac下默认是不支持NTFS格式的文件系统的写入的，可以用NTFS Paragon这款软件（不过是收费的，要找破解版或者激活码，搜了好多都不能用）或者是免费的ntfsMounter（在我的系统上不能用，也不知道为什么。）</p>
+
+<!--more-->
+
+
+<p>那么作为一个程序员，我们只要拿起命令行武器，在系统中添加一个文件就ok了！</p>
+
+<p>首先需要找到你的移动硬盘的设备号(UUID)，打开终端，输入</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>diskutil info /Volumes/你的硬盘名 <span class="p">|</span> grep UUID
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里你的硬盘名可以通过tab自动补齐，不用手动输入。可以找到一串长长的用<code>-</code>分隔开的字符串，如A9667400-4E6C-4A7C-8444-54E69C3EAD5E。输入</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;UUID=A9667400-4E6C-4A7C-8444-54E69C3EAD5E none ntfs rw,auto,nobrowse&quot;</span> <span class="p">|</span> sudo tee a /etc/fstab
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>就可以创建一个配置文件了。然而这时你的移动硬盘被隐藏起来了，不过还在<code>/Volumes</code>文件夹中，在桌面创建一个快捷方式吧！</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>ln -s /Volumes ~/Desktop/Volumes
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>推出你的移动硬盘，再插入电脑，会发现权限已经变了，大功告成！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[判断欧拉回路]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/06/07/euler-circuit/"/>
+    <updated>2015-06-07T16:04:42+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/06/07/euler-circuit</id>
+    <content type="html"><![CDATA[<p>昨天开始学习图算法，正好hihoCoder<a href="http://hihocoder.com/contest/hiho49/problem/1">这周的题目</a>是判断欧拉回路，AC之。</p>
+
+<!-- more  -->
+
+
+<h3>如何判断欧拉回路？</h3>
+
+<p>欧拉回路即小学时就学过的一笔画问题，不再分析了，判断条件为“奇点个数为0或2个的连通图”。所以首先要判断是否是连通图，从一个结点开始遍历图，如果最终存在结点没被访问，则不是连通图；然后计算奇点个数即可。</p>
+
+<h3>图的存储</h3>
+
+<p>第一次做图论的题目，怎么存就卡住了。首先想到的是邻接矩阵，但是邻接矩阵在结点数很多的情况下会占用很多内存，而且对于边数较少的图（稀疏图），大部分的边都是0，很浪费资源。所以一般用的是邻接表，开一个vector的数组，每个vector存该结点相邻的结点即可。</p>
+
+<h3>图的遍历</h3>
+
+<p>BFS和DFS听了很多了，即宽度优先搜索和深度优先搜索。深度优先就是访问一个结点A，假设与A相邻的结点还有B和C，接着访问B，再访问和B相邻的结点，直到不能再访问为止。DFS用到了栈，可以用递归隐式地调用栈，写起来就只有几行。BFS将与当前结点相邻的结点依次存入队列，再访问队列中的结点。</p>
+
+<p>一次AC，爽爽爽！贴上代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;cstdio&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;vector&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">MAX_N</span> <span class="o">=</span> <span class="mi">10000</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">g</span><span class="p">[</span><span class="n">MAX_N</span><span class="p">];</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">vis</span><span class="p">[</span><span class="n">MAX_N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">])</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">dfs</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">bool</span> <span class="nf">solve</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">dfs</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">v</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="n">e</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">e</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">g</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">g</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 非连通图</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">solve</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Part</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 判断奇点个数是否为0或2</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">odd_point_cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">v</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">size_t</span> <span class="n">v_cnt</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">v_cnt</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>            <span class="o">++</span><span class="n">odd_point_cnt</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">odd_point_cnt</span><span class="o">==</span><span class="mi">0</span> <span class="o">||</span> <span class="n">odd_point_cnt</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Full</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Part</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HackerRank Maximise Sum题解]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/06/05/hackerrank-maximise-sum/"/>
+    <updated>2015-06-05T23:42:33+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/06/05/hackerrank-maximise-sum</id>
+    <content type="html"><![CDATA[<p>今晚被<a href="https://www.hackerrank.com/challenges/maximise-sum">这道题</a>折磨了好久，记录下。</p>
+
+<h3>题意</h3>
+
+<p>对数组的子序列（任意相连的元素）求和，找出所有和里对M的模中的最大值。</p>
+
+<!-- more -->
+
+
+<h3>思路</h3>
+
+<p>开始就想到能不能按照“最大子序列和问题”的思路解决，后来发现无论是分治递归求解还是复杂度为O(N)的算法在这个问题中都没有用，于是看了题解。<br/>
+在<a href="http://www.quora.com/What-is-the-logic-used-in-the-HackerRank-Maximise-Sum-problem#">Quora</a>上找到了题解，看了半天才看明白。大意是，对于输入的数组v中的元素v[i]，先找到v[i]之前所有数的和对M取模的值（包括v[i]），存到数组prefix中。这里有个技巧，</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">ull</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// unsigned long long</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">v_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">tmp</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">tmp</span> <span class="o">%=</span> <span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">prefix</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>即<code>v[i] = (prefix[i-1] + m) % m</code>。<br/>
+对于新的数组prefix，保存了当前元素之前所有元素和除m的余数，对于prefix[i]，如果存在j &lt; i，使prefix[j] &lt; prefix[i]，则从j到i的这一段序列肯定不是我们想要的，这段子序列之和对m取模的值为prefix[i]-prefix[j]。所以我们要找出从prefix[0]到prefix[i-1]中比prefix[i]大的。我们需要维护一个有序数组，并且要不断往其中添加元素，C++的set由红黑树实现（题解中介绍），采用之。由于是有序的，只要找到递增数组中比prefix[i]大的第一个元素即可，即这个元素比prefix[i]大得越少越好，使用<code>s.upper_bound(prefix[i])</code>找出这里的迭代器。<br/>
+代码贴出来：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;cstdio&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;vector&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;set&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">ull</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ull</span> <span class="nf">find_result</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">ull</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">,</span> <span class="n">ull</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ull</span><span class="o">&gt;</span> <span class="n">prefix</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">set</span><span class="o">&lt;</span><span class="n">ull</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// get prefix array</span>
+</span><span class='line'>    <span class="kt">size_t</span> <span class="n">v_size</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+</span><span class='line'>    <span class="n">ull</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">v_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">tmp</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">tmp</span> <span class="o">%=</span> <span class="n">m</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">prefix</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">ull</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">v_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">upper_bound</span><span class="p">(</span><span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="o">*</span><span class="n">it</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="o">%</span> <span class="n">m</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">res</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>        <span class="n">res</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">prefix</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">cnt</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cnt</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">vector</span><span class="o">&lt;</span><span class="n">ull</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">ull</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">tmp</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">cnt</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%llu %llu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">v</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%llu&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tmp</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%llu</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">find_result</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">m</span><span class="p">));</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>关于C++的部分</h3>
+
+<h4>看题解新学的set容器</h4>
+
+<p>set即集合，维护一个递增数组，两种方法注意下</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+</span><span class='line'><span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'><span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span><span class='line'><span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">upper_bound</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="n">it</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>  <span class="c1">// 输出3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>upper_bound(val)</code>[<a href="http://www.cplusplus.com/reference/set/set/upper_bound/">http://www.cplusplus.com/reference/set/set/upper_bound/</a>]函数返回比val大的第一个元素的迭代器，要注意与<code>s.end()</code>比较下，看是否不存在比它大的元素。类似的函数还有<code>lower_bound(val)</code></p>
+
+<h4>vector一定要清空！！！</h4>
+
+<p>第一次交全没过！下了测试例子发现从第二组例子开始就没过了，仔细检查发现是vector没有清空搞的鬼，一堆超时的。从另一个角度也说明vector确实牛逼，被我塞了那么多组测试也没爆。。。</p>
+
+<p>总之多做题、多总结吧，想不出来看题解也是好的。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[瞎扯淡 - 拖延症与项目延期]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/04/25/procrastination/"/>
+    <updated>2015-04-25T00:09:42+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/04/25/procrastination</id>
+    <content type="html"><![CDATA[<p>我是一个资深的拖延症患者，症状最早可以追溯到小学的寒暑假，放假永远是痛并快乐着，整个假期基本就是一个拖延不做作业的过程，为了拖延，我真是什么事都干得出来，往往就是到了临近开学的时候就疯狂赶起作业来。那时挺羡慕“别人家的孩子”，能在放假一星期内完成所有作业。</p>
+
+<!-- more -->
+
+
+<p>多年的经验告诉我，拖延基本会让人陷入一个循环：拖延->愧疚->决定改变->失败->继续拖延。人人都想治好拖延症，可我发现拖延症似乎是绝症，并不能治好，了不起也就是缓解一下，该拖还得拖，但是我们也不能放弃治疗啊！</p>
+
+<h3>为什么拖延</h3>
+
+<p>知乎专栏<a href="http://zhuanlan.zhihu.com/happy">幸福课</a>里有一个关于拖延症的专题，我读完了大部分，感觉不错。动机在杭州老师分析出拖延的以下几个原因：</p>
+
+<ul>
+<li>诱惑导致的分心</li>
+<li>对压力的逃避</li>
+<li>对失败的恐惧</li>
+<li>弱者反抗的工具</li>
+<li>对未来的错估</li>
+</ul>
+
+
+<p>完整的解释可以看<a href="http://zhuanlan.zhihu.com/happy/19716928">这篇文章</a></p>
+
+<p>我的拖延症总离不开社交网络，拖延的时候我常常会在微博、豆瓣、知乎中间来回刷，要知道这三个网站都是无底洞，随便哪一个一层层挖下去都能看很久。</p>
+
+<h3>我是怎么解决的</h3>
+
+<p>其实也并没有解决，只是稍微缓解了一点。好长一段时间里我手机的todo list软件都是爆满，150+的待办事项都很常见了、豆瓣上500+的书想读、300+的电影想看、浏览器书签里一大摞文章没看、一堆算法题没做。想到有好多事就很烦。最近发现我那些要做的事情总是存的很多，实际上分配的时间其实不多，真正沉下心来打码的时间也不多；另外，那些想做的事情都没有一个截止日期，导致我总是对要做的事感到很大压力却没有在具体的某一件事上有压力。对此，我做了几件事：</p>
+
+<ul>
+<li>睡前安排第二天的任务，把最想做的事情加到第二天的要做的事里，慢慢完成</li>
+<li>延期任务修改截止日期，因为延期任务放在列表里会让人感觉对它无能为力了，其实重新设定一个截止日期，设得宽松一些会让自己更有动力完成它</li>
+<li>多花时间，这个是必然的了，这段时间我基本上每天不在教室上课就是在启明做事情，感觉状态还是不错的</li>
+<li>过犹不及，不要太看重任务，完成的质量和热情还是很重要的</li>
+</ul>
+
+
+<p>每天有自己的事之后，刷微博、微信等等的时间也少多了，形成了正反馈。</p>
+
+<p>另外，专栏里还介绍了一种方法——试着和自己谈判。每当意识到自己要拖延时，告诉自己先做一会事情，比如做半个小时再玩，如果半个小时后自己进入了状态，想做事情了，那自然最好，如果不想做事了，就放松一下吧，也没关系~亲测有效。</p>
+
+<h3>项目中的拖延</h3>
+
+<p>项目管理是不是只是PM的事和程序员完全没有关系呢？我觉得不是，相反，项目的延期和程序员、设计师的关系是最大的，到今天在冰岩里合作过的几个PM我还没遇到一个能完全把控项目风险的。</p>
+
+<p>软件工程课上我学到两点，一是任何软件都是有bug的，就看有没有人能发现；二是大部分项目都会延期，程序员总是对自己的能力估计过高。不算丰富的开发经验告诉我，有时接手一个任务，一开始可能觉得任务非常简单，对需求的理解逐渐加深后可能会发现做坑越多，发现自己的漏洞越多，项目的时间慢慢就不在自己掌控之内了。</p>
+
+<p>在实际开发过程中，我们会经历一个产品讨论->确定需求->技术选择->开发的过程。这个过程涉及到的人会很多，就会出现沟通不足导致拖延的现象。程序员多半是脸皮薄的，有些同学会觉得自己没弄清需求再去问会让人觉得很蠢，于是开始自己琢磨，造成拖延。这时团队人员的熟悉度就非常重要，非常熟悉的同学是不可能出现这种问题的；同时对不清楚的同学的包容也很重要，如果对ta的解答不耐烦或者嘲笑ta，很可能会导致下次ta出现问题时陷入自己纠结的状态。</p>
+
+<p>第二个坑就是技术坑了。毕竟我们都处于学习阶段，有不会的东西很正常，并且技术的世界本来就是个无底洞，谁能保证自己样样精通。碰到技术坑师傅教我的一定要学会Google，我也一直这么干，并且鄙视那些伸手党。但是我发现Google解决问题只适合于对要解决的问题有些了解，很明确问题所在的时候，如果完全一头雾水，就应该找人聊一聊，看自己哪些东西不懂，弄清大概后再搜索效率会很高，也不会浪费别人很多时间。其实没事的时候大家在启明就可以多聊一聊，聊聊最近碰到的一些问题、看到的一些新东西，交流技术上的困惑和烦恼是非常爽的一件事，我就很喜欢跟强哥聊遇到的一些坑和一些不理解的东西，这样大家成长都很快~</p>
+
+<p>第三个坑是互相拖，尤其在人多的情况下，A和B可能都不想干活，刚好都需要跟C交流，C的活还没干完，于是A和B也不干了。这种现象很常见，尤其是客户端，设计没出图、后台没接口都能成为拖延的理由。</p>
+
+<h3>最后</h3>
+
+<p>其实拖延是压力管理、时间管理、自我评价等等的综合问题，只是一种现象，至于根源，还是能不能和自己好好相处，实在不行，就拖吧，也没什么大不了的，不过一定要让自己舒服，不要压抑自己，身心健康比什么都重要。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[翻译]Python漫游指南 - 编程风格]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style/"/>
+    <updated>2015-03-22T22:56:11+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/22/python-guide-code-style</id>
+    <content type="html"><![CDATA[<p>原文: <a href="http://docs.python-guide.org/en/latest/writing/style/">Code Style</a></p>
+
+<p>如果你问Python程序员他们最喜欢Python的什么，他们通常会说是Python的可读性。实际上，良好的可读性是Python设计时的一个核心思想，这是根据一个广为认可的事实 <em>比起写，代码更容易被人读</em> 的思想设计的。</p>
+
+<p>Python代码易读易懂的一个原因是它相对完善的代码风格的规范和<em>Pythonic</em>的成语。</p>
+
+<!-- more -->
+
+
+<p>另外，当一个Python老手(<em>Pythonista</em>)指出一段代码不够<em>Pythonic</em>，通常意味着这几行代码没有按照一般的代码规范来并且没有用公认的最好的(通常是最易读的)方式表达其意图。</p>
+
+<p>在某些情况下是找不到一个大家都认可的方式去用Python表达一个意图的，不过很少有这种情况。</p>
+
+<h3>一般概念</h3>
+
+<h4>明确的代码</h4>
+
+<p>虽然在Python中，一切黑魔法都有可能发生，但我们更推荐最明确和最直接的方式。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">make_complex</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">args</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">make_complex</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">{</span><span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在上面的正面例子中，x、y明确地被函数接收，返回了一个明确的字典。通过读第一行和最后一行，使用这个函数的开发者就能准确知道怎样使用这个函数了，然而反面教材就完全不是那回事了。</p>
+
+<h4>一行一个语句</h4>
+
+<p>虽然有些复合语句，比如列表推导式，因为它们的简洁和丰富的表达能力被允许和推荐使用，但是将两个不能联合使用的语句放到同一行是一种很糟糕的做法。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">print</span> <span class="s">&#39;one&#39;</span><span class="p">;</span> <span class="k">print</span> <span class="s">&#39;two&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;one&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">&lt;</span><span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span> <span class="ow">and</span> <span class="o">&lt;</span><span class="n">other</span> <span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># do something</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">print</span> <span class="s">&#39;one&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="s">&#39;two&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;one&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">cond1</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">cond2</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">other</span> <span class="nb">complex</span> <span class="n">comparison</span><span class="o">&gt;</span>
+</span><span class='line'><span class="k">if</span> <span class="n">cond1</span> <span class="ow">and</span> <span class="n">cond2</span><span class="p">:</span>
+</span><span class='line'>    <span class="c"># do something</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>函数参数</h4>
+
+<p>有四种不同方法向函数传递参数：<br/>
+1. <strong>位置参数</strong>是必须的并且没有默认值。它们是参数的最简单形式，并且它们适用于很少的、是函数含义一部分并且顺序很自然的函数参数。比如在<code>send(message, recipient)</code>或<code>point(x, y)</code>中，用函数的人不难记住这两个函数需要两个参数和参数间的顺序。<br/>
+在那两个例子中，调用函数时也可以使用参数名，并且如果这样做就可以交换两个参数的顺序了，比如调用<code>send(recipient='World', message='Hello')</code>和<code>point(y=2, x=1)</code>但是这会降低可读性，并且比起更直接地调用<code>send('Hello', 'World')</code>和<code>point(1, 2)</code>这是没有必要的冗余。<br/>
+2. <strong>关键字参数</strong><br/>
+不是必须的并且有默认值。它们常常被作为可选参数传递给函数。当一个函数有超过2至3个可选参数时，它的特点就变得更让人难以记住了，这时使用有默认值的关键字参数就会很有用。比如，一个更完整的<code>send</code>函数可以被定义为<code>send(message, to, cc=None, bcc=None)</code>。这里<code>cc</code>和<code>bcc</code>是可选的，并且在没有其它参数传入时值为<code>None</code>。</p>
+
+<p>在Python中有多种方法调用一个有关键字参数的函数，比如可以按照参数定义的顺序而不显式地命名参数来调用，比如<code>send('Hello', 'World', 'Cthulhu', 'God')</code>会向上帝发送一个密件副本。也可以像<code>send('Hello again', 'World', bcc='God', cc='Cthulhu')</code>这样用其它的顺序命名参数。除非有充分的理由不按照最接近函数定义的语法<code>send('Hello', 'World', cc='Cthulhu', bcc='God')</code>来，否则最好避免出现这两种可能性。</p>
+
+<p>作为旁注，我要说，按照<a href="http://en.wikipedia.org/wiki/You_ain't_gonna_need_it">YAGNI</a> 原则来，通常去掉一个“只是为了以防万一”而加上的可选参数(和函数当中的逻辑)比在需要时添加一个新的可选参数和它的逻辑要难。<br/>
+3. <strong>可变参数列表</strong><br/>
+第三种向函数传递参数的方法。如果一个函数的作用用一组数目可扩展的位置参数能更好地表示的话，它就能用<code>*args</code>结构定义。在函数体中，<code>args</code>会成为一个包含所有位置参数的元组。比如<code>send(message, *args)</code>可以将每个接收者作为参数被调用：<code>send('Hello', 'God', 'Mom', 'Cthulhu')</code>在函数体中<code>args</code>会等价于<code>('God', 'Mom', 'Cthulhu')</code>。</p>
+
+<p>但是这种结构有些缺陷，要小心使用。如果一个函数接受一系列具有共同特征的参数，通常将函数定义为接受一个列表或者其它序列的参数的函数会更清晰。在这里，如果<code>send</code>有多个接收者，最好显式地定义它：<code>send(message, recipients)</code>并用<code>send('Hello', ['God', 'Mom', 'Cthulhu'])</code>来调用它。这样，函数的使用者事先就能将接收者列表制造为一个列表，并且可以向其中传递任何的序列，包括不能被解包成其它序列的迭代器。<br/>
+4. <strong>可变关键字参数列表</strong><br/>
+最后一种向函数传递参数的方法。如果函数需要一组不确定的命名参数，就可以用<strong>kwargs</strong>结构。在函数体中，<strong>kwargs</strong>会是一个字典，其中包含所有没被函数特征中的其它关键字参数获取的有变量名的参数。</p>
+
+<p>同样需要注意<em>可变参数列表</em>中的情形，因为类似的原因：这些强大的工具应该在的确有必要时才被用到，并且如果更简单、整洁的结构就足够表明函数的意图时就不应该使用它们。</p>
+
+<p>哪些参数是位置参数、哪些参数是可选关键字参数和是否使用高级的可变参数是写函数的程序员决定的，如果能明智地遵循上面的建议，就可以写出这样的Python函数：</p>
+
+<ul>
+<li>易读（参数名不需要解释）</li>
+<li>易修改（添加一个新的关键字参数不会破坏代码的其它部分）</li>
+</ul>
+
+
+<h4>别用魔棒</h4>
+
+<p>作为黑客的强大工具，Python有非常多的钩子和工具，能让你做几乎任何的技巧性的玩法。比如，可以做这些事：</p>
+
+<ul>
+<li>修改对象是怎么创建和实例化的</li>
+<li>修改Python解释器是怎么导入模块的</li>
+<li>甚至可以（如果需要也推荐）在Python中嵌入C例程</li>
+</ul>
+
+
+<p>但是所有这些选项都有很多缺点，用最直接的方法来达到你的目标总是会更好。最主要的缺点是用这些结构时可读性会大大降低。许多代码分析工具，像pylint或pyflakes，都不能解析这些“魔术”代码。</p>
+
+<p>我们认为一个Python开发者应该了解这些几乎无穷无尽的可能性，因为这让我们具有信心，没有什么能阻碍我们。然而，知道怎么做、尤其是什么时候<strong>不</strong>用它们非常重要。  r</p>
+
+<p>就像一个功夫高手，一个Pythonista知道如何用一只手指杀人，实际上却从不这么干。</p>
+
+<h4>我们都是负责的用户</h4>
+
+<p>正如上面我们看到的，Python允许很多技巧，其中有些包含潜在的危险。一个很好的例子就是，任何客户端代码都可以重载一个对象的属性和方法：Python中没有private关键字。这种和像Java这样防御性很强、有很多手段来避免误用的语言非常不同的设计思想被称为“我们都是负责的用户”。</p>
+
+<p>这不意味着没有属性被认为是私有的、Python中不可能进行合适的封装。相反，Python社区不依赖开发者在自己和别人的代码之间建一堵堵墙，而是更倾向于依赖一系列的公约来指示这些元素不应该被直接访问。</p>
+
+<p>对私有变量和实现细节最主要的公约就是给所有“内部变量”加上下划线前缀。如果客户端代码破坏了这种规则访问了这些被标记的元素，任何因为代码修改导致的误操作或者问题都应该由客户端承担责任。</p>
+
+<p>慷慨地使用这条公约是被鼓励的：任何不想被客户端代码使用的方法或属性都应该加上一个下划线前缀。这会保证责任更好地分离、现有代码更好修改；将私有属性公开化总是可以的，但是将公有属性私有化可能就要麻烦多了。</p>
+
+<h4>返回值</h4>
+
+<p>当一个函数变得越来越复杂，不难碰到在一个函数体中用多个return语句的情况。然而为了保证清晰的缩进和可持续发展的可读性水准，最好避免从很多函数体输出点返回有意义的值。</p>
+
+<p>有两种主要情况会在函数体中返回值：函数的结果在函数正常执行后返回，和指示错误输入参数或者导致函数无法完成它的计算或任务的其它情况。</p>
+
+<p>如果你不希望在第二种情况中抛出异常，可能就需要返回一个值，比如None或者False来指示错误的输入参数或者其它原因导致函数不能像需要的那样正确执行。在这种情况下，在错误的上下文被发现时，越早返回越好。这会让函数的结构变得扁平化：所有那条因为错误而返回的语句之后的代码都可以假设满足进一步计算函数主要结果的条件。通常是要有多个这样的返回语句的。</p>
+
+<p>然而，当一个函数在正常流程中有多个主要退出点时，调试返回结果就变得困难了，所以保持一个退出点会更好。这对制造出代码轨迹也有好处，有多个退出点可能表明你的代码需要重构了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">complex_function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">a</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">return</span> <span class="bp">None</span>  <span class="c"># 抛出异常会更好</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">return</span> <span class="bp">None</span>  <span class="c"># 抛出异常会更好</span>
+</span><span class='line'>    <span class="c"># 一些用a、b和c来计算x的复杂代码</span>
+</span><span class='line'>    <span class="c"># 如果成功了要忍住返回x的诱惑</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">:</span>
+</span><span class='line'>        <span class="c"># 一些对x的Plan-B的计算</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">x</span>  <span class="c"># 维护代码时，一个为返回值x设置的单退出点会很好</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>成语</h3>
+
+<p>一个编程成语简单来说就是写代码的一种<em>方法</em>。编程成语的想法在<a href="http://c2.com/cgi/wiki?ProgrammingIdiom">c2</a>和<a href="http://stackoverflow.com/questions/302459/what-is-a-programming-idiom">Stack Overflow</a>中已经得到了充分说明。</p>
+
+<p>地道的Python代码通常被称作很Pythonic。</p>
+
+<p>尽管通常有一种，并且更可取地仅仅只有一种明显的方法来解决问题；<em>那种</em>写地道的Python代码的方法，对于新人来说可能很不明显。所以好的成语需要有意识地去掌握。</p>
+
+<p>下面介绍几个常用的成语：</p>
+
+<h4>解包</h4>
+
+<p>如果你知道一个列表或元组的长度，你可以通过解包给其中的元素命名。比如<code>enumerate()</code>会为列表中的每一项提供一个二元组：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">some_list</span><span class="p">):</span>
+</span><span class='line'>    <span class="c"># 用index和item来干点什么</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你也可以用它来交换两个变量：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>嵌套序列解包也行：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Python3中，<a href="http://www.python.org/dev/peps/pep-3132">PEP 3132</a>介绍了一个扩展的解包的新方式：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">rest</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</span><span class='line'><span class="c"># a = 1, rest = [2, 3]</span>
+</span><span class='line'><span class="n">a</span><span class="p">,</span> <span class="o">*</span><span class="n">middle</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+</span><span class='line'><span class="c"># a = 1, middle = [2, 3], c = 4</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>创建一个会被忽略的变量</h4>
+
+<p>如果你需要给什么东西赋值（比如在序列解包中），但是后面不会用到那个变量，用<code>__</code>：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;foobar.txt&#39;</span>
+</span><span class='line'><span class="n">basename</span><span class="p">,</span> <span class="n">__</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">rpartition</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>注意：
+很多Python风格指南推荐对需要抛弃的变量使用单下划线"_"，而不是这里推荐的双下划线"__"。问题是单下划线"_"通常是作为[gettext()](http://docs.python.org/library/gettext.html#gettext.gettext)函数的别名来使用的，并且还被在交互式提示环境中来保存上一次操作用。用双下划线来替换掉它可以和它一样清晰，也几乎差不多方便，并且还消除了意外干扰其它用到它的情况的风险。
+</code></pre>
+
+<h4>创建一个长度为N的相同元素的列表</h4>
+
+<p>使用列表<code>*</code>操作符</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">four_nones</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>创建一个长度为N的元素为列表的列表</h4>
+
+<p>因为列表是可变的，<code>*</code>操作符（像上面的一样）会创造一个包含N个对<strong>相同</strong>列表的引用的列表，这可能不是你想要的。我们用列表推导来代替它：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">four_lists</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">__</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>一个创建字符串的常见成语是对空字符串调用<a href="http://docs.python.org/library/stdtypes.html#str.join">str.join()</a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">]</span>
+</span><span class='line'><span class="n">word</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">letters</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这会将变量word赋值为&#8217;spam&#8217;。这条成语可以用在列表和元组上。</p>
+
+<p>有时候我们需要在在一个集合中进行查找。让我们来看看两种选择：列表和字典。<br/>
+例如下面的代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;s&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&#39;p&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s">&#39;m&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+</span><span class='line'><span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">lookup_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&#39;s&#39;</span> <span class="ow">in</span> <span class="n">d</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">lookup_list</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s">&#39;s&#39;</span> <span class="ow">in</span> <span class="n">l</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>尽管这两个函数看起来几乎一模一样，因为<code>lookup_dict</code>利用了Python中的字典是哈希表的事实，这两个查找函数之间的性能差异是很大的。Python会不得不遍历列表中的每个项目来找到匹配的情形，这是非常耗时的。通过分析字典的哈希，在字典中查找键值可以被非常迅速地完成。要获得更多信息看这个<a href="http://stackoverflow.com/questions/513882/python-list-vs-dict-for-look-up-table">StackOverflow</a>页面</p>
+
+<h3>Python之禅</h3>
+
+<p>也作为<a href="http://www.python.org/dev/peps/pep-0020">PEP 20</a>被人了解，Python设计的指导原则</p>
+
+<pre><code>&gt;&gt;&gt; import this
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+</code></pre>
+
+<p>更多好的Python风格的例子，看<a href="http://stackoverflow.com/questions/228181/the-zen-of-python">这个Stack Overflow的问题</a>或<a href="http://artifex.org/~hblanks/talks/2011/pep20_by_example.pdf">这些来自一个Python用户组的幻灯</a></p>
+
+<h3>PEP 8</h3>
+
+<p><a href="http://www.python.org/dev/peps/pep-0008">PEP 8</a>是Python实际上执行的编程风格指南。</p>
+
+<p>将你的Python代码装换成PEP 8的整体上是个很好的想法，这能让你的代码在和其他开发者一起做项目时更持续。有一个命令行程序，<a href="https://github.com/jcrocholl/pep8">pep8</a>可以检查你的代码是否符合要求。在终端中输入下面的命令来安装它：</p>
+
+<pre><code>$ pip install pep8
+</code></pre>
+
+<p>在你的一个或者一系列文件跑一下来查看是否有任何冲突：</p>
+
+<pre><code>$ pep8 optparse.py
+optparse.py:69:11: E401 multiple imports on one line
+optparse.py:77:1: E302 expected 2 blank lines, found 1
+optparse.py:88:5: E301 expected 1 blank line, found 0
+optparse.py:222:34: W602 deprecated form of raising exception
+optparse.py:347:31: E211 whitespace before '('
+optparse.py:357:17: E201 whitespace after '{'
+optparse.py:472:29: E221 multiple spaces before operator
+optparse.py:544:21: W601 .has_key() is deprecated, use 'in'
+</code></pre>
+
+<h3>约定</h3>
+
+<p>这里有些约定你应该遵守来让你的代码更易读。</p>
+
+<h4>检查一个变量是否等于常量</h4>
+
+<p>你不用显式地将一个值与True或None或0进行比较，你可以将它加到if语句后就行了。查看<a href="http://docs.python.org/library/stdtypes.html#truth-value-testing">Truth Value Testing</a>来查看一个值为false的列表。</p>
+
+<p><strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;True!&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is None!&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c"># Just check the value</span>
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is truthy!&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># or check for the opposite</span>
+</span><span class='line'><span class="k">if</span> <span class="ow">not</span> <span class="n">attr</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is falsey!&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># or, since None is considered false, explicitly check for it</span>
+</span><span class='line'><span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;attr is None!&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>获得一个字典元素</h4>
+
+<p>不要用<a href="http://docs.python.org/library/stdtypes.html#dict.has_key">dict.has_key()</a>方法，用<code>key in d</code>语法来代替它，或者向<a href="http://docs.python.org/library/stdtypes.html#dict.get">dict.get()</a>方法传递一个默认参数。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;hello&#39;</span><span class="p">:</span> <span class="s">&#39;world&#39;</span><span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;hello&#39;</span><span class="p">]</span>    <span class="c"># prints &#39;world&#39;</span>
+</span><span class='line'><span class="k">else</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="s">&#39;default_value&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">d</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;hello&#39;</span><span class="p">:</span> <span class="s">&#39;world&#39;</span><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;hello&#39;</span><span class="p">,</span> <span class="s">&#39;default_value&#39;</span><span class="p">)</span> <span class="c"># prints &#39;world&#39;</span>
+</span><span class='line'><span class="k">print</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;thingy&#39;</span><span class="p">,</span> <span class="s">&#39;default_value&#39;</span><span class="p">)</span> <span class="c"># prints &#39;default_value&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="k">if</span> <span class="s">&#39;hello&#39;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">d</span><span class="p">[</span><span class="s">&#39;hello&#39;</span><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>更短的操纵列表的方法</h4>
+
+<p><a href="http://docs.python.org/tutorial/datastructures.html#list-comprehensions">列表推导</a>提供了一种强大的、简洁的方法来操纵列表。同样地，<a href="http://docs.python.org/library/functions.html#map">map()</a>和<a href="http://docs.python.org/library/functions.html#filter">filter()</a>函数可以用一种不同的、更简洁的语法对列表执行操作。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c"># Filter elements greater than 4</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">b</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">]</span>
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c"># Add three to all list members.</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)):</span>
+</span><span class='line'>    <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="p">]</span>
+</span><span class='line'><span class="c"># Or:</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用<a href="http://docs.python.org/library/functions.html#enumerate">enumerate()</a>来对列表中你的位置进行计数。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span>
+</span><span class='line'><span class="c"># prints</span>
+</span><span class='line'><span class="c"># 0 3</span>
+</span><span class='line'><span class="c"># 1 4</span>
+</span><span class='line'><span class="c"># 2 5</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://docs.python.org/library/functions.html#enumerate">enumerate()</a>函数比手动处理计数器的可读性更好。更重要的是，它对迭代器的优化更好。</p>
+
+<h4>读文件</h4>
+
+<p>用<code>with open</code>语法来读文件，这样会自动地为你关闭文件。</p>
+
+<p><strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;file.txt&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="k">print</span> <span class="n">a</span>
+</span><span class='line'><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;file.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">line</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>with</code>语句会更好因为它会保证你总是会关闭文件，甚至在<code>with</code>块中有异常抛出的情况下。</p>
+
+<h4>换行</h4>
+
+<p>当代码逻辑上的一行比可接受的限制长时，你需要将它分割到多个物理行中。如果行尾是一个反斜杠，Python解释器会将连续的行连接起来。在有些情况下这很有用，但是通常应该避免这样做，因为这很脆弱：将一个空格加到行尾的反斜杠后就会破坏代码并且可能造成意料之外的错误。</p>
+
+<p>一个更好的解决方案是在你的元素周围使用括号。Python解释器会将一个行尾未闭合括号后的下一行连接起来，直到括号闭合。同样的行为对花括号和方括号也成立。</p>
+
+<p><strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">my_very_big_string</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;For a long time I used to go to bed early. Sometimes, </span><span class="se">\</span>
+</span><span class='line'><span class="s">    when I had put out my candle, my eyes would close so quickly that I had not even </span><span class="se">\</span>
+</span><span class='line'><span class="s">    time to say “I’m going to sleep.”&quot;&quot;&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">from</span> <span class="nn">some.deep.module.inside.a.module</span> <span class="kn">import</span> <span class="n">a_nice_function</span><span class="p">,</span> <span class="n">another_nice_function</span><span class="p">,</span> \
+</span><span class='line'>    <span class="n">yet_another_nice_function</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Good</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">my_very_big_string</span> <span class="o">=</span> <span class="p">(</span>
+</span><span class='line'>    <span class="s">&quot;For a long time I used to go to bed early. Sometimes, &quot;</span>
+</span><span class='line'>    <span class="s">&quot;when I had put out my candle, my eyes would close so quickly &quot;</span>
+</span><span class='line'>    <span class="s">&quot;that I had not even time to say “I’m going to sleep.”&quot;</span>
+</span><span class='line'><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">from</span> <span class="nn">some.deep.module.inside.a.module</span> <span class="kn">import</span> <span class="p">(</span>
+</span><span class='line'>    <span class="n">a_nice_function</span><span class="p">,</span> <span class="n">another_nice_function</span><span class="p">,</span> <span class="n">yet_another_nice_function</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然而更多情况下，不得不分割一个逻辑行意味着你试图同时做太多事，这可能会降低可读性。</p>
+
+<h3>译后记</h3>
+
+<p>这篇文章的翻译动笔是在3月22日，今天已经是4月16日了，中间拖延了将近一个月，实际上大部分都是我今天一口气翻译完的。而且由于这篇文章一直没翻译完，导致想写的其它几篇也不能开始写。首先自我检讨下，确实没把这篇文章的翻译放在心上，因为找实习一直在打码，不过如今实习找完了，就有时间充实下自己和自己的博客了。另外，本来对这篇文章期望值相当高的，结果翻译完发现大部分内容我早已掌握，对我的帮助实际上不大，这种一直在语法上绕来绕去其实还是有点无聊，后面会翻译或者写一些更有实用价值的文章。</p>
+
+<p>翻译这件事还是很难的，不过翻完这篇长文，我也掌握了一些技巧，比如it&#8217;s开头的无主被动句型要调整语序、灵活地选用更地道的汉语、长句子拆分为多个短句……总得来说还是熟能生巧。</p>
+
+<p>另外，有译得不好的地方请在留言指出，请你吃棒棒糖。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[翻译]Python文件读写]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/19/python-file/"/>
+    <updated>2015-03-19T13:22:38+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/19/python-file</id>
+    <content type="html"><![CDATA[<p>原文: <a href="http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python">Reading and Writing Files in Python</a></p>
+
+<h3>概览</h3>
+
+<p>在Python中, 读写文件不需要import任何库, 第一步是使用<code>open</code>函数获取一个文件对象</p>
+
+<!-- more -->
+
+
+<h3>文件类型</h3>
+
+<p>文件通常被分为<code>文本文件</code>或<code>二进制文件</code>, <code>文本文件</code>通常是由很多行组成的序列(sequence), 而每一行又是很多字符(characters)组成的序列. 每一行由<code>EOL(End Of Line)</code>终结, 最常见的行终结符是<code>\n</code>, 又叫换行符. 反斜杠(backslash)表明下一个字符将被当作一个新行(<em>译注: 这里没理解</em>). 基本上不是文本文件的文件就是二进制文件, 二进制文件只能被了解其文件结构的应用处理.</p>
+
+<h3>Open()</h3>
+
+<p>我们使用内置的<code>open()</code>函数打开一个文件. <code>open()</code>返回一个文件对象, 一般会传入两个参数. 语法是:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">file_object</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>  <span class="c"># file_object是储存文件对象的变量</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>打开方式(mode)</h3>
+
+<p><code>mode</code>参数是可以省略的, 缺省条件下为<code>'r'</code><br/>
+<code>mode</code>参数可以是:</p>
+
+<ul>
+<li>&lsquo;r&rsquo;, 读文件</li>
+<li>&lsquo;w&rsquo;, 仅写文件(如果有同名文件会被覆盖)</li>
+<li>&lsquo;a&rsquo;, 添加文本; 所有写入的内容都会被自动添加到文件末尾</li>
+<li>&lsquo;r+&rsquo;, 读写文件</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;workfile&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="o">&gt;&gt;&gt;</span> <span class="k">print</span> <span class="n">f</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接下来文件对象函数将被调用. 最常用的两个函数是<code>read</code>和<code>write</code>.</p>
+
+<h3>创建一个文本文件</h3>
+
+<p>让我们先来创建一个新文本文件. 你可以随便给它取名字, 在这个例子中我们叫它<code>newfile.txt</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;newfile.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;hello world in the new file</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;and another line</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在我们打开<code>newfile.txt</code>, 可以看到如下内容:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>cat newfile.txt
+</span><span class='line'>hello world in the new file
+</span><span class='line'>and another line
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>如何读文本文件</h3>
+
+<p>我们可以用不同的方法来读一个文本文件.</p>
+
+<h4><code>file.read()</code></h4>
+
+<p>如果你想得到一个包含文件中所有字符的字符串, 你可以用<code>file.read()</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+hello world in the new file
+and another line
+</code></pre>
+
+<p>我们也可以通过使用<code>file.read(n)</code>来指定字符串应该返回的字符的个数, <code>n</code>确定了字符个数. 下面这段代码读取文本中的前5个字符并将它们作为字符串返回.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+hello
+</code></pre>
+
+<h4>file.readline()</h4>
+
+<p><code>readline()</code>函数会逐行读取文件(而非一次读取整个文件), 调用<code>readline()</code>会获取文件第一行, 之后的调用会返回接下来的行. 通常它会从文件读取单行并返回一个包含直到<code>\n</code>的字符串</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="nb">file</span><span class="o">.</span><span class="n">readline</span><span class="p">():</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+hello world in the new file
+</code></pre>
+
+<h4>file.readlines()</h4>
+
+<p><code>readlines()</code>将整个文件作为一个用<code>\n</code>分隔的列表返回</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="nb">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+['hello world in the new file\n', 'and another line\n']
+</code></pre>
+
+<h3>循环遍历一个文件对象</h3>
+
+<p>读取文件的行时, 你可以循环遍历这个文件对象. 这在内存占用上是高效的, 并且写法简单.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newfile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">file</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">line</span><span class="p">,</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+hello world in the new file
+and another line
+</code></pre>
+
+<h3>file.write()</h3>
+
+<p>写方法需要一个参数, 待写入的字符串. 写入后如果要换行, 在末尾添加一个<code>\n</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="nb">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;newfile.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;This is a test</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;And here is another line</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>close()</h3>
+
+<p>当你对文件的操作结束后, 调用<code>f.close()</code>来关闭它并且释放打开这个文件所占用的系统资源. 调用<code>f.close()</code>后, 对这个文件的操作都会失败.</p>
+
+<h3>文件句柄(file handler)的用法</h3>
+
+<p>让我们看看一些使用不同方法的例子</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="c"># 打开文本文件:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 读文本文件:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span><span class="s">&quot;r&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 一次读一行:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="o">.</span><span class="n">txt</span><span class="s">&quot;, &quot;r&quot;)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">fh</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 读取文件各行组成的列表:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt.&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">fh</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 写文件:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span><span class="s">&quot;w&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 写入字符串列表:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">lines_of_text</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;a line of text&quot;</span><span class="p">,</span> <span class="s">&quot;another line of text&quot;</span><span class="p">,</span> <span class="s">&quot;a third line&quot;</span><span class="p">]</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">lines_of_text</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 在文件后追加内容:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;Hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello World again&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># 关闭文件:</span>
+</span><span class='line'><span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="k">print</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'><span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>with语句</h3>
+
+<p>另一种处理文件的方式是<code>with</code>语句. 使用<code>with</code>语句是很好的做法. 通过<code>with</code>语句, 你就有了更好的语法和异常处理.<br/>
+另外, 它会自动关闭文件. <code>with</code>语句提供了一种保证资源得到释放的方法.<br/>
+使用<code>with</code>打开文件很简单:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>让我们来看些例子</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;newtext.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>   <span class="c"># Use file to refer to the file object</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">do</span> <span class="n">something</span> <span class="k">with</span> <span class="n">data</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同样地, 你也可以循环遍历文件对象:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;newfile.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">line</span><span class="p">,</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意, 我们不需要写<code>file.close()</code>, 它会被自动调用.</p>
+
+<h3>使用<code>with</code>的例子</h3>
+
+<p>让我们通过一些例子来看看平常我们可以怎么用到它</p>
+
+<h4>用<code>with</code>写文件</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;hello.txt&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>逐行读取文件</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;hello.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>分割行</h4>
+
+<p>最后一个例子中, 我们将看到如何从一个文本文件中分割行. <code>split</code>函数将变量<code>data</code>中包含的字符串以空格符为分割符分割开. 你也可以根据任何你想要的分割符分割, 例如<code>line.split(':')</code>会用冒号分割字符串</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">words</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">words</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<pre><code>输出:
+
+Because multiple values are returned by split, they are returned as an array.
+['hello', 'world,', 'how', 'are', 'you', 'today?']
+['today', 'is', 'saturday']
+</code></pre>
+
+<h3>扩展阅读</h3>
+
+<p>[1] <a href="http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files">http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files</a><br/>
+[2] <a href="http://www.pythonforbeginners.com/cheatsheet/python-file-handling/">http://www.pythonforbeginners.com/cheatsheet/python-file-handling/</a><br/>
+[3] <a href="http://en.wikibooks.org/wiki/Non-Programmer's_Tutorial_for_Python_3/">http://en.wikibooks.org/wiki/Non-Programmer&#8217;s_Tutorial_for_Python_3/</a><br/>
+[4] <a href="http://chryswoods.com/beginning_python/">http://chryswoods.com/beginning_python/</a></p>
+
+<h3>译后记</h3>
+
+<p>呼, 终于译完了这篇水文&hellip;完全新手向的一篇文章, 译完才发现比我以为的要浅好多, 算是复习文件操作吧~</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[老博文迁移]推土小记]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/oh-so-sad/"/>
+    <updated>2015-03-18T16:20:38+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/oh-so-sad</id>
+    <content type="html"><![CDATA[<p>十一这几天留在学校没回家跟胡扬，胡淼，强哥一起“推土”加上写一点新版新闻网的后台，这次来客串写点php。“推土”就是把原来的像17,43,45这几台跑windows的老机器尽量换成linux的，还有几台跑在45上的虚拟机都搬到13,14上。哎，想想之前做的有那么多网站就觉得好累。</p>
+
+<!-- more -->
+
+
+<p>今天一天我完成了原来用discuz搭的bbs的迁移，<a href="http://blog.bingyan.net/">冰岩博客</a>的迁移和华中大知多少的迁移，原先代码都在43上，数据库在17上，都是windows服务器，43上还有ftp服务，17上就什么都没有，dump下来的表都是用百度云上传的==！最后把它们全都放到13上了，整个都是体力劳动啊，后面应该想想一些重复的劳动怎样用脚本来解决掉。</p>
+
+<h3>数据库导出与导入</h3>
+
+<p><code>mysqldump -u username -p dbname &gt; name.sql</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">dbname</span><span class="p">;</span>
+</span><span class='line'><span class="n">USE</span> <span class="n">dbname</span><span class="p">;</span>
+</span><span class='line'><span class="k">SOURCE</span> <span class="n">name</span><span class="p">.</span><span class="k">sql</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>还是相当方便的</p>
+
+<h3>scp命令</h3>
+
+<ul>
+<li>从本地到服务器，2012是端口，不同服务器不同
+<code>scp -P2012 /home/mrzero/test.txt user@example.com:/home/user</code></li>
+<li>从服务器到本地
+<code>scp -P2012 user@example.com:/home/user/test.txt /home/mrzero</code><br/>
+scp这个命令还真是不好用，又臭又长还不能tab出文件名，很蛋疼。如果有图形界面的话，还是用filezilla来传文件吧。</li>
+</ul>
+
+
+<h3>ftp下载</h3>
+
+<p>我用Python写了一段脚本来下上传的文件，先是在iPython里一点点测试，成功后用scp传到13上的。用到的是<code>ftplib</code>，这是Python的标准库，果然是battery include啊～～</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="kn">from</span> <span class="nn">ftplib</span> <span class="kn">import</span> <span class="n">FTP</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">()</span>
+</span><span class='line'><span class="n">ftp</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">&quot;xxxxxxx&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">xxxx</span><span class="p">)</span>
+</span><span class='line'><span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="s">&quot;xxxxxx&quot;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="s">&quot;xxxxx&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">filehandler</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;test.txt&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span>
+</span><span class='line'><span class="c"># ftp.retrbinary(&#39;RETR robots.txt&#39;, filehandler)</span>
+</span><span class='line'><span class="n">ftp</span><span class="o">.</span><span class="n">cwd</span><span class="p">(</span><span class="s">&#39;chenxiangyu&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s">&#39;RETR test.txt&#39;</span><span class="p">,</span> <span class="n">filehandler</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>感觉写得相当挫，不过能用=。=
+后面再改改能加上命令行参数就能在团队里共享，以后部署到服务器上就很欢乐了，现在简直是&hellip;
+不过在部署和管理方面，shell scripts应该能更自在地工作，后面一空下来就要学学shell scripts啊！</p>
+
+<h3>php的部署流程</h3>
+
+<ul>
+<li>把代码目录放到/var/www/example.com下</li>
+<li>在/etc/nginx/sites-avalible下建配置文件</li>
+<li>在/etc/nginx/sites-enabled下建立到avalible目录的软链接
+<code>ln -s example.com ../sites-avalible/example.com</code></li>
+<li>reload nginx一下，把配置文件更新</li>
+<li>对于搬迁服务器来说，还要在dnspod上将域名的指向改掉，并修改数据库配置，等一下下，没bug就可以去玩啦～～～</li>
+</ul>
+
+
+<p>奥，就是这个样子，明天再在自己电脑上折腾下把nginx配好吧，还要从零入门php和CI框架。哎，十一也过的这么累，不过还是进步很快的就是啦，最后谢谢胡扬大神的悉心指导，bug还要加油才是！</p>
+
+<p><em>2014-10-4 于博客园</em></p>
+
+<p>迁移批注:<br/>
+<code>scp</code>不能tab出文件名是<code>ssh key</code>的问题. 之前部署网站这种重复性的劳动也用脚本解决了一些, 不过说好的运维平台还是没有搭起来, 不知什么时候可以搭起来&hellip;</p>
+
+<p>即使现在想想那段每天迁网站调bug的日子还是很痛苦, 三四点睡都是家常便饭了, 最后效果还是不够好, 负载均衡没有搭起来, 单点故障的问题还是没有解决, 数据库依然是本机, 除了我用自己写的脚本部署外大家还是手动复制粘贴<code>nginx</code>配置, 只能说现在还是太弱了, 运维知识不足, 对架构理解也不深, 当时都没能理解胡扬到底要我干啥. 也许到公司实习之后可以改变团队服务器的现状吧, 可那时我还会能抵住更有趣的项目和钱的诱惑回来整团队服务器吗, 我要打上一个大大的问号&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[老博文迁移]linux管道命令学习(一)]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1/"/>
+    <updated>2015-03-18T16:06:38+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/linux-pipe-1</id>
+    <content type="html"><![CDATA[<p>继续看鸟哥私房菜，看一直很想弄懂的<code>管道命令(pipe)</code>。第一次知道管道这个词还是在学<code>django</code>的时候，模板里的过滤器很像这里的管道。管道就是将输出在标准输出中的信息一次次处理最终打印在标准输出中，所以管道命令必须是接受标准输出的命令，<code>cp</code> <code>mv</code> <code>ls</code>都不是管道命令。</p>
+
+<!-- more -->
+
+
+<h3>好用的<code>less</code>和<code>tail</code></h3>
+
+<h4>less</h4>
+
+<p>如<code>ls -al /etc | less</code>就能用类似<code>vi</code>的方式浏览在屏幕上打印的内容了。还能用<code>vi</code>里的查找命令<code>/</code>、<code>?</code>，可以避免滚屏，非常好用。</p>
+
+<h4>tail</h4>
+
+<ul>
+<li><code>tail filename</code>输出文件最后10行</li>
+<li><code>tail -n 5 filename</code>输出文件最后5行</li>
+<li><code>tail -F filename</code>监视文件的改变，一有变化就显示出来</li>
+</ul>
+
+
+<p>在分析error log的时候非常有用，可以查看最近的错误信息。</p>
+
+<h3>选取命令<code>cut</code>和<code>grep</code></h3>
+
+<h4>cut</h4>
+
+<p>cut针对的是输出的每一行，解释两个命令：</p>
+
+<ul>
+<li><code>echo $PATH | cut -d ':' -f 5</code>
+-d 选项后面紧跟分隔符，-f表示取第5段</li>
+<li><code>export | cut -c 12-</code>
+-c 选项表示选取的字符数，从12到结尾，也可是类似12-15这样</li>
+</ul>
+
+
+<h4>grep</h4>
+
+<p>grep真是神一般的命令，可以配合<code>ps aux</code>找到想要的进程。
+参数</p>
+
+<ul>
+<li>-c计算找到的被查找字符串的次数</li>
+<li>-i忽略大小写</li>
+<li>-v输出查找结果的补集
+例如<code>last | grep -v 'root'</code>找出非root的登陆</li>
+</ul>
+
+
+<p>睡觉，明天继续整理剩下的内容ww</p>
+
+<p><em>2014-9-22 于博客园</em></p>
+
+<p>迁移批注:<br/>
+Yesterday you said tomorrow&hellip;有了&#8221;一&#8221;就再没&#8221;二&#8221;了&hellip;<br/>
+不过后来除了<code>cut</code>外这几个命令都很常用, 使用<code>linux</code>时还是带来了很大帮助~ 需要继续学习~</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[老博文迁移]linux进程管理]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/linux-process/"/>
+    <updated>2015-03-18T15:35:11+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/linux-process</id>
+    <content type="html"><![CDATA[<p>作为一个新手，部署Python网站的时候总会出各种各样的问题，这个时候我就很想知道是哪个程序没有运行。这几天读了鸟哥私房菜的进程管理这一章，还没读完，先做下笔记。</p>
+
+<!--more-->
+
+
+<h3>什么是进程？</h3>
+
+<p><strong>一个程序被加载到内存中运行，在内存中的数据就被称为进程.</strong> 在Linux下，所有的命令在执行时都会被系统定义为一个<code>进程</code>，这条命令会被分配一个ID，称为<code>PID</code>，执行这条命令的用户会被分配一个<code>UID</code>，系统根据UID来判别执行命令的权限。</p>
+
+<p>进程就是正在运行中的程序。</p>
+
+<p>子进程是父进程衍生出来的进程，用<code>fork and exec</code>的方式产生，<code>PPID</code>值与父进程<code>PID</code>值相同可以用<code>ps -l</code>来查看当前用户的所有进程。</p>
+
+<h3>工作管理(job control)</h3>
+
+<p>Linux下的工作管理很像windows的任务管理器。工作管理是将进程控制在前台或后台运行，后台运行的程序必须是与用户没有交互，换句话说不用等待输入的。出现提示符让你操作的环境称为<code>前台(foreground)</code>，反之称为<code>后台(background)</code></p>
+
+<p>可以在执行的命令后加上<code>&amp;</code>把它丢到后台去执行，如</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>tar -zpcf /tmp/etc.tar.gz /etc <span class="p">&amp;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  <br/>
+终端里会显示出PID，如果有出错信息，会提示，可以看到命令提示符。</p>
+
+<h4>CTRL+Z 与 CTRL+C</h4>
+
+<p>CTRL+Z可以将进程暂停放到后台，<strong>进程是没有停止的！</strong>CTRL+C是停止当前的进程。被CTRL+Z放到后台暂停的进程，可以通过<code>fg</code>和<code>bg</code>调整为运行状态。先查看一下当前后台工作状态：
+<code>jobs [-lrs]</code></p>
+
+<ul>
+<li>-l：列出命令及PID</li>
+<li>-r：列出运行的进程(run)</li>
+<li>-s：列出后台暂停的进程(stop)<br/>
+然后用<code>fg %jobnumber</code>可以调到前台（<code>%</code>可有可无，jobnumber为任务编号，不是PID）或是用<code>bg %jobnumber</code>来在后台运行。</li>
+</ul>
+
+
+<h4>kill</h4>
+
+<p><code>kill -signal %jobnumber</code>
+- signal：</p>
+
+<ul>
+<li>-1：重新读取配置文件（类似reload）（左边是原文，不懂是干嘛的，如果明白烦请指点>&lt;）</li>
+<li>-2：与键盘ctrl+c作用相同</li>
+<li>-9：强制删除一个工作</li>
+<li>-15：以正常方式结束一个工作</li>
+</ul>
+
+
+<h4>脱机管理</h4>
+
+<p>脱机管理是指当你用远程终端登陆服务器时，如果直接以<code>&amp;</code>方式将任务放到后台掉线之后进程是不会继续执行的，可以用<code>nohup</code>来解决，如：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>nohup ./sleep500.sh <span class="p">&amp;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>查看进程</h4>
+
+<p>ps命令可以静态查看系统进程。</p>
+
+<ul>
+<li><code>ps -l</code>查看自己bash相关进程</li>
+<li><code>ps aux</code>查看系统所有进程，配合grep等管道命令用</li>
+</ul>
+
+
+<p><em>2014-9-21 于博客园</em></p>
+
+<p>迁移批注:<br/>
+其实到今天那一章还是没读完&hellip;拖延就是这么产生的&hellip;</p>
+
+<p>之后学习到<code>ps aux | grep uwsgi | awk {'print $2'} | xargs sudo kill -9</code>这个神奇的命令, 后面还要详细学习<code>awk</code>的主要用法, 目前只会这一个命令, 用于重启<code>uwsgi</code>等等的进程已经足够了</p>
+
+<p>对于<code>ps</code>和<code>kill</code>两个命令, 目前团队里大家的做法依然是简单粗暴的<code>ps aux</code>和<code>kill -9</code>, 感觉对<code>kill</code>用得还是不够好&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[老博文迁移]jinja2模板使用经验]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/jinja-practice/"/>
+    <updated>2015-03-18T13:19:01+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/jinja-practice</id>
+    <content type="html"><![CDATA[<p>用<code>jinja2</code>写模板的时候遇到了一些问题，记录一下</p>
+
+<!--more-->
+
+
+<h3>抽出base.html作为模板</h3>
+
+<p>之前的小项目写得都很不规范，模板都是能用就行，基本上只用到<code>if</code>语句，<code>for</code>语句和变量。导航栏都是复制粘贴，没有把共同的部分抽出来。写模板的时候还应该注意一下不要直接在原来的html上改，这样容易把html改乱，应该新建一个<code>template</code>目录，再一个个写模板，这样更好</p>
+
+<p>参照<a href="http://jinja.pocoo.org/docs/dev/templates/">jinja2的文档</a>抽出公共部分，如</p>
+
+<figure class='code'><figcaption><span> (jinja0.html)</span> <a href='http://cxymrzero.github.io/downloads/code/html/jinja0.html'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;&gt;</span>
+</span><span class='line'><span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;head&gt;</span>
+</span><span class='line'>{% block head %}
+</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;style.css&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;title&gt;</span>{% block title %}{% endblock %} - My Webpage<span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>{% endblock %}
+</span><span class='line'><span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>{% block content %}{% endblock %}<span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        {% block footer %}
+</span><span class='line'>        <span class="ni">&amp;copy;</span> Copyright 2008 by <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://domain.invalid/&quot;</span><span class="nt">&gt;</span>you<span class="nt">&lt;/a&gt;</span>.
+</span><span class='line'>        {% endblock %}
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="nt">&lt;/body&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在子模板中填充对应的<code>block</code>就行，如
+对于在base.html里有但是子模板里没有的<code>block</code>，对应位置会采用base.html里的内容</p>
+
+<figure class='code'><figcaption><span> (jinja1.html)</span> <a href='http://cxymrzero.github.io/downloads/code/html/jinja1.html'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% block title %}
+</span><span class='line'>我是标题
+</span><span class='line'>{% endblock %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>导航栏怎么设置为active?</h3>
+
+<p>很多用到导航栏的情况都会有当前所在位置高亮的设置，假设CSS中<code>.active</code>设为高亮了，那么在jinja2中就能给base.html传值，如：</p>
+
+<figure class='code'><figcaption><span> (jinja2.html)</span> <a href='http://cxymrzero.github.io/downloads/code/html/jinja2.html'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;bd clearfix&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;team clearfix {% if active == &quot;</span><span class="na">team</span><span class="err">&quot;</span> <span class="err">%}</span><span class="na">now</span><span class="err">{%</span> <span class="na">endif</span> <span class="err">%}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/team&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;circle circle1&quot;</span> <span class="na">title=</span><span class="s">&quot;团队介绍&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;hover-wrap&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>Team Introduction<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;ch&quot;</span><span class="nt">&gt;</span>团队介绍<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;group clearfix {% if active == &quot;</span><span class="na">group</span><span class="err">&quot;</span> <span class="err">%}</span><span class="na">now</span><span class="err">{%</span> <span class="na">endif</span> <span class="err">%}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/group&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;circle circle2&quot;</span> <span class="na">title=</span><span class="s">&quot;各组介绍&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;hover-wrap&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>Group Introduction<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;ch&quot;</span><span class="nt">&gt;</span>各组介绍<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;pro clearfix {% if active == &quot;</span><span class="na">works</span><span class="err">&quot;</span> <span class="err">%}</span><span class="na">now</span><span class="err">{%</span> <span class="na">endif</span> <span class="err">%}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/works&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;circle circle3&quot;</span> <span class="na">title=</span><span class="s">&quot;陈列室&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;hover-wrap&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>Portfolio<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;ch&quot;</span><span class="nt">&gt;</span>陈列室<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;part clearfix {% if active == &quot;</span><span class="na">partner</span><span class="err">&quot;</span> <span class="err">%}</span><span class="na">now</span><span class="err">{%</span> <span class="na">endif</span> <span class="err">%}&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/partner&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;circle circle4&quot;</span> <span class="na">title=</span><span class="s">&quot;成员风采&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;hover-wrap&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>Our Partner<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;ch&quot;</span><span class="nt">&gt;</span>成员风采<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">&quot;re clearfix&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://hr.bingyan.net/&quot;</span> <span class="na">target=</span><span class="s">&quot;_blank&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;circle circle5&quot;</span> <span class="na">title=</span><span class="s">&quot;历届招新&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;hover-wrap&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>Recruit<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">&quot;ch&quot;</span><span class="nt">&gt;</span>历届招新<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'><span class="nt">&lt;/ul&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在子模板中，向base.html传<code>active</code>的值就行了，我们不只可以通过py文件向jinja2传值，还能在不同模板之间传值</p>
+
+<figure class='code'><figcaption><span> (jinja3.html)</span> <a href='http://cxymrzero.github.io/downloads/code/html/jinja3.html'>download</a></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% extends &quot;base.html&quot; %}
+</span><span class='line'>{% set active = &quot;group&quot; %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这样导航栏就能根据相应的内容显示高亮的<code>li</code>了！更多内容参考<a href="http://jinja.pocoo.org/docs/dev/tricks/">官方文档</a></p>
+
+<h3>如何获取列表的长度？</h3>
+
+<p>jinja2支持很多Python的语法，于是我尝试调用<code>len(lst)</code>函数，会报错。
+要获取列表的长度，应该写成<code>lst|length</code>或是它的别称<code>lst|count</code>
+参考<a href="http://stackoverflow.com/questions/1465249/jinja2-get-lengths-of-list">这个问题</a></p>
+
+<p><em>2014-9-10 于博客园</em></p>
+
+<p>迁移批注:<br/>
+这篇博文由于包含<code>jinja2</code>的模板语法, 在解析时会与<code>liquid</code>发生冲突而报错, 于是我采用<a href="http://octopress.org/docs/blogging/code/">载入代码文件</a>的方式解决了这个问题!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[使用Flask实现用户认证API]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/18/flask-token/"/>
+    <updated>2015-03-18T00:32:28+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/18/flask-token</id>
+    <content type="html"><![CDATA[<p>我们在开发网站时会采用<code>session</code>和<code>cookie</code>的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个<code>token(令牌)</code>的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次<code>token</code>是否有效, 无效的情况包括<code>token</code>无法被解析等. 另一个问题是如果<code>token</code>被泄露, 用户的安全将受到威胁, 所以应当对这个<code>token</code>设置一个过期时间, 超过这个时间后应当重新登录, 这样可以将用户信息泄露的风险降低.</p>
+
+<!--more-->
+
+
+<h3>生成和使用<code>token</code></h3>
+
+<p>有个很棒的Python第三方库叫<code>itsdangerous</code>, 包含许多常见安全问题的解决方案, 比如文件名等等.</p>
+
+<h4>生成<code>token</code></h4>
+
+<p><code>TimedJSONWebSignatureSerializer</code>能将包含用户id的字典, 如<code>{'user_id': 1}</code>设置一个具有过期时间的<code>数字证书(Signature)</code>, 需要注意的是, 设置的<code>secret key</code>一定要足够安全, 在<code>flask</code>应用中, 我们采用<code>flask</code>配置中的<code>secret key</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">TimedJSONWebSignatureSerializer</span> <span class="k">as</span> <span class="n">Serializer</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">SignatureExpired</span><span class="p">,</span> <span class="n">BadSignature</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">config</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">gen_token</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">expiration</span><span class="o">=</span><span class="mi">1440</span><span class="o">*</span><span class="mi">31</span><span class="o">*</span><span class="mi">60</span><span class="p">):</span>  <span class="c"># 单位为秒, 设定31天过期</span>
+</span><span class='line'>    <span class="n">s</span> <span class="o">=</span> <span class="n">Serializer</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">expires_in</span><span class="o">=</span><span class="n">expiration</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>  <span class="c"># user为model中封装过的对象</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h4>验证<code>token</code>合法性以及是否过期</h4>
+
+<p><code>装饰器(decorator)</code>是<code>Python</code>一个很有用的语法糖, 可以有效地减少重复代码. 在每个需要验证<code>token</code>的场景都用装饰器包裹一层, 就能验证无效<code>token</code>和过期<code>token</code>了~</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">token_required</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+</span><span class='line'>    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class='line'>        <span class="n">token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;token&#39;</span><span class="p">]</span>
+</span><span class='line'>        <span class="n">s</span> <span class="o">=</span> <span class="n">Serializer</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">SECRET_KEY</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">try</span><span class="p">:</span>
+</span><span class='line'>            <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">except</span> <span class="n">SignatureExpired</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;msg&#39;</span><span class="p">:</span> <span class="s">&#39;expired token&#39;</span><span class="p">}})</span>
+</span><span class='line'>        <span class="k">except</span> <span class="n">BadSignature</span><span class="p">:</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="s">&#39;fail&#39;</span><span class="p">,</span> <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;msg&#39;</span><span class="p">:</span> <span class="s">&#39;useless token&#39;</span><span class="p">}})</span>
+</span><span class='line'>        <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;user_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">wrapper</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>例如实现一个关注用户的操作, 在视图函数中这样调用装饰器<code>token_required</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="nd">@user.route</span><span class="p">(</span><span class="s">&#39;/follow&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;POST&#39;</span><span class="p">])</span>
+</span><span class='line'><span class="nd">@token_required</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">follow_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">user_to_follow_id</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s">&#39;user_id&#39;</span><span class="p">]</span>
+</span><span class='line'>    <span class="n">user_rel</span> <span class="o">=</span> <span class="n">UserRel</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_to_follow_id</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">get_user_rel</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user_to_follow_id</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">to_json</span><span class="p">(</span><span class="s">&#39;already follow&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">user_to_follow</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">UserInfo</span><span class="p">)</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="n">user_to_follow_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">data</span> <span class="o">=</span> <span class="n">user_to_follow</span><span class="o">.</span><span class="n">data</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">model</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user_rel</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">model</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">to_json</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">success</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c"># 将flask中的jsonify封装了一层</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可是这样每个视图函数中需要一个<code>user_id</code>的参数, 这样还是存在重复, 不知是不是我装饰器用得不对:(</p>
+
+<h3>参考</h3>
+
+<p>[1]<a href="http://www.cnblogs.com/vovlie/p/4182814.html">使用Flask设计带认证token的RESTful API接口</a><br/>
+[2]<a href="http://pythonhosted.org/itsdangerous/">itsdangerous文档</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[[老博文迁移]web.py+fastcgi+nginx 502]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/17/webpy-502/"/>
+    <updated>2015-03-17T23:45:42+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/17/webpy-502</id>
+    <content type="html"><![CDATA[<p>用<code>web.py</code>照着<a href="http://webpy.org/cookbook/fastcgi-nginx.zh-cn">官方文档</a>在服务器上搭好了后台。这次很奇怪地出现了一个Nginx 502 Bad Gateway的错误。</p>
+
+<p>执行上面的<code>kill `pgrep -f "python /path/to/www/index.py"`</code>会出现错误提示，可是启动脚本的时候明明是提示<code>spawn-fcgi: child spawned successfully: PID: 32401</code>的信息的，然后还可以继续执行<code>spawn-fcgi -d /path/to/www -f /path/to/www/index.py -a 127.0.0.1 -p 9002</code>的脚本
+，同样会提示成功。</p>
+
+<!--more-->
+
+
+<p>原因是<strong>进程确实创建成功了，但是又马上终止了！！</strong>
+这时用<code>spawn-fcgi</code>的<code>-n</code>选项就能看到错误信息了。原来是index.py里少了一行<code>import os</code>，一开始就出错了，而不是访问某个具体地址时会报错。类似的情况在php下面也容易碰到，php的语法错导致php5-fpm一开启就死掉，用<code>php5-fpm -e</code>可以查看错误原因。</p>
+
+<p>这里还要注意是否是按照官网上的步骤配置的web.py部署条件，有没有安装web.py, spawn-fcgi和flup，如果没有安装可以用<code>sudo pip install web.py</code>，<code>sudo apt-get install spawn-fcgi</code>，<code>sudo apt-get install python-flup</code>（ubuntu下），没安装依赖也会导致同样的错误。</p>
+
+<p>解决是google到<a href="http://python.6.x6.nabble.com/CPyUG-spawn-fcgi-web-py-td2737790.html">这里</a>的解决方案。</p>
+
+<p><em>2014-9-10 于博客园</em></p>
+
+<p>迁移批注:<br/>
+这是在部署<a href="http://new.bingyan.net/">冰岩新官网</a>出bug后写的博文, 其实是使用<code>web.py</code>线上代码和开发环境不一致导致的(服务器采用Nginx+FastCGI, 本地是直接解释器运行), <code>web.py</code>在部署时还得根据环境改代码, 这种做法是非常操蛋的, 我也没找到最佳实践, 而<code>flask</code>就不存在类似问题. 另外<code>web.py</code>的作者已经饮弹自尽, 没有继续开发了, 加上文档缺失等原因, <code>web.py</code>已经被抛弃了, 不过它足够简单, 作为Python web开发入门的学习框架还是很合适的, 它也是我的初恋, 相爱相杀! <code>tornado</code>与它写法很相似, 闲下来我会学习的!</p>
+
+<p><code>502 Bad Gateway</code>其实很常见, 字面意思是网关错误, 原因几乎都是前端<code>Nginx</code>将请求反向代理到后端的进程, 如<code>uwsgi</code>或<code>php-fpm</code>等进程管理工具跑起来的进程, 没有成功运行导致的, 这种情况首先应该检查进程有没有起, 生产环境与开发环境是否不同.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[新博客终于搭起来了]]></title>
+    <link href="http://cxymrzero.github.io/blog/2015/03/15/new-blog/"/>
+    <updated>2015-03-15T19:19:36+08:00</updated>
+    <id>http://cxymrzero.github.io/blog/2015/03/15/new-blog</id>
+    <content type="html"><![CDATA[<h3>啰嗦</h3>
+
+<p>去年大概这个时候, 用<code>jekyll</code>和<code>github pages</code>搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low!</p>
+
+<p>比较好的办法就是经常写, 把那些很low的文章顶到很多页之前, 就没人笑话了.</p>
+
+<!--more-->
+
+
+<p>新博客将<code>jekyll</code>换成了<code>octopress</code>, 因为喜欢这个博客主题, 同样是用markdown写博客, 代码高亮支持得很好, 自带的好看的<code>solarized dark</code>配色, 搭建流程参看<a href="http://shengmingzhiqing.com/blog/setup-octopress-with-github-pages.html/#octopress--github-pages">这篇博文</a></p>
+
+<h3>发博客很简单</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">cd </span>octopress  <span class="c"># 进入博客目录</span>
+</span><span class='line'>rake new_post<span class="o">[</span><span class="s2">&quot;title&quot;</span><span class="o">]</span>  <span class="c"># title是文章名, 在生成的markdown文件名里</span>
+</span><span class='line'>rake preview  <span class="c"># 实时预览, 我用Mou写markdown, 保存后刷新网页即可</span>
+</span><span class='line'>rake gen_deploy  <span class="c"># 自动生成HTML网页, 并且进行一次commit and push, 还有贴心的commit message =w=</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>坑</h3>
+
+<p>由于我用的是<code>zsh</code>, <code>rake new_post</code>命令不支持<code>zsh</code>, 每次还要切回<code>bash</code>才能自动生成新文章, 我在考虑写个脚本完成这件事</p>
+
+<h3>定制修改</h3>
+
+<h4>加上about页面</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>rake new_page<span class="o">[</span><span class="s2">&quot;about&quot;</span><span class="o">]</span>  <span class="c"># 注意这里是`page`</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>并根据<a href="http://octopress.org/docs/theme/template/">文档</a>修改navigation的配置</p>
+
+<h4>加上disqus评论</h4>
+
+<p>首先注册disqus并设置自己的shortname, 在<code>_config.yml</code>中加上自己的shortname</p>
+
+<h4>添加侧边栏文章分类</h4>
+
+<p>看<a href="http://codemacro.com/2012/07/18/add-category-list-to-octopress/">这篇博客</a>, 折腾完还要<code>Ctrl+C</code>再执行下<code>rake preview</code>, 并且注意, 如果你的分类中有中文博客里的代码会出bug, 需要自己hack一下, 或者像我压根就不用中文做分类名&hellip;</p>
+
+<p>最后推荐这份<a href="http://shengmingzhiqing.com/blog/octopress-tutorials-toc.html/">教程</a>(不过这哥们貌似写完这份教程之后都没更博了囧)</p>
+
+<h4>添加&#8221;继续阅读&#8221;按钮</h4>
+
+<p><a href="http://shengmingzhiqing.com/blog/octopress-lean-modification-1.html/#section-8">教程在此</a>, 修改<code>_config.yml</code>, 查找到<code>excerpt_link: "Read on &amp;rarr;"</code>这一段, 默认设置是文中<code>&lt;!--more--&gt;</code>之前的内容会显示到首页上</p>
+]]></content>
+  </entry>
+  
+</feed>

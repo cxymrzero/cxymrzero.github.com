@@ -1,0 +1,26 @@
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    {% for post in site.posts limit:10 %}
+      <li class="post">
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% if site.categories %}
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    {% assign categories = site.categories | sort %}
+    {% for category in categories %}
+      {% assign name = category[0] %}
+      {% assign posts = category[1] %}
+      <li class='category'>
+        <a href='/blog/categories/{{ name | downcase | uri_escape }}/'>{{ name }} ({{ posts | size }})</a>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}

@@ -1,0 +1,32 @@
+---
+layout: post
+title: "[老博文迁移]linux进程管理"
+date: 2015-03-18T15:35:11+08:00
+categories: ["linux"]
+permalink: /blog/2015/03/18/linux-process/
+legacy: true
+---
+{% raw %}
+<p>作为一个新手，部署Python网站的时候总会出各种各样的问题，这个时候我就很想知道是哪个程序没有运行。这几天读了鸟哥私房菜的进程管理这一章，还没读完，先做下笔记。</p>
+
+<!--more-->
+
+
+<h3>什么是进程？</h3>
+
+<p><strong>一个程序被加载到内存中运行，在内存中的数据就被称为进程.</strong> 在Linux下，所有的命令在执行时都会被系统定义为一个<code>进程</code>，这条命令会被分配一个ID，称为<code>PID</code>，执行这条命令的用户会被分配一个<code>UID</code>，系统根据UID来判别执行命令的权限。</p>
+
+<p>进程就是正在运行中的程序。</p>
+
+<p>子进程是父进程衍生出来的进程，用<code>fork and exec</code>的方式产生，<code>PPID</code>值与父进程<code>PID</code>值相同可以用<code>ps -l</code>来查看当前用户的所有进程。</p>
+
+<h3>工作管理(job control)</h3>
+
+<p>Linux下的工作管理很像windows的任务管理器。工作管理是将进程控制在前台或后台运行，后台运行的程序必须是与用户没有交互，换句话说不用等待输入的。出现提示符让你操作的环境称为<code>前台(foreground)</code>，反之称为<code>后台(background)</code></p>
+
+<p>可以在执行的命令后加上<code>&amp;</code>把它丢到后台去执行，如</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>tar -zpcf /tmp/etc.tar.gz /etc <span class="p">&amp;</span>
+</span></code></pre></td></tr></table>
+{% endraw %}

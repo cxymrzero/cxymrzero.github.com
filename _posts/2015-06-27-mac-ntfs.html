@@ -1,0 +1,22 @@
+---
+layout: post
+title: "mac下向NTFS文件系统写入文件"
+date: 2015-06-27T02:39:27+08:00
+categories: ["try"]
+permalink: /blog/2015/06/27/mac-ntfs/
+legacy: true
+---
+{% raw %}
+<p>mac下默认是不支持NTFS格式的文件系统的写入的，可以用NTFS Paragon这款软件（不过是收费的，要找破解版或者激活码，搜了好多都不能用）或者是免费的ntfsMounter（在我的系统上不能用，也不知道为什么。）</p>
+
+<!--more-->
+
+
+<p>那么作为一个程序员，我们只要拿起命令行武器，在系统中添加一个文件就ok了！</p>
+
+<p>首先需要找到你的移动硬盘的设备号(UUID)，打开终端，输入</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>diskutil info /Volumes/你的硬盘名 <span class="p">|</span> grep UUID
+</span></code></pre></td></tr></table>
+{% endraw %}

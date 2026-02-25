@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="jKZt25RHZv" />
+  <title>clean code - clean code</title>
+  <meta name="author" content="Mr.Zero">
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="canonical" href="http://localhost:4000/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <header role="banner"><hgroup>
+  <h1><a href="/">clean code</a></h1>
+  
+    <h2>i create stuff</h2>
+  
+  </hgroup>
+  </header>
+
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  </ul>
+
+  <form action="https://www.google.com/search" method="get">
+    <fieldset role="search">
+      <input type="hidden" name="sitesearch" value="localhost:4000">
+      <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    </fieldset>
+  </form>
+
+  <ul class="main-navigation">
+    <li><a href="/">Blog</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/links">Links</a></li>
+  </ul>
+  </nav>
+
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2026/02/25/anti-burnout-notes/">《反倦怠能量站》读书笔记：重新找回你的能量感</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2026-02-25T18:20:00+08:00'>
+            <span class='date'>
+              <span class='date-month'>Feb</span>
+              <span class='date-day'>25</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2026</span>
+            </span>
+            <span class='time'>6:20 pm</span>
+          </time>
+          | <a href="/blog/2026/02/25/anti-burnout-notes/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2026/02/25/anti-burnout-notes/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        <p>在这个人人喊累的时代，我们似乎陷入了一种奇怪的困境：明明没做什么体力活，却总觉得身心俱疲；明明想要努力，却总是拖延内耗。刀熊的《反倦怠能量站》像一面镜子，照出了现代人能量枯竭的真相——问题不在于我们不够自律，而在于我们一直在用错误的方式对待自己。</p>
+
+<p>以下是我从书中整理的核心 takeaways，希望能帮你重新认识能量感，找到属于自己的能量恢复路径。</p>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2026/02/25/anti-burnout-notes/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/08/19/php-time/">PHP的两个时间函数</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-08-19T22:44:42+08:00'>
+            <span class='date'>
+              <span class='date-month'>Aug</span>
+              <span class='date-day'>19</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>10:44 pm</span>
+          </time>
+          | <a href="/blog/2015/08/19/php-time/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/08/19/php-time/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>最近经常需要处理时间，一直在用这两个函数：</p>
+
+<h3><a href="http://php.net/manual/zh/function.date.php">date()</a></h3>
+
+<p><code>date()</code>可以将时间戳格式化成字符串，最常用的就是<code>YYYY-mm-dd HH:ii:ss</code>这种格式了。可以不加<code>$timestamp</code>参数，默认是当前时间。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$time_str</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;Y-m-d H:i:s&#39;</span><span class="p">,</span> <span class="nv">$timestamp</span><span class="p">)</span>
+</span></code></pre></td></tr></table>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/08/19/php-time/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/08/18/php-curl/">PHP cURL使用小结</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-08-18T22:46:31+08:00'>
+            <span class='date'>
+              <span class='date-month'>Aug</span>
+              <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>10:46 pm</span>
+          </time>
+          | <a href="/blog/2015/08/18/php-curl/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/08/18/php-curl/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。</p>
+
+<p>项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cURL外，<code>file_get_contents</code>这个函数也可以发起HTTP请求，不过不是专门干这个的，不好配置参数，还是cURL好。</p>
+
+
+
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/08/18/php-curl/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/08/17/myisam-innodb/">MyISAM与InnoDB区别</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-08-17T13:18:39+08:00'>
+            <span class='date'>
+              <span class='date-month'>Aug</span>
+              <span class='date-day'>17</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>1:18 pm</span>
+          </time>
+          | <a href="/blog/2015/08/17/myisam-innodb/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/08/17/myisam-innodb/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>MyISAM和InnoDB是MySQL两种最常用的存储引擎，最近几次面试都有问到区别，感觉答得不好，今天专门抽时间研究下。</p>
+
+<h3>设计目标</h3>
+
+<p>InnoDB设计目标是处理大容量的数据，而MyISAM追求的是性能，两者产生的差异也是基于这点。 InnoDB是MySQL的默认存储引擎。</p>
+
+
+
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/08/17/myisam-innodb/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/06/27/mac-ntfs/">mac下向NTFS文件系统写入文件</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-06-27T02:39:27+08:00'>
+            <span class='date'>
+              <span class='date-month'>Jun</span>
+              <span class='date-day'>27</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>2:39 am</span>
+          </time>
+          | <a href="/blog/2015/06/27/mac-ntfs/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/06/27/mac-ntfs/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>mac下默认是不支持NTFS格式的文件系统的写入的，可以用NTFS Paragon这款软件（不过是收费的，要找破解版或者激活码，搜了好多都不能用）或者是免费的ntfsMounter（在我的系统上不能用，也不知道为什么。）</p>
+
+
+
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/06/27/mac-ntfs/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/06/07/euler-circuit/">判断欧拉回路</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-06-07T16:04:42+08:00'>
+            <span class='date'>
+              <span class='date-month'>Jun</span>
+              <span class='date-day'>07</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>4:04 pm</span>
+          </time>
+          | <a href="/blog/2015/06/07/euler-circuit/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/06/07/euler-circuit/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>昨天开始学习图算法，正好hihoCoder<a href="http://hihocoder.com/contest/hiho49/problem/1">这周的题目</a>是判断欧拉回路，AC之。</p>
+
+<!-- more  -->
+
+
+<h3>如何判断欧拉回路？</h3>
+
+<p>欧拉回路即小学时就学过的一笔画问题，不再分析了，判断条件为“奇点个数为0或2个的连通图”。所以首先要判断是否是连通图，从一个结点开始遍历图，如果最终存在结点没被访问，则不是连通图；然后计算奇点个数即可。</p>
+
+<h3>图的存储</h3>
+
+<p>第一次做图论的题目，怎么存就卡住了。首先想到的是邻接矩阵，但是邻接矩阵在结点数很多的情况下会占用很多内存，而且对于边数较少的图（稀疏图），大部分的边都是0，很浪费资源。所以一般用的是邻接表，开一个vector的数组，每个vector存该结点相邻的结点即可。</p>
+
+<h3>图的遍历</h3>
+
+<p>BFS和DFS听了很多了，即宽度优先搜索和深度优先搜索。深度优先就是访问一个结点A，假设与A相邻的结点还有B和C，接着访问B，再访问和B相邻的结点，直到不能再访问为止。DFS用到了栈，可以用递归隐式地调用栈，写起来就只有几行。BFS将与当前结点相邻的结点依次存入队列，再访问队列中的结点。</p>
+
+<p>一次AC，爽爽爽！贴上代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="cp">#include &lt;cstdio&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;vector&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">MAX_N</span> <span class="o">=</span> <span class="mi">10000</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">g</span><span class="p">[</span><span class="n">MAX_N</span><span class="p">];</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">vis</span><span class="p">[</span><span class="n">MAX_N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">])</span> <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">vis</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">dfs</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">i</span><span class="p">]);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">bool</span> <span class="nf">solve</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">dfs</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">v</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">vis</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="n">e</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">e</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">g</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">g</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 非连通图</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">solve</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Part</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 判断奇点个数是否为0或2</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">odd_point_cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">v</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kt">size_t</span> <span class="n">v_cnt</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">v_cnt</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class='line'>            <span class="o">++</span><span class="n">odd_point_cnt</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">odd_point_cnt</span><span class="o">==</span><span class="mi">0</span> <span class="o">||</span> <span class="n">odd_point_cnt</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Full</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Part</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/06/07/euler-circuit/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/06/05/hackerrank-maximise-sum/">HackerRank Maximise Sum题解</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-06-05T23:42:33+08:00'>
+            <span class='date'>
+              <span class='date-month'>Jun</span>
+              <span class='date-day'>05</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>11:42 pm</span>
+          </time>
+          | <a href="/blog/2015/06/05/hackerrank-maximise-sum/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/06/05/hackerrank-maximise-sum/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>今晚被<a href="https://www.hackerrank.com/challenges/maximise-sum">这道题</a>折磨了好久，记录下。</p>
+
+<h3>题意</h3>
+
+<p>对数组的子序列（任意相连的元素）求和，找出所有和里对M的模中的最大值。</p>
+
+<!-- more -->
+
+
+<h3>思路</h3>
+
+<p>开始就想到能不能按照“最大子序列和问题”的思路解决，后来发现无论是分治递归求解还是复杂度为O(N)的算法在这个问题中都没有用，于是看了题解。<br/>
+在<a href="http://www.quora.com/What-is-the-logic-used-in-the-HackerRank-Maximise-Sum-problem#">Quora</a>上找到了题解，看了半天才看明白。大意是，对于输入的数组v中的元素v[i]，先找到v[i]之前所有数的和对M取模的值（包括v[i]），存到数组prefix中。这里有个技巧，</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="n">ull</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="c1">// unsigned long long</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">v_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">tmp</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">tmp</span> <span class="o">%=</span> <span class="n">m</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">prefix</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/06/05/hackerrank-maximise-sum/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/04/25/procrastination/">瞎扯淡 - 拖延症与项目延期</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-04-25T00:09:42+08:00'>
+            <span class='date'>
+              <span class='date-month'>Apr</span>
+              <span class='date-day'>25</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>12:09 am</span>
+          </time>
+          | <a href="/blog/2015/04/25/procrastination/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/04/25/procrastination/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>我是一个资深的拖延症患者，症状最早可以追溯到小学的寒暑假，放假永远是痛并快乐着，整个假期基本就是一个拖延不做作业的过程，为了拖延，我真是什么事都干得出来，往往就是到了临近开学的时候就疯狂赶起作业来。那时挺羡慕“别人家的孩子”，能在放假一星期内完成所有作业。</p>
+
+<!-- more -->
+
+
+<p>多年的经验告诉我，拖延基本会让人陷入一个循环：拖延->愧疚->决定改变->失败->继续拖延。人人都想治好拖延症，可我发现拖延症似乎是绝症，并不能治好，了不起也就是缓解一下，该拖还得拖，但是我们也不能放弃治疗啊！</p>
+
+<h3>为什么拖延</h3>
+
+<p>知乎专栏<a href="http://zhuanlan.zhihu.com/happy">幸福课</a>里有一个关于拖延症的专题，我读完了大部分，感觉不错。动机在杭州老师分析出拖延的以下几个原因：</p>
+
+<ul>
+<li>诱惑导致的分心</li>
+<li>对压力的逃避</li>
+<li>对失败的恐惧</li>
+<li>弱者反抗的工具</li>
+<li>对未来的错估</li>
+</ul>
+
+
+<p>完整的解释可以看<a href="http://zhuanlan.zhihu.com/happy/19716928">这篇文章</a></p>
+
+<p>我的拖延症总离不开社交网络，拖延的时候我常常会在微博、豆瓣、知乎中间来回刷，要知道这三个网站都是无底洞，随便哪一个一层层挖下去都能看很久。</p>
+
+<h3>我是怎么解决的</h3>
+
+<p>其实也并没有解决，只是稍微缓解了一点。好长一段时间里我手机的todo list软件都是爆满，150+的待办事项都很常见了、豆瓣上500+的书想读、300+的电影想看、浏览器书签里一大摞文章没看、一堆算法题没做。想到有好多事就很烦。最近发现我那些要做的事情总是存的很多，实际上分配的时间其实不多，真正沉下心来打码的时间也不多；另外，那些想做的事情都没有一个截止日期，导致我总是对要做的事感到很大压力却没有在具体的某一件事上有压力。对此，我做了几件事：</p>
+
+<ul>
+<li>睡前安排第二天的任务，把最想做的事情加到第二天的要做的事里，慢慢完成</li>
+<li>延期任务修改截止日期，因为延期任务放在列表里会让人感觉对它无能为力了，其实重新设定一个截止日期，设得宽松一些会让自己更有动力完成它</li>
+<li>多花时间，这个是必然的了，这段时间我基本上每天不在教室上课就是在启明做事情，感觉状态还是不错的</li>
+<li>过犹不及，不要太看重任务，完成的质量和热情还是很重要的</li>
+</ul>
+
+
+<p>每天有自己的事之后，刷微博、微信等等的时间也少多了，形成了正反馈。</p>
+
+<p>另外，专栏里还介绍了一种方法——试着和自己谈判。每当意识到自己要拖延时，告诉自己先做一会事情，比如做半个小时再玩，如果半个小时后自己进入了状态，想做事情了，那自然最好，如果不想做事了，就放松一下吧，也没关系~亲测有效。</p>
+
+<h3>项目中的拖延</h3>
+
+<p>项目管理是不是只是PM的事和程序员完全没有关系呢？我觉得不是，相反，项目的延期和程序员、设计师的关系是最大的，到今天在冰岩里合作过的几个PM我还没遇到一个能完全把控项目风险的。</p>
+
+<p>软件工程课上我学到两点，一是任何软件都是有bug的，就看有没有人能发现；二是大部分项目都会延期，程序员总是对自己的能力估计过高。不算丰富的开发经验告诉我，有时接手一个任务，一开始可能觉得任务非常简单，对需求的理解逐渐加深后可能会发现做坑越多，发现自己的漏洞越多，项目的时间慢慢就不在自己掌控之内了。</p>
+
+<p>在实际开发过程中，我们会经历一个产品讨论->确定需求->技术选择->开发的过程。这个过程涉及到的人会很多，就会出现沟通不足导致拖延的现象。程序员多半是脸皮薄的，有些同学会觉得自己没弄清需求再去问会让人觉得很蠢，于是开始自己琢磨，造成拖延。这时团队人员的熟悉度就非常重要，非常熟悉的同学是不可能出现这种问题的；同时对不清楚的同学的包容也很重要，如果对ta的解答不耐烦或者嘲笑ta，很可能会导致下次ta出现问题时陷入自己纠结的状态。</p>
+
+<p>第二个坑就是技术坑了。毕竟我们都处于学习阶段，有不会的东西很正常，并且技术的世界本来就是个无底洞，谁能保证自己样样精通。碰到技术坑师傅教我的一定要学会Google，我也一直这么干，并且鄙视那些伸手党。但是我发现Google解决问题只适合于对要解决的问题有些了解，很明确问题所在的时候，如果完全一头雾水，就应该找人聊一聊，看自己哪些东西不懂，弄清大概后再搜索效率会很高，也不会浪费别人很多时间。其实没事的时候大家在启明就可以多聊一聊，聊聊最近碰到的一些问题、看到的一些新东西，交流技术上的困惑和烦恼是非常爽的一件事，我就很喜欢跟强哥聊遇到的一些坑和一些不理解的东西，这样大家成长都很快~</p>
+
+<p>第三个坑是互相拖，尤其在人多的情况下，A和B可能都不想干活，刚好都需要跟C交流，C的活还没干完，于是A和B也不干了。这种现象很常见，尤其是客户端，设计没出图、后台没接口都能成为拖延的理由。</p>
+
+<h3>最后</h3>
+
+<p>其实拖延是压力管理、时间管理、自我评价等等的综合问题，只是一种现象，至于根源，还是能不能和自己好好相处，实在不行，就拖吧，也没什么大不了的，不过一定要让自己舒服，不要压抑自己，身心健康比什么都重要。</p>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/04/25/procrastination/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/22/python-guide-code-style/">[翻译]Python漫游指南 - 编程风格</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-22T22:56:11+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>22</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>10:56 pm</span>
+          </time>
+          | <a href="/blog/2015/03/22/python-guide-code-style/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/22/python-guide-code-style/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>原文: <a href="http://docs.python-guide.org/en/latest/writing/style/">Code Style</a></p>
+
+<p>如果你问Python程序员他们最喜欢Python的什么，他们通常会说是Python的可读性。实际上，良好的可读性是Python设计时的一个核心思想，这是根据一个广为认可的事实 <em>比起写，代码更容易被人读</em> 的思想设计的。</p>
+
+<p>Python代码易读易懂的一个原因是它相对完善的代码风格的规范和<em>Pythonic</em>的成语。</p>
+
+<!-- more -->
+
+
+<p>另外，当一个Python老手(<em>Pythonista</em>)指出一段代码不够<em>Pythonic</em>，通常意味着这几行代码没有按照一般的代码规范来并且没有用公认的最好的(通常是最易读的)方式表达其意图。</p>
+
+<p>在某些情况下是找不到一个大家都认可的方式去用Python表达一个意图的，不过很少有这种情况。</p>
+
+<h3>一般概念</h3>
+
+<h4>明确的代码</h4>
+
+<p>虽然在Python中，一切黑魔法都有可能发生，但我们更推荐最明确和最直接的方式。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">make_complex</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">args</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+</span></code></pre></td></tr></table>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/22/python-guide-code-style/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/19/python-file/">[翻译]Python文件读写</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-19T13:22:38+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>19</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>1:22 pm</span>
+          </time>
+          | <a href="/blog/2015/03/19/python-file/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/19/python-file/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>原文: <a href="http://www.pythonforbeginners.com/files/reading-and-writing-files-in-python">Reading and Writing Files in Python</a></p>
+
+<h3>概览</h3>
+
+<p>在Python中, 读写文件不需要import任何库, 第一步是使用<code>open</code>函数获取一个文件对象</p>
+
+<!-- more -->
+
+
+<h3>文件类型</h3>
+
+<p>文件通常被分为<code>文本文件</code>或<code>二进制文件</code>, <code>文本文件</code>通常是由很多行组成的序列(sequence), 而每一行又是很多字符(characters)组成的序列. 每一行由<code>EOL(End Of Line)</code>终结, 最常见的行终结符是<code>\n</code>, 又叫换行符. 反斜杠(backslash)表明下一个字符将被当作一个新行(<em>译注: 这里没理解</em>). 基本上不是文本文件的文件就是二进制文件, 二进制文件只能被了解其文件结构的应用处理.</p>
+
+<h3>Open()</h3>
+
+<p>我们使用内置的<code>open()</code>函数打开一个文件. <code>open()</code>返回一个文件对象, 一般会传入两个参数. 语法是:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="n">file_object</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>  <span class="c"># file_object是储存文件对象的变量</span>
+</span></code></pre></td></tr></table>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/19/python-file/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/18/oh-so-sad/">[老博文迁移]推土小记</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-18T16:20:38+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>4:20 pm</span>
+          </time>
+          | <a href="/blog/2015/03/18/oh-so-sad/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/18/oh-so-sad/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>十一这几天留在学校没回家跟胡扬，胡淼，强哥一起“推土”加上写一点新版新闻网的后台，这次来客串写点php。“推土”就是把原来的像17,43,45这几台跑windows的老机器尽量换成linux的，还有几台跑在45上的虚拟机都搬到13,14上。哎，想想之前做的有那么多网站就觉得好累。</p>
+
+<!-- more -->
+
+
+<p>今天一天我完成了原来用discuz搭的bbs的迁移，<a href="http://blog.bingyan.net/">冰岩博客</a>的迁移和华中大知多少的迁移，原先代码都在43上，数据库在17上，都是windows服务器，43上还有ftp服务，17上就什么都没有，dump下来的表都是用百度云上传的==！最后把它们全都放到13上了，整个都是体力劳动啊，后面应该想想一些重复的劳动怎样用脚本来解决掉。</p>
+
+<h3>数据库导出与导入</h3>
+
+<p><code>mysqldump -u username -p dbname &gt; name.sql</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">dbname</span><span class="p">;</span>
+</span><span class='line'><span class="n">USE</span> <span class="n">dbname</span><span class="p">;</span>
+</span><span class='line'><span class="k">SOURCE</span> <span class="n">name</span><span class="p">.</span><span class="k">sql</span><span class="p">;</span>
+</span></code></pre></td></tr></table>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/18/oh-so-sad/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/18/linux-pipe-1/">[老博文迁移]linux管道命令学习(一)</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-18T16:06:38+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>4:06 pm</span>
+          </time>
+          | <a href="/blog/2015/03/18/linux-pipe-1/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/18/linux-pipe-1/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>继续看鸟哥私房菜，看一直很想弄懂的<code>管道命令(pipe)</code>。第一次知道管道这个词还是在学<code>django</code>的时候，模板里的过滤器很像这里的管道。管道就是将输出在标准输出中的信息一次次处理最终打印在标准输出中，所以管道命令必须是接受标准输出的命令，<code>cp</code> <code>mv</code> <code>ls</code>都不是管道命令。</p>
+
+<!-- more -->
+
+
+<h3>好用的<code>less</code>和<code>tail</code></h3>
+
+<h4>less</h4>
+
+<p>如<code>ls -al /etc | less</code>就能用类似<code>vi</code>的方式浏览在屏幕上打印的内容了。还能用<code>vi</code>里的查找命令<code>/</code>、<code>?</code>，可以避免滚屏，非常好用。</p>
+
+<h4>tail</h4>
+
+<ul>
+<li><code>tail filename</code>输出文件最后10行</li>
+<li><code>tail -n 5 filename</code>输出文件最后5行</li>
+<li><code>tail -F filename</code>监视文件的改变，一有变化就显示出来</li>
+</ul>
+
+
+<p>在分析error log的时候非常有用，可以查看最近的错误信息。</p>
+
+<h3>选取命令<code>cut</code>和<code>grep</code></h3>
+
+<h4>cut</h4>
+
+<p>cut针对的是输出的每一行，解释两个命令：</p>
+
+<ul>
+<li><code>echo $PATH | cut -d ':' -f 5</code>
+-d 选项后面紧跟分隔符，-f表示取第5段</li>
+<li><code>export | cut -c 12-</code>
+-c 选项表示选取的字符数，从12到结尾，也可是类似12-15这样</li>
+</ul>
+
+
+<h4>grep</h4>
+
+<p>grep真是神一般的命令，可以配合<code>ps aux</code>找到想要的进程。
+参数</p>
+
+<ul>
+<li>-c计算找到的被查找字符串的次数</li>
+<li>-i忽略大小写</li>
+<li>-v输出查找结果的补集
+例如<code>last | grep -v 'root'</code>找出非root的登陆</li>
+</ul>
+
+
+<p>睡觉，明天继续整理剩下的内容ww</p>
+
+<p><em>2014-9-22 于博客园</em></p>
+
+<p>迁移批注:<br/>
+Yesterday you said tomorrow&hellip;有了&#8221;一&#8221;就再没&#8221;二&#8221;了&hellip;<br/>
+不过后来除了<code>cut</code>外这几个命令都很常用, 使用<code>linux</code>时还是带来了很大帮助~ 需要继续学习~</p>
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/18/linux-pipe-1/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/18/linux-process/">[老博文迁移]linux进程管理</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-18T15:35:11+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>3:35 pm</span>
+          </time>
+          | <a href="/blog/2015/03/18/linux-process/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/18/linux-process/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>作为一个新手，部署Python网站的时候总会出各种各样的问题，这个时候我就很想知道是哪个程序没有运行。这几天读了鸟哥私房菜的进程管理这一章，还没读完，先做下笔记。</p>
+
+
+
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/18/linux-process/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/18/jinja-practice/">[老博文迁移]jinja2模板使用经验</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-18T13:19:01+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>1:19 pm</span>
+          </time>
+          | <a href="/blog/2015/03/18/jinja-practice/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/18/jinja-practice/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>用<code>jinja2</code>写模板的时候遇到了一些问题，记录一下</p>
+
+
+
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/18/jinja-practice/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/18/flask-token/">使用Flask实现用户认证API</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-18T00:32:28+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>12:32 am</span>
+          </time>
+          | <a href="/blog/2015/03/18/flask-token/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/18/flask-token/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>我们在开发网站时会采用<code>session</code>和<code>cookie</code>的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个<code>token(令牌)</code>的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次<code>token</code>是否有效, 无效的情况包括<code>token</code>无法被解析等. 另一个问题是如果<code>token</code>被泄露, 用户的安全将受到威胁, 所以应当对这个<code>token</code>设置一个过期时间, 超过这个时间后应当重新登录, 这样可以将用户信息泄露的风险降低.</p>
+
+
+
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/18/flask-token/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/17/webpy-502/">[老博文迁移]web.py+fastcgi+nginx 502</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-17T23:45:42+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>17</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>11:45 pm</span>
+          </time>
+          | <a href="/blog/2015/03/17/webpy-502/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/17/webpy-502/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<p>用<code>web.py</code>照着<a href="http://webpy.org/cookbook/fastcgi-nginx.zh-cn">官方文档</a>在服务器上搭好了后台。这次很奇怪地出现了一个Nginx 502 Bad Gateway的错误。</p>
+
+<p>执行上面的<code>kill `pgrep -f "python /path/to/www/index.py"`</code>会出现错误提示，可是启动脚本的时候明明是提示<code>spawn-fcgi: child spawned successfully: PID: 32401</code>的信息的，然后还可以继续执行<code>spawn-fcgi -d /path/to/www -f /path/to/www/index.py -a 127.0.0.1 -p 9002</code>的脚本
+，同样会提示成功。</p>
+
+
+
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/17/webpy-502/">阅读全文</a>
+      </footer>
+    </article>
+  
+    <article>
+      <header>
+        <h1 class="entry-title"><a href="/blog/2015/03/15/new-blog/">新博客终于搭起来了</a></h1>
+        <p class="meta">
+          <time class='entry-date' datetime='2015-03-15T19:19:36+08:00'>
+            <span class='date'>
+              <span class='date-month'>Mar</span>
+              <span class='date-day'>15</span><span class='date-suffix'>th</span>,
+              <span class='date-year'>2015</span>
+            </span>
+            <span class='time'>7:19 pm</span>
+          </time>
+          | <a href="/blog/2015/03/15/new-blog/#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/03/15/new-blog/">Comments</a>
+        </p>
+      </header>
+
+      <div class="entry-content">
+        
+<h3>啰嗦</h3>
+
+<p>去年大概这个时候, 用<code>jekyll</code>和<code>github pages</code>搭了一个静态博客, 当时乱折腾把ruby环境给折腾坏了, 加上对之前的主题始终不满意(代码高亮差以及审美疲劳等&hellip;), 一年都没有更博. 然后在博客园写了十几篇博客, 隔段时间看, 擦, 写得好low!</p>
+
+<p>比较好的办法就是经常写, 把那些很low的文章顶到很多页之前, 就没人笑话了.</p>
+
+
+
+
+
+      </div>
+
+      <footer>
+        <a rel="full-article" href="/blog/2015/03/15/new-blog/">阅读全文</a>
+      </footer>
+    </article>
+  
+</div>
+
+    </div>
+
+    <aside class="sidebar">
+      <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2026/02/25/anti-burnout-notes/">《反倦怠能量站》读书笔记：重新找回你的能量感</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/19/php-time/">PHP的两个时间函数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/18/php-curl/">PHP cURL使用小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/17/myisam-innodb/">MyISAM与InnoDB区别</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/27/mac-ntfs/">mac下向NTFS文件系统写入文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/07/euler-circuit/">判断欧拉回路</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/05/hackerrank-maximise-sum/">HackerRank Maximise Sum题解</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/25/procrastination/">瞎扯淡 - 拖延症与项目延期</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/22/python-guide-code-style/">[翻译]Python漫游指南 - 编程风格</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/19/python-file/">[翻译]Python文件读写</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/algorithm/'>algorithm (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/bb/'>bb (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/database/'>database (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/linux/'>linux (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/operation/'>operation (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/php/'>php (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/python/'>python (5)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/reading/'>reading (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/try/'>try (2)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+    </aside>
+  </div>
+</body>
+</html>

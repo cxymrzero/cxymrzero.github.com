@@ -1,0 +1,37 @@
+---
+layout: post
+title: "[翻译]Python漫游指南 - 编程风格"
+date: 2015-03-22T22:56:11+08:00
+categories: ["python"]
+permalink: /blog/2015/03/22/python-guide-code-style/
+legacy: true
+---
+{% raw %}
+<p>原文: <a href="http://docs.python-guide.org/en/latest/writing/style/">Code Style</a></p>
+
+<p>如果你问Python程序员他们最喜欢Python的什么，他们通常会说是Python的可读性。实际上，良好的可读性是Python设计时的一个核心思想，这是根据一个广为认可的事实 <em>比起写，代码更容易被人读</em> 的思想设计的。</p>
+
+<p>Python代码易读易懂的一个原因是它相对完善的代码风格的规范和<em>Pythonic</em>的成语。</p>
+
+<!-- more -->
+
+
+<p>另外，当一个Python老手(<em>Pythonista</em>)指出一段代码不够<em>Pythonic</em>，通常意味着这几行代码没有按照一般的代码规范来并且没有用公认的最好的(通常是最易读的)方式表达其意图。</p>
+
+<p>在某些情况下是找不到一个大家都认可的方式去用Python表达一个意图的，不过很少有这种情况。</p>
+
+<h3>一般概念</h3>
+
+<h4>明确的代码</h4>
+
+<p>虽然在Python中，一切黑魔法都有可能发生，但我们更推荐最明确和最直接的方式。<br/>
+<strong>Bad</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='py'><span class='line'><span class="k">def</span> <span class="nf">make_complex</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">args</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+</span></code></pre></td></tr></table>
+{% endraw %}

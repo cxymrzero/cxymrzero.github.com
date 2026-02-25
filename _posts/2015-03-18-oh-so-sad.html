@@ -1,0 +1,28 @@
+---
+layout: post
+title: "[老博文迁移]推土小记"
+date: 2015-03-18T16:20:38+08:00
+categories: ["operation"]
+permalink: /blog/2015/03/18/oh-so-sad/
+legacy: true
+---
+{% raw %}
+<p>十一这几天留在学校没回家跟胡扬，胡淼，强哥一起“推土”加上写一点新版新闻网的后台，这次来客串写点php。“推土”就是把原来的像17,43,45这几台跑windows的老机器尽量换成linux的，还有几台跑在45上的虚拟机都搬到13,14上。哎，想想之前做的有那么多网站就觉得好累。</p>
+
+<!-- more -->
+
+
+<p>今天一天我完成了原来用discuz搭的bbs的迁移，<a href="http://blog.bingyan.net/">冰岩博客</a>的迁移和华中大知多少的迁移，原先代码都在43上，数据库在17上，都是windows服务器，43上还有ftp服务，17上就什么都没有，dump下来的表都是用百度云上传的==！最后把它们全都放到13上了，整个都是体力劳动啊，后面应该想想一些重复的劳动怎样用脚本来解决掉。</p>
+
+<h3>数据库导出与导入</h3>
+
+<p><code>mysqldump -u username -p dbname &gt; name.sql</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">dbname</span><span class="p">;</span>
+</span><span class='line'><span class="n">USE</span> <span class="n">dbname</span><span class="p">;</span>
+</span><span class='line'><span class="k">SOURCE</span> <span class="n">name</span><span class="p">.</span><span class="k">sql</span><span class="p">;</span>
+</span></code></pre></td></tr></table>
+{% endraw %}

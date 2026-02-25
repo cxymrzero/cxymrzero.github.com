@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="jKZt25RHZv" />
+  <title>PHP cURL使用小结 - clean code</title>
+  <meta name="author" content="Mr.Zero">
+
+  
+  <meta name="description" content="
+实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。
+
+项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cUR...">
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="canonical" href="http://localhost:4000/blog/2015/08/18/php-curl/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="clean code" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+</head>
+
+<body>
+  <header role="banner"><hgroup>
+  <h1><a href="/">clean code</a></h1>
+  
+    <h2>i create stuff</h2>
+  
+  </hgroup>
+  </header>
+
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  </ul>
+
+  <form action="https://www.google.com/search" method="get">
+    <fieldset role="search">
+      <input type="hidden" name="sitesearch" value="localhost:4000">
+      <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+    </fieldset>
+  </form>
+
+  <ul class="main-navigation">
+    <li><a href="/">Blog</a></li>
+    <li><a href="/blog/archives">Archives</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/links">Links</a></li>
+  </ul>
+  </nav>
+
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  <header>
+    <h1 class="entry-title">PHP cURL使用小结</h1>
+    <p class="meta">
+      <time class='entry-date' datetime='2015-08-18T22:46:31+08:00'>
+        <span class='date'>
+          <span class='date-month'>Aug</span>
+          <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+          <span class='date-year'>2015</span>
+        </span>
+        <span class='time'>10:46 pm</span>
+      </time>
+      | <a href="#disqus_thread" data-disqus-identifier="http://localhost:4000/blog/2015/08/18/php-curl/">Comments</a>
+    </p>
+  </header>
+
+  <div class="entry-content">
+    
+<p>实习这段时间主要在写PHP和很少的Python和Java。之前写过的PHP不超过100行，Java几乎没写过，算是都入了个门。</p>
+
+<p>项目需要作为客户端发起HTTP请求，查一些API来分析一些数据，于是就接触了cURL这个库。作为天生的web语言，PHP在这方面真是太厉害了，居然自带了HTTP请求的函数。除了cURL外，<code>file_get_contents</code>这个函数也可以发起HTTP请求，不过不是专门干这个的，不好配置参数，还是cURL好。</p>
+
+<!--more-->
+
+
+<p></p>
+
+<p>官方文档里的例子很有用：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>        <span class="c1">// create curl resource </span>
+</span><span class='line'>        <span class="nv">$ch</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// set url </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="s2">&quot;example.com&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//return the transfer as a string </span>
+</span><span class='line'>        <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// $output contains the output string </span>
+</span><span class='line'>        <span class="nv">$output</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// close curl resource to free up system resources </span>
+</span><span class='line'>        <span class="nb">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table>
+
+
+  </div>
+
+  <footer>
+    <p class="meta">
+      <span class="byline author vcard">Posted by <span class="fn">Mr.Zero</span></span>
+      <time class='entry-date' datetime='2015-08-18T22:46:31+08:00'>
+        <span class='date'>
+          <span class='date-month'>Aug</span>
+          <span class='date-day'>18</span><span class='date-suffix'>th</span>,
+          <span class='date-year'>2015</span>
+        </span>
+        <span class='time'>10:46 pm</span>
+      </time>
+
+      
+      <span class="categories">
+        
+          <a class='category' href='/blog/categories/php/'>php</a>
+        
+      </span>
+      
+    </p>
+
+    <div class="sharing">
+      <a href="//twitter.com/share" class="twitter-share-button" data-url="http://localhost:4000/blog/2015/08/18/php-curl/" data-via="" data-counturl="http://localhost:4000/blog/2015/08/18/php-curl/" >Tweet</a>
+    </div>
+
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/08/17/myisam-innodb/" title="Previous Post: MyISAM与InnoDB区别">&laquo; MyISAM与InnoDB区别</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/08/19/php-time/" title="Next Post: PHP的两个时间函数">PHP的两个时间函数 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+    </div>
+
+    <aside class="sidebar">
+      <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2026/02/25/anti-burnout-notes/">《反倦怠能量站》读书笔记：重新找回你的能量感</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/19/php-time/">PHP的两个时间函数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/18/php-curl/">PHP cURL使用小结</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/17/myisam-innodb/">MyISAM与InnoDB区别</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/27/mac-ntfs/">mac下向NTFS文件系统写入文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/07/euler-circuit/">判断欧拉回路</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/05/hackerrank-maximise-sum/">HackerRank Maximise Sum题解</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/25/procrastination/">瞎扯淡 - 拖延症与项目延期</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/22/python-guide-code-style/">[翻译]Python漫游指南 - 编程风格</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/19/python-file/">[翻译]Python文件读写</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/algorithm/'>algorithm (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/bb/'>bb (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/database/'>database (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/linux/'>linux (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/operation/'>operation (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/php/'>php (2)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/python/'>python (5)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/reading/'>reading (1)</a>
+      </li>
+    
+      
+      
+      <li class='category'>
+        <a href='/blog/categories/try/'>try (2)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+    </aside>
+  </div>
+</body>
+</html>

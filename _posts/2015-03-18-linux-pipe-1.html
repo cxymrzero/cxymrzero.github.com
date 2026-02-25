@@ -1,0 +1,66 @@
+---
+layout: post
+title: "[老博文迁移]linux管道命令学习(一)"
+date: 2015-03-18T16:06:38+08:00
+categories: ["linux"]
+permalink: /blog/2015/03/18/linux-pipe-1/
+legacy: true
+---
+{% raw %}
+<p>继续看鸟哥私房菜，看一直很想弄懂的<code>管道命令(pipe)</code>。第一次知道管道这个词还是在学<code>django</code>的时候，模板里的过滤器很像这里的管道。管道就是将输出在标准输出中的信息一次次处理最终打印在标准输出中，所以管道命令必须是接受标准输出的命令，<code>cp</code> <code>mv</code> <code>ls</code>都不是管道命令。</p>
+
+<!-- more -->
+
+
+<h3>好用的<code>less</code>和<code>tail</code></h3>
+
+<h4>less</h4>
+
+<p>如<code>ls -al /etc | less</code>就能用类似<code>vi</code>的方式浏览在屏幕上打印的内容了。还能用<code>vi</code>里的查找命令<code>/</code>、<code>?</code>，可以避免滚屏，非常好用。</p>
+
+<h4>tail</h4>
+
+<ul>
+<li><code>tail filename</code>输出文件最后10行</li>
+<li><code>tail -n 5 filename</code>输出文件最后5行</li>
+<li><code>tail -F filename</code>监视文件的改变，一有变化就显示出来</li>
+</ul>
+
+
+<p>在分析error log的时候非常有用，可以查看最近的错误信息。</p>
+
+<h3>选取命令<code>cut</code>和<code>grep</code></h3>
+
+<h4>cut</h4>
+
+<p>cut针对的是输出的每一行，解释两个命令：</p>
+
+<ul>
+<li><code>echo $PATH | cut -d ':' -f 5</code>
+-d 选项后面紧跟分隔符，-f表示取第5段</li>
+<li><code>export | cut -c 12-</code>
+-c 选项表示选取的字符数，从12到结尾，也可是类似12-15这样</li>
+</ul>
+
+
+<h4>grep</h4>
+
+<p>grep真是神一般的命令，可以配合<code>ps aux</code>找到想要的进程。
+参数</p>
+
+<ul>
+<li>-c计算找到的被查找字符串的次数</li>
+<li>-i忽略大小写</li>
+<li>-v输出查找结果的补集
+例如<code>last | grep -v 'root'</code>找出非root的登陆</li>
+</ul>
+
+
+<p>睡觉，明天继续整理剩下的内容ww</p>
+
+<p><em>2014-9-22 于博客园</em></p>
+
+<p>迁移批注:<br/>
+Yesterday you said tomorrow&hellip;有了&#8221;一&#8221;就再没&#8221;二&#8221;了&hellip;<br/>
+不过后来除了<code>cut</code>外这几个命令都很常用, 使用<code>linux</code>时还是带来了很大帮助~ 需要继续学习~</p>
+{% endraw %}

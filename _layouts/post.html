@@ -1,0 +1,68 @@
+---
+layout: default
+---
+<div>
+<article class="hentry" role="article">
+  <header>
+    <h1 class="entry-title">{{ page.title }}</h1>
+    <p class="meta">
+      <time class='entry-date' datetime='{{ page.date | date_to_xmlschema }}'>
+        <span class='date'>
+          <span class='date-month'>{{ page.date | date: '%b' }}</span>
+          <span class='date-day'>{{ page.date | date: '%d' }}</span><span class='date-suffix'>th</span>,
+          <span class='date-year'>{{ page.date | date: '%Y' }}</span>
+        </span>
+        <span class='time'>{{ page.date | date: '%-I:%M %P' }}</span>
+      </time>
+      | <a href="#disqus_thread" data-disqus-identifier="{{ site.url }}{{ page.url }}">Comments</a>
+    </p>
+  </header>
+
+  <div class="entry-content">
+    {{ content }}
+  </div>
+
+  <footer>
+    <p class="meta">
+      <span class="byline author vcard">Posted by <span class="fn">{{ site.author.name | default: 'Mr.Zero' }}</span></span>
+      <time class='entry-date' datetime='{{ page.date | date_to_xmlschema }}'>
+        <span class='date'>
+          <span class='date-month'>{{ page.date | date: '%b' }}</span>
+          <span class='date-day'>{{ page.date | date: '%d' }}</span><span class='date-suffix'>th</span>,
+          <span class='date-year'>{{ page.date | date: '%Y' }}</span>
+        </span>
+        <span class='time'>{{ page.date | date: '%-I:%M %P' }}</span>
+      </time>
+
+      {% if page.categories %}
+      <span class="categories">
+        {% for category in page.categories %}
+          <a class='category' href='/blog/categories/{{ category | downcase | uri_escape }}/'>{{ category }}</a>
+        {% endfor %}
+      </span>
+      {% endif %}
+    </p>
+
+    <div class="sharing">
+      <a href="//twitter.com/share" class="twitter-share-button" data-url="{{ site.url }}{{ page.url }}" data-via="" data-counturl="{{ site.url }}{{ page.url }}" >Tweet</a>
+    </div>
+
+    <p class="meta">
+      {% if page.previous %}
+        <a class="basic-alignment left" href="{{ page.previous.url }}" title="Previous Post: {{ page.previous.title }}">&laquo; {{ page.previous.title }}</a>
+      {% endif %}
+      {% if page.next %}
+        <a class="basic-alignment right" href="{{ page.next.url }}" title="Next Post: {{ page.next.title }}">{{ page.next.title }} &raquo;</a>
+      {% endif %}
+    </p>
+  </footer>
+</article>
+
+{% if site.disqus_shortname %}
+<section>
+  <h1>Comments</h1>
+  <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+</section>
+{% include disqus.html %}
+{% endif %}
+</div>

@@ -1,0 +1,40 @@
+---
+layout: post
+title: "使用Flask实现用户认证API"
+date: 2015-03-18T00:32:28+08:00
+categories: ["python"]
+permalink: /blog/2015/03/18/flask-token/
+legacy: true
+---
+{% raw %}
+<p>我们在开发网站时会采用<code>session</code>和<code>cookie</code>的方式来处理登录权限问题, 而在移动应用中要验证用户身份采用登录时给用户生成一个<code>token(令牌)</code>的方式. 每次用户发出需要身份认证的请求时, 就需要验证一次<code>token</code>是否有效, 无效的情况包括<code>token</code>无法被解析等. 另一个问题是如果<code>token</code>被泄露, 用户的安全将受到威胁, 所以应当对这个<code>token</code>设置一个过期时间, 超过这个时间后应当重新登录, 这样可以将用户信息泄露的风险降低.</p>
+
+<!--more-->
+
+
+<h3>生成和使用<code>token</code></h3>
+
+<p>有个很棒的Python第三方库叫<code>itsdangerous</code>, 包含许多常见安全问题的解决方案, 比如文件名等等.</p>
+
+<h4>生成<code>token</code></h4>
+
+<p><code>TimedJSONWebSignatureSerializer</code>能将包含用户id的字典, 如<code>{'user_id': 1}</code>设置一个具有过期时间的<code>数字证书(Signature)</code>, 需要注意的是, 设置的<code>secret key</code>一定要足够安全, 在<code>flask</code>应用中, 我们采用<code>flask</code>配置中的<code>secret key</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">TimedJSONWebSignatureSerializer</span> <span class="k">as</span> <span class="n">Serializer</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">itsdangerous</span> <span class="kn">import</span> <span class="n">SignatureExpired</span><span class="p">,</span> <span class="n">BadSignature</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">config</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">gen_token</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">expiration</span><span class="o">=</span><span class="mi">1440</span><span class="o">*</span><span class="mi">31</span><span class="o">*</span><span class="mi">60</span><span class="p">):</span>  <span class="c"># 单位为秒, 设定31天过期</span>
+</span><span class='line'>    <span class="n">s</span> <span class="o">=</span> <span class="n">Serializer</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">SECRET_KEY</span><span class="p">,</span> <span class="n">expires_in</span><span class="o">=</span><span class="n">expiration</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">})</span>  <span class="c"># user为model中封装过的对象</span>
+</span></code></pre></td></tr></table>
+{% endraw %}
